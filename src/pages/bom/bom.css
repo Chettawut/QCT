@@ -1,0 +1,144 @@
+.bom--page-layout .ant-card-body{
+    padding: 0px;
+}
+.no-box-shadow{
+    box-shadow: none !important; 
+}
+.card-p{
+    padding: 0.745rem 1.245rem; 
+}
+
+.card-secondary{
+    background-color: #d5d5d5;
+}
+
+.bg-secondary{
+    background-color: #535353;
+    color: #fff;
+}
+
+.bg-secondary:hover{
+    background-color: #79797c !important;;
+    color: #fff;
+}
+.bom--page-layout{
+    .ant-radio-button-wrapper:last-child {
+        border-radius: 0 6px 6px 0;
+    }
+    .ant-radio-button-wrapper:first-child {
+        border-radius: 6px 0 0 6px;
+    }    
+    .card-tb{
+        padding-right: 0px;
+    }
+    @media screen and (max-width: 1368px){
+        .card-tb{
+            padding-right: 1.245rem; 
+            .ant-table-title{
+                padding-inline-end: 0px !important;
+            }
+        }
+    }
+}
+
+/* start table bom list */
+
+#table--list{
+    max-width: 100%;
+    overflow: auto;
+    height: calc(100vh - 16.678rem);
+    scrollbar-gutter: stable;
+}
+
+#table--list table colgroup col:first-child {  
+    min-width: 200px; 
+}
+
+#table--list table thead tr th{
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+
+#table--list table tbody tr td{
+    padding: 16px 24px;
+}
+
+#table--list table tbody td:last-child::before{
+    content: ''; 
+    border-right: 1px solid inherit;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%; 
+}
+
+#table--list table tbody td:last-child::before{
+    content: ''; 
+    border-right: 1px solid inherit;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* end css table bom list */ 
+
+
+.ant-form-item-has-error .status-group label{
+    border: 1px solid #ff4d4f;
+}
+
+/* start table bom  detail list */
+#table--bom-detail-list{
+    width: 100%;
+    .ant-table-title{
+        padding-inline: 0rem 1.045rem;
+    }
+    .ant-table-container table thead{
+        z-index: 2;
+        position: sticky;
+        background: inherit;
+        top: 0;
+    }
+}
+#table--bom-detail-list table tbody tr td{
+    padding: 16px 24px;
+    line-height: 2rem;
+    vertical-align: top;
+}
+
+#table--bom-detail-list .ant-table-container{
+    max-width: 100%;
+    overflow: auto;
+    height: calc(100vh - 31.878rem);
+    scrollbar-gutter: stable;
+    padding-left: 0rem;
+}
+
+ 
+/* end table bom  detail list */
+
+/* bom  item modal choose */
+.choose-res{ 
+    width:60vw !important; 
+}    
+@media screen and (max-width: 1368px){
+    .choose-res{
+        width: 100% !important;
+    }
+}
+
+#items-bom-layout{
+    width: 100%;
+    /* max-width: 100%;*/
+    /* overflow: auto;  */
+    height: calc(100vh - 19.578rem); 
+    /* scrollbar-gutter: stable; */
+    table tbody tr td{
+        padding: 16px 24px;
+    } 
+}
+/* end bom item modal choose*/
