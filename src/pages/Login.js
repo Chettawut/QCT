@@ -1,11 +1,10 @@
 import { React } from "react";
 import { useNavigate } from "react-router-dom";
-import { Layout, Button, Typography, Card, Form, Input } from "antd";
+import { Layout, Button, Card, Form, Input } from "antd";
 import logo4 from "../assets/images/logo_nsf.png";
 import Swal from "sweetalert2";
 import SystemService from "../service/SystemService";
 
-const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
 
 const Login = () => {
@@ -44,17 +43,13 @@ const Login = () => {
       <div className="layout-default ant-layout layout-sign-up">
         <Header>
           <div className="header-col header-brand">
-            <h5>Nine Star Food</h5>
+           
           </div>
         </Header>
 
         <Content className="p-0">
           <div className="sign-up-header">
             <div className="content">
-              <Title>LOGIN</Title>
-              <p className="text-lg">
-                Enter your username and password to login
-              </p>
             </div>
           </div>
 
@@ -94,7 +89,7 @@ const Login = () => {
                   { required: true, message: "กรุณาใส่รหัสผ่าน!" },
                 ]}
               >
-                <Input.Password size="small"  placeholder="Password" />
+                <Input.Password size="small"  placeholder=" Password" />
               </Form.Item>
 
               <Form.Item>
