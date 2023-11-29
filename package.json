@@ -1,5 +1,5 @@
 {
-  "name": "muse-ant-design-dashboard",
+  "name": "ninestartfood",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -10,7 +10,10 @@
     "antd": "^5.9.2",
     "apexcharts": "^3.27.1",
     "axios": "^1.5.0",
+    "base-64": "^1.0.0",
+    "env-cmd": "^10.1.0",
     "install": "^0.13.0",
+    "jwt-decode": "^3.1.2",
     "primeicons": "^6.0.1",
     "primereact": "^9.6.2",
     "react": "^17.0.2",
@@ -26,6 +29,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:dev": "env-cmd -f .env.development react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
