@@ -1,5 +1,5 @@
 import {
-  AppstoreOutlined,
+  // AppstoreOutlined,
   CreditCardOutlined,
   FileDoneOutlined,
   HddOutlined,
@@ -7,62 +7,127 @@ import {
   TeamOutlined,
   UserOutlined,
   ApartmentOutlined,
+  CarOutlined,
+  ShopOutlined,
+  GiftOutlined,
+  DropboxOutlined,
+  TagOutlined,
+  FileAddOutlined,
+  BarcodeOutlined,
+  IdcardOutlined,
+  ShoppingCartOutlined,
+  DownloadOutlined,
+  DesktopOutlined,
+  DollarOutlined,
 } from "@ant-design/icons";
 
 let _nav = [
+  // {
+  //   title: "DATA",
+  //   type: "group",
+  // },
+  // {
+  //   title: "Dashboard",
+  //   icon: <AppstoreOutlined className="nav-ico" />,
+  //   to: "/dashboard",
+  // },
   {
-    title: "DATA",
+    title: "ระบบงานขาย",
     type: "group",
   },
   {
-    title: "Dashboard",
-    icon: <AppstoreOutlined className="nav-ico" />,
-    to: "/dashboard",
-  },
-  {
-    title: "MASTER",
-    type: "group",
-  },
-  {
-    title: "Sample Request",
-    icon: <CreditCardOutlined className="nav-ico" />,
+    title: "ใบรายการซ่อม",
+    icon: <FileAddOutlined className="nav-ico" />,
     to: "/sr",
   },
   {
-    title: "Bom",
-    icon: <ApartmentOutlined className="nav-ico" />,
+    title: "การวางบิล",
+    icon: <BarcodeOutlined className="nav-ico" />,
     to: "/bom",
   }, 
   {
-    title: "Items",
-    icon: <FileDoneOutlined className="nav-ico" />,
+    title: "ข้อมูลการเก็บเงิน",
+    icon: <DollarOutlined className="nav-ico" />,
     to: "/items",
   },
 
   {
-    title: "Unit",
-    icon: <HddOutlined className="nav-ico" />,
+    title: "ประวัติลูกค้า",
+    icon: <IdcardOutlined className="nav-ico" />,
     to: "/unit",
   },
   {
-    title: "Product Type",
+    title: "ใบเสนอราคา",
     icon: <InboxOutlined className="nav-ico" />,
     to: "/itemtype",
   },
   {
-    title: "Customer",
+    title: "รายจ่าย",
     icon: <UserOutlined className="nav-ico" />,
     to: "/customer",
   },
   {
-    title: "SYSTEM",
+    title: "คลังสินค้า",
     type: "group",
   },
   {
-    title: "User",
+    title: "ใบสั่งซื้อสินค้า",
+    icon: <ShoppingCartOutlined className="nav-ico" />,
+    // to: "/sr",
+  },
+  {
+    title: "รับสินค้า",
+    icon: <DownloadOutlined className="nav-ico" />,
+    // to: "/bom",
+  }, 
+  {
+    title: "สั่งซื้ออันโนมัติ",
+    icon: <DesktopOutlined className="nav-ico" />,
+    // to: "/items",
+  },
+  {
+    title: "สินค้า",
+    type: "group",
+  },
+  {
+    title: "สินค้า",
+    icon: <TagOutlined  className="nav-ico" />,
+    // to: "/sr",
+  },
+  {
+    title: "ข้อมูล",
+    type: "group",
+  },
+  {
+    title: "รถ",
+    icon: <CarOutlined className="nav-ico" />,
+    // to: "/sr",
+  },
+  {
+    title: "ลูกค้าบุคคล",
+    icon: <UserOutlined className="nav-ico" />,
+    // to: "/sr",
+  },
+  {
+    title: "ลูกค้าบริษัท",
+    icon: <ShopOutlined className="nav-ico" />,
+    // to: "/bom",
+  }, 
+  {
+    title: "พนักงาน",
+    icon: <TeamOutlined className="nav-ico" />,
+    // to: "/items",
+  },
+  {
+    title: "จัดการระบบ",
+    type: "group",
+  },
+  {
+    title: "ผู้ใช้ระบบ",
     icon: <TeamOutlined className="nav-ico" />,
     to: "/user",
   },
+  
 ];
 
 export default _nav;
