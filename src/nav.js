@@ -1,48 +1,44 @@
 import {
   // AppstoreOutlined,
-  CreditCardOutlined,
-  FileDoneOutlined,
-  HddOutlined,
-  InboxOutlined,
   TeamOutlined,
   UserOutlined,
-  ApartmentOutlined,
   CarOutlined,
   ShopOutlined,
-  GiftOutlined,
-  DropboxOutlined,
   TagOutlined,
-  FileAddOutlined,
-  BarcodeOutlined,
   IdcardOutlined,
   ShoppingCartOutlined,
   DownloadOutlined,
   DesktopOutlined,
   DollarOutlined,
+  FileTextOutlined,
+  AppstoreOutlined,
+  ToolOutlined,
+  SnippetsOutlined,
+
 } from "@ant-design/icons";
 
 let _nav = [
-  // {
-  //   title: "DATA",
-  //   type: "group",
-  // },
-  // {
-  //   title: "Dashboard",
-  //   icon: <AppstoreOutlined className="nav-ico" />,
-  //   to: "/dashboard",
-  // },
+  {
+    title: "DATA",
+    type: "group",
+  },
+  {
+    title: "Dashboard",
+    icon: <AppstoreOutlined className="nav-ico" />,
+    to: "/dashboard",
+  },
   {
     title: "ระบบงานขาย",
     type: "group",
   },
   {
     title: "ใบรายการซ่อม",
-    icon: <FileAddOutlined className="nav-ico" />,
+    icon: <ToolOutlined className="nav-ico" />,
     to: "/sr",
   },
   {
     title: "การวางบิล",
-    icon: <BarcodeOutlined className="nav-ico" />,
+    icon: <SnippetsOutlined className="nav-ico" />,
     to: "/bom",
   }, 
   {
@@ -58,7 +54,7 @@ let _nav = [
   },
   {
     title: "ใบเสนอราคา",
-    icon: <InboxOutlined className="nav-ico" />,
+    icon: <FileTextOutlined className="nav-ico" />,
     to: "/itemtype",
   },
   {
@@ -73,12 +69,12 @@ let _nav = [
   {
     title: "ใบสั่งซื้อสินค้า",
     icon: <ShoppingCartOutlined className="nav-ico" />,
-    // to: "/sr",
+    to: "/PO",
   },
   {
     title: "รับสินค้า",
     icon: <DownloadOutlined className="nav-ico" />,
-    // to: "/bom",
+    to: "/sr1",
   }, 
   {
     title: "สั่งซื้ออันโนมัติ",
