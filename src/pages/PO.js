@@ -15,6 +15,7 @@ import {
   Modal,
   Form,
   Select,
+  Collapse,
 } from "antd";
 import Highlighter from "react-highlight-words";
 
@@ -26,7 +27,6 @@ import ItemService from "../service/ItemService";
 import SRService from "../service/SRService";
 
 const SR = () => {
-
   const [AllSR, setAllSR] = useState("");
   const [itemList, setItemList] = useState([]);
   const [selectedList, setSelectedList] = useState([]);
@@ -629,6 +629,16 @@ const SR = () => {
   return (
     <>
       <div className="layout-content">
+        <Collapse
+          items={[
+            {
+              key: "1",
+              label: "ตัวกรองตามวันที่",
+              children: <p></p>,
+            },
+          ]}
+        />
+        <br></br>
         <Button type="primary" onClick={() => setIsOpenModal(true)}>
           เพิ่มใบสั่งซื้อสินค้า
         </Button>
