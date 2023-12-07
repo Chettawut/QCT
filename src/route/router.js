@@ -2,7 +2,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Items from "../pages/Items";
-import SR from "../pages/SR";
+import RB from "../pages/RB";
 import PO from "../pages/PO";
 import Unit from "../pages/Unit";
 import Profile from "../pages/Profile";
@@ -27,7 +27,7 @@ const Router = () => {
         >
           <Route path="/dashboard" element={<Home />} />
           <Route path="/items" element={<Items />} />
-          <Route path="/sr" element={<SR />} />
+          <Route path="/RB" element={<RB />} />
           <Route path="/PO" element={<PO />} />
           <Route path="/unit" element={<Unit />} />
           <Route path="/itemtype" element={<Itemtype />} />

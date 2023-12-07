@@ -15,6 +15,9 @@ import {
   Modal,
   Form,
   Select,
+  Collapse,
+  Radio,
+  DatePicker,
 } from "antd";
 import Highlighter from "react-highlight-words";
 
@@ -26,7 +29,6 @@ import ItemService from "../service/ItemService";
 import SRService from "../service/SRService";
 
 const SR = () => {
-
   const [AllSR, setAllSR] = useState("");
   const [itemList, setItemList] = useState([]);
   const [selectedList, setSelectedList] = useState([]);
@@ -625,10 +627,51 @@ const SR = () => {
       </Modal>
     );
   };
+  const [value, setValue] = useState(1);
+  const onChange = (e) => {
+    console.log("radio checked", e.target.value);
+    setValue(e.target.value);
+  };
 
   return (
     <>
       <div className="layout-content">
+        <Row gutter={[24, 0]}>
+          <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            <Collapse
+              items={[
+                {
+                  key: "1",
+                  label: "ตัวกรองตามวันที่",
+                  children: (
+                    <Radio.Group onChange={onChange} value={value}>
+                      <Space direction="vertical">
+                        <Row gutter={[24, 0]}>
+                          <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                            <Radio value={1}>เฉพาะวันนี้</Radio>
+                          </Col>
+                          <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                            <DatePicker onChange={onChange} />
+                          </Col>
+                        </Row>
+                        <Row gutter={[24, 0]}>
+                          <Radio value={2}>เฉพาะเดือนนี้</Radio>
+                        </Row>
+                        <Row gutter={[24, 0]}>
+                          <Radio value={3}>ตั้งแต่</Radio>
+                        </Row>
+                        <Row gutter={[24, 0]}>
+                          <Radio value={4}>ทั้งหมด</Radio>
+                        </Row>
+                      </Space>
+                    </Radio.Group>
+                  ),
+                },
+              ]}
+            />
+          </Col>
+        </Row>
+        <br></br>
         <Button type="primary" onClick={() => setIsOpenModal(true)}>
           เพิ่มใบสั่งซื้อสินค้า
         </Button>

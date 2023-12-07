@@ -34,7 +34,7 @@ let _nav = [
   {
     title: "ใบรายการซ่อม",
     icon: <ToolOutlined className="nav-ico" />,
-    to: "/sr",
+    to: "/RB",
   },
   {
     title: "การวางบิล",
