@@ -43,7 +43,7 @@ const SR = () => {
   // MODAL CONTROLLER
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isShowModalItem, setIsShowModalItem] = useState(false);
-
+  const { RangePicker } = DatePicker;
   const searchInput = useRef(null);
 
   useEffect(() => {
@@ -647,21 +647,38 @@ const SR = () => {
                     <Radio.Group onChange={onChange} value={value}>
                       <Space direction="vertical">
                         <Row gutter={[24, 0]}>
-                          <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <Radio value={1}>เฉพาะวันนี้</Radio>
+                          <Col xs={12} sm={12} md={12} lg={12} xl={24}>
+                            <Radio style={{ paddingTop: 6 }} value={1}>
+                              เฉพาะวันนี้
+                            </Radio>
                           </Col>
-                          <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <DatePicker onChange={onChange} />
+                        </Row>
+                        <Row gutter={[24, 0]}>
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                            <Radio style={{ paddingTop: 6 }} value={2}>
+                              เฉพาะเดือนนี้
+                            </Radio>
+                          </Col>
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                            <DatePicker  picker="month"  format="MM-YYYY" onChange={onChange} />
                           </Col>
                         </Row>
                         <Row gutter={[24, 0]}>
-                          <Radio value={2}>เฉพาะเดือนนี้</Radio>
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                            <Radio style={{ paddingTop: 6 }} value={3}>
+                              ตั้งแต่
+                            </Radio>
+                          </Col>
+                          <Col xs={24} sm={24} md={12} lg={12} xl={12}  >
+                            <RangePicker format="DD-MM-YYYY" style={{ width: 220}}/>
+                          </Col>
                         </Row>
                         <Row gutter={[24, 0]}>
-                          <Radio value={3}>ตั้งแต่</Radio>
-                        </Row>
-                        <Row gutter={[24, 0]}>
-                          <Radio value={4}>ทั้งหมด</Radio>
+                          <Col xs={12} sm={12} md={12} lg={12} xl={24}>
+                            <Radio style={{ paddingTop: 6 }} value={4}>
+                              ทั้งหมด
+                            </Radio>
+                          </Col>
                         </Row>
                       </Space>
                     </Radio.Group>
