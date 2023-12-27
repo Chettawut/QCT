@@ -1,6 +1,6 @@
 // import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "../pages/Home";
+import Dashboard from "../pages/Dashboard";
 import Items from "../pages/Items";
 import RB from "../pages/RB";
 import PO from "../pages/PO";
@@ -25,7 +25,7 @@ const Router = () => {
         <Route
           element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER,  ]} />}
         >
-          <Route path="/dashboard" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/items" element={<Items />} />
           <Route path="/RB" element={<RB />} />
           <Route path="/PO" element={<PO />} />
