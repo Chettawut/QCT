@@ -182,7 +182,7 @@ const SR = () => {
 
   const columns = [
     {
-      title: "SR Code",
+      title: "หมายเลข",
       dataIndex: "srcode",
       key: "srcode",
       width: "20%",
@@ -191,7 +191,7 @@ const SR = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "SR Date",
+      title: "ลูกค้า",
       dataIndex: "srdate",
       key: "srdate",
       width: "20%",
@@ -200,12 +200,103 @@ const SR = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ชื่อลูกค้า",
-      dataIndex: "cusname",
-      key: "cusname",
+      title: "ทะเบียนรถ",
+      dataIndex: "srdate",
+      key: "srdate",
       width: "20%",
-      ...getColumnSearchProps("cusname"),
-      sorter: (a, b) => a.cusname.length - b.cusname.length,
+      ...getColumnSearchProps("srdate"),
+      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "จังหวัด",
+      dataIndex: "srdate",
+      key: "srdate",
+      width: "20%",
+      ...getColumnSearchProps("srdate"),
+      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "วันที่",
+      key: "operation",
+      width: "20%",
+      fixed: "right",
+      render: (text) => (
+        <span
+          style={{ color: "#29f", cursor: "pointer" }}
+          onClick={(e) => showEditModal(text.srcode)}
+        >
+          Edit
+        </span>
+      ),
+    },
+    {
+      title: "ตัดสต๊อก",
+      dataIndex: "srdate",
+      key: "srdate",
+      width: "20%",
+      ...getColumnSearchProps("srdate"),
+      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "พิมพ์ VAT",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "ตัดสต๊อก VAT",
+      key: "operation",
+      width: "20%",
+      fixed: "right",
+      render: (text) => (
+        <span
+          style={{ color: "#29f", cursor: "pointer" }}
+          onClick={(e) => showEditModal(text.srcode)}
+        >
+          Edit
+        </span>
+      ),
+    },
+    {
+      title: "บิลออนไลน์",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "ส่งด่วน",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "สถานะการส่ง",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "จอง",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -218,18 +309,22 @@ const SR = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Action",
-      key: "operation",
+      title: "พนักงานขาย",
+      dataIndex: "srstatus",
+      key: "srstatus",
       width: "20%",
-      fixed: "right",
-      render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.srcode)}
-        >
-          Edit
-        </span>
-      ),
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "สาขา",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
     },
   ].filter((item) => !item.hidden);
 
