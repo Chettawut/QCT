@@ -21,13 +21,13 @@ const Router = () => {
       <Routes>
         {/* <Route path="/" element={<Navigate replace to="/login" />} /> */}
         <Route path="/" element={<Login />} />
-
+        <Route path="/RB" element={<RB />} />
         <Route
-          element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER,  ]} />}
+          element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER]} />}
         >
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/items" element={<Items />} />
-          <Route path="/RB" element={<RB />} />
+
           <Route path="/PO" element={<PO />} />
           <Route path="/unit" element={<Unit />} />
           <Route path="/itemtype" element={<Itemtype />} />
@@ -36,7 +36,6 @@ const Router = () => {
           <Route path="bom/" element={<BomIndex />}></Route>
           <Route path="bom/:action/:id?" element={<BomForm />} />
         </Route>
-
 
         <Route element={<PrivateRoute allowdRole={[ROLES.ADMIN]} />}>
           <Route path="/user" element={<User />} />

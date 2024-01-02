@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import Header from "../pages/PublicHeader";
 import {
   DeleteOutlined,
   SearchOutlined,
@@ -20,7 +21,6 @@ import {
   DatePicker,
 } from "antd";
 import Highlighter from "react-highlight-words";
-
 // COMPONENT
 import { EditableRow, EditableCell } from "../components/table/TableEditAble";
 
@@ -729,7 +729,8 @@ const SR = () => {
 
   return (
     <>
-      <div className="layout-content">
+      <Header></Header>
+      <div className="layout-content" style={{padding: 20}}>
         <Row gutter={[24, 0]}>
           <Col xs={24} sm={24} md={24} lg={24} xl={12}>
             <Collapse
