@@ -1,67 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import {
+  AppstoreOutlined,
+  MailOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
 import { ConfigProvider, Menu } from "antd";
 const PublicHeader = () => {
   const items = [
     {
-      label: 'Navigation One',
-      key: 'mail',
+      label: "Navigation One",
+      key: "mail",
       icon: <MailOutlined />,
     },
     {
-      label: 'Navigation Two',
-      key: 'app',
+      label: "Navigation Two",
+      key: "app",
       icon: <AppstoreOutlined />,
       disabled: true,
     },
     {
-      label: 'Navigation Three - Submenu',
-      key: 'SubMenu',
+      label: "ระบบงานขาย",
+      key: "SubMenu",
       icon: <SettingOutlined />,
       children: [
         {
-          type: 'group',
-          label: 'Item 1',
+          type: "group",
           children: [
             {
-              label: 'Option 1',
-              key: 'setting:1',
+              label: (
+                <a href="/" rel="noopener ">
+                  ใบรายการซ่อม
+                </a>
+              ),
+              key: "setting:1",
             },
             {
-              label: 'Option 2',
-              key: 'setting:2',
-            },
-          ],
-        },
-        {
-          type: 'group',
-          label: 'Item 2',
-          children: [
-            {
-              label: 'Option 3',
-              key: 'setting:3',
-            },
-            {
-              label: 'Option 4',
-              key: 'setting:4',
+              label: "Option 2",
+              key: "setting:2",
             },
           ],
         },
       ],
     },
-    {
-      label: (
-        <a href="/" rel="noopener noreferrer">
-          Navigation Four - Link
-        </a>
-      ),
-      key: 'alipay',
-    },
   ];
-  const [current, setCurrent] = useState('mail');
+  const [current, setCurrent] = useState("mail");
   const onClick = (e) => {
-    console.log('click ', e);
+    console.log("click ", e);
     setCurrent(e.key);
   };
   return (
@@ -105,7 +90,12 @@ const PublicHeader = () => {
           },
         }}
       ></ConfigProvider>
-      <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
+      <Menu
+        onClick={onClick}
+        selectedKeys={[current]}
+        mode="horizontal"
+        items={items}
+      />
     </>
   );
 };
