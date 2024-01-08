@@ -4,6 +4,7 @@ const PublicHeader = () => {
   const items = [
     {
       label: "ระบบงานขาย",
+      key: 'menu1',
       children: [
         {
           type: "group",
@@ -14,6 +15,7 @@ const PublicHeader = () => {
                   ใบรายการซ่อม
                 </a>
               ),
+              key: 'menu1_1',
             },
             {
               label: (
@@ -21,6 +23,7 @@ const PublicHeader = () => {
                   การวางบิล
                 </a>
               ),
+              key: 'menu1_2',
             },
             {
               label: (
@@ -28,6 +31,7 @@ const PublicHeader = () => {
                   ข้อมูลการเก็บเงิน
                 </a>
               ),
+              key: 'menu1_3',
             },
             {
               label: (
@@ -35,6 +39,7 @@ const PublicHeader = () => {
                   ประวัติลูกค้า
                 </a>
               ),
+              key: 'menu1_4',
             },
             {
               label: (
@@ -42,6 +47,7 @@ const PublicHeader = () => {
                   ใบเสนอราคา
                 </a>
               ),
+              key: 'menu1_5',
             },
             {
               label: (
@@ -49,6 +55,7 @@ const PublicHeader = () => {
                   รายจ่าย
                 </a>
               ),
+              key: 'menu1_6',
             },
           ],
         },
@@ -56,6 +63,7 @@ const PublicHeader = () => {
     },
     {
       label: "คลังสินค้า",
+      key: 'menu2',
       children: [
         {
           type: "group",
@@ -66,6 +74,7 @@ const PublicHeader = () => {
                   ใบสั่งซื้อ
                 </a>
               ),
+              key: 'menu2_1',
             },
             {
               label: (
@@ -73,6 +82,7 @@ const PublicHeader = () => {
                   รับสินค้า
                 </a>
               ),
+              key: 'menu2_2',
             },
             {
               label: (
@@ -80,13 +90,7 @@ const PublicHeader = () => {
                   สั่งซื้ออัตโนมัติ
                 </a>
               ),
-            },
-            {
-              label: (
-                <a href="/"  rel="noopener noreferrer">
-                  ตัวแทนจำหน่าย
-                </a>
-              ),
+              key: 'menu2_3',
             },
           ],
         },
@@ -94,6 +98,7 @@ const PublicHeader = () => {
     },
     {
       label: "สินค้า",
+      key: 'menu3',
       children: [
         {
           type: "group",
@@ -104,20 +109,7 @@ const PublicHeader = () => {
                   สินค้า
                 </a>
               ),
-            },
-            {
-              label: (
-                <a href="/"  rel="noopener noreferrer">
-                  แพ็คเก็จ
-                </a>
-              ),
-            },
-            {
-              label: (
-                <a href="/"  rel="noopener noreferrer">
-                  สิทธิ์แลกซื้อ
-                </a>
-              ),
+              key: 'menu3_1',
             },
           ],
         },
@@ -125,6 +117,7 @@ const PublicHeader = () => {
     },
     {
       label: "ข้อมูล",
+      key: 'menu4',
       children: [
         {
           type: "group",
@@ -135,6 +128,7 @@ const PublicHeader = () => {
                   รถ
                 </a>
               ),
+              key: 'menu4_1',
             },
             {
               label: (
@@ -142,6 +136,7 @@ const PublicHeader = () => {
                   ลูกค้าบุคคล
                 </a>
               ),
+              key: 'menu4_2',
             },
             {
               label: (
@@ -149,6 +144,7 @@ const PublicHeader = () => {
                   ลูกค้าบริษัท
                 </a>
               ),
+              key: 'menu4_3',
             },
             {
               label: (
@@ -163,6 +159,7 @@ const PublicHeader = () => {
     },
     {
       label: "จัดการระบบ",
+      key: 'menu5',
       children: [
         {
           type: "group",
@@ -173,6 +170,7 @@ const PublicHeader = () => {
                   ผู้ใช้ระบบ
                 </a>
               ),
+              key: 'menu5_1',
             },
           ],
         },
