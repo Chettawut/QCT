@@ -1,4 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
+import Header from "../pages/PublicHeader";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -560,7 +561,8 @@ function User() {
 
   return (
     <>
-      <div className="layout-content">
+    <Header></Header>
+      <div className="layout-content" style={{padding: 20}}>
         <Button
           type="primary"
           onClick={() => {

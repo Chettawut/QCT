@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import Items from "../pages/Items";
 import RB from "../pages/RB";
+import Billing from "../pages/Billing";
+import History from "../pages/History";
 import PO from "../pages/PO";
 import Unit from "../pages/Unit";
 import Profile from "../pages/Profile";
@@ -22,6 +24,8 @@ const Router = () => {
         {/* <Route path="/" element={<Navigate replace to="/login" />} /> */}
         <Route path="/" element={<Login />} />
         <Route path="/RB" element={<RB />} />
+        <Route path="/Billing" element={<Billing />} />
+        <Route path="/History" element={<History />} />
         <Route
           element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER]} />}
         >
@@ -37,7 +41,7 @@ const Router = () => {
           <Route path="bom/:action/:id?" element={<BomForm />} />
         </Route>
 
-        <Route element={<PrivateRoute allowdRole={[ROLES.ADMIN]} />}>
+        <Route>
           <Route path="/user" element={<User />} />
         </Route>
 

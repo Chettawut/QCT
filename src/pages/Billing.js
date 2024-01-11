@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import Header from "../pages/PublicHeader";
+import Header from "./PublicHeader";
 import {
   DeleteOutlined,
   SearchOutlined,
@@ -730,10 +730,10 @@ const SR = () => {
   return (
     <>
       <Header></Header>
-      <div className="layout-content" style={{ padding: 20 }}>
-        <h1>ใบรายการซ่อม</h1>
+      <div className="layout-content" style={{padding: 20}}>
+      <h1>ระบบงานขาย</h1>
         <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
             <Collapse
               items={[
                 {
@@ -775,7 +775,60 @@ const SR = () => {
               ]}
             />
           </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+            <Collapse
+              items={[
+                {
+                  key: "1",
+                  label: "ประเภทบิล",
+                  children: (
+                    <Radio.Group onChange={onChange} value={value}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={24} sm={12} md={12} lg={12} xl={24}>
+                          <Radio style={{ paddingTop: 6 }} value={1}>
+                            เฉพาะวันนี้
+                          </Radio>
+                        </Col>
+
+                        <Col xs={24} sm={12} md={12} lg={12} xl={24}>
+                          <Radio style={{ paddingTop: 6 }} value={4}>
+                            ทั้งหมด
+                          </Radio>
+                        </Col>
+
+                        <Col xs={24} sm={24} md={12} lg={12} xl={3}>
+                          <Radio style={{ paddingTop: 6 }} value={2}>
+                            ตั้งแต่
+                          </Radio>
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                          <DatePicker format="DD-MM-YYYY" onChange={onChange} />
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={2}>
+                          <p style={{ paddingTop: 6 }}>ถึง</p>
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                          <DatePicker format="DD-MM-YYYY" onChange={onChange} />
+                        </Col>
+                      </Row>
+                    </Radio.Group>
+                  ),
+                },
+              ]}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+            <Collapse
+              items={[
+                {
+                  key: "1",
+                  label: "ประเภทบิล",
+                },
+              ]}
+            />
+          </Col>
         </Row>
+        
         <br></br>
         <Button type="primary" onClick={() => setIsOpenModal(true)}>
           เพิ่มใบสั่งซื้อสินค้า
