@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import Header from "./PublicHeader";
+import Header from "../pages/PublicHeader";
 import {
   DeleteOutlined,
   SearchOutlined,
@@ -721,25 +721,19 @@ const SR = () => {
       </Modal>
     );
   };
-  // Radio ระบบงานขาย
   const [value, setValue] = useState(1);
   const onChange = (e) => {
     console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
-  // Radio ประเภทบิล
-  const [value1, setValue1] = useState(1);
-  const onChange1 = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue1(e.target.value);
-  };
+
   return (
     <>
       <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
-        <h1>การวางบิล</h1>
+        <h1>การรับสินค้า</h1>
         <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+          <Col xs={24} sm={24} md={24} lg={24} xl={12}>
             <Collapse
               items={[
                 {
@@ -781,52 +775,10 @@ const SR = () => {
               ]}
             />
           </Col>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-            <Collapse
-              items={[
-                {
-                  key: "1",
-                  label: "ประเภทบิล",
-                  children: (
-                    <Row gutter={[24, 0]}>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="การวางบิล">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังไม่วางบิล</Radio>
-                            <Radio value={3}>วางบิลแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="การชำระเงิน">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังชำระไม่ครบ</Radio>
-                            <Radio value={3}>ชำระครบแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="ถึงวันชำระ">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังไม่ถึง</Radio>
-                            <Radio value={3}>ถึงแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  ),
-                },
-              ]}
-            />
-          </Col>
         </Row>
-
         <br></br>
         <Button type="primary" onClick={() => setIsOpenModal(true)}>
-          เพิ่มการวางบิล
+          เพิ่มการรับสินค้า
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>

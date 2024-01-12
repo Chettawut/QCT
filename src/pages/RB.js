@@ -778,7 +778,7 @@ const SR = () => {
         </Row>
         <br></br>
         <Button type="primary" onClick={() => setIsOpenModal(true)}>
-          เพิ่มใบสั่งซื้อสินค้า
+          เพิ่มใบรายการซ่อม
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>

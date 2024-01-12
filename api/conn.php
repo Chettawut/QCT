@@ -2,9 +2,9 @@
 class DbConnect {
 	private $server = 'localhost';
 
-	private $user = "chairat1_db"; //
+	private $user = "qctautoc_db"; //
 	private $pass = "Gxh.2411"; //
-	private $dbname = "chairat1_db";
+	private $dbname = "qctautoc_db";
 
 	public function connect() {
 		try {

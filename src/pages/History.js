@@ -727,7 +727,7 @@ const SR = () => {
         <h1>ประวัติลูกค้า(ตามรถ)</h1>
         <br></br>
         <Button type="primary" onClick={() => setIsOpenModal(true)}>
-          เพิ่มใบสั่งซื้อสินค้า
+          เพิ่มประวัติลูกค้า
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
@@ -754,7 +754,7 @@ const SR = () => {
           onClick={() => setIsShowModalItem(true)}
           style={{ marginBottom: 16, float: "right" }}
         >
-          เพิ่มสินค้า
+          ประวัติลูกค้า
         </Button>
 
         <Table

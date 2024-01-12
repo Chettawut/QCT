@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import Header from "./PublicHeader";
 import {
   DeleteOutlined,
   SearchOutlined,
@@ -16,9 +17,10 @@ import {
   Form,
   Select,
   Collapse,
+  Radio,
+  DatePicker,
 } from "antd";
 import Highlighter from "react-highlight-words";
-
 // COMPONENT
 import { EditableRow, EditableCell } from "../components/table/TableEditAble";
 
@@ -41,7 +43,6 @@ const SR = () => {
   // MODAL CONTROLLER
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isShowModalItem, setIsShowModalItem] = useState(false);
-
   const searchInput = useRef(null);
 
   useEffect(() => {
@@ -181,7 +182,7 @@ const SR = () => {
 
   const columns = [
     {
-      title: "SR Code",
+      title: "หมายเลข",
       dataIndex: "srcode",
       key: "srcode",
       width: "20%",
@@ -190,7 +191,7 @@ const SR = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "SR Date",
+      title: "ลูกค้า",
       dataIndex: "srdate",
       key: "srdate",
       width: "20%",
@@ -199,12 +200,103 @@ const SR = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ชื่อลูกค้า",
-      dataIndex: "cusname",
-      key: "cusname",
+      title: "ทะเบียนรถ",
+      dataIndex: "srdate",
+      key: "srdate",
       width: "20%",
-      ...getColumnSearchProps("cusname"),
-      sorter: (a, b) => a.cusname.length - b.cusname.length,
+      ...getColumnSearchProps("srdate"),
+      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "จังหวัด",
+      dataIndex: "srdate",
+      key: "srdate",
+      width: "20%",
+      ...getColumnSearchProps("srdate"),
+      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "วันที่",
+      key: "operation",
+      width: "20%",
+      fixed: "right",
+      render: (text) => (
+        <span
+          style={{ color: "#29f", cursor: "pointer" }}
+          onClick={(e) => showEditModal(text.srcode)}
+        >
+          Edit
+        </span>
+      ),
+    },
+    {
+      title: "ตัดสต๊อก",
+      dataIndex: "srdate",
+      key: "srdate",
+      width: "20%",
+      ...getColumnSearchProps("srdate"),
+      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "พิมพ์ VAT",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "ตัดสต๊อก VAT",
+      key: "operation",
+      width: "20%",
+      fixed: "right",
+      render: (text) => (
+        <span
+          style={{ color: "#29f", cursor: "pointer" }}
+          onClick={(e) => showEditModal(text.srcode)}
+        >
+          Edit
+        </span>
+      ),
+    },
+    {
+      title: "บิลออนไลน์",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "ส่งด่วน",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "สถานะการส่ง",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "จอง",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -217,18 +309,22 @@ const SR = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Action",
-      key: "operation",
+      title: "พนักงานขาย",
+      dataIndex: "srstatus",
+      key: "srstatus",
       width: "20%",
-      fixed: "right",
-      render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.srcode)}
-        >
-          Edit
-        </span>
-      ),
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "สาขา",
+      dataIndex: "srstatus",
+      key: "srstatus",
+      width: "20%",
+      ...getColumnSearchProps("srstatus"),
+      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      sortDirections: ["descend", "ascend"],
     },
   ].filter((item) => !item.hidden);
 
@@ -625,19 +721,119 @@ const SR = () => {
       </Modal>
     );
   };
-
+  // Radio ระบบงานขาย
+  const [value, setValue] = useState(1);
+  const onChange = (e) => {
+    console.log("radio checked", e.target.value);
+    setValue(e.target.value);
+  };
+  // Radio ประเภทบิล
+  const [value1, setValue1] = useState(1);
+  const onChange1 = (e) => {
+    console.log("radio checked", e.target.value);
+    setValue1(e.target.value);
+  };
   return (
     <>
-      <div className="layout-content">
-        <Collapse
-          items={[
-            {
-              key: "1",
-              label: "ตัวกรองตามวันที่",
-              children: <p></p>,
-            },
-          ]}
-        />
+      <Header></Header>
+      <div className="layout-content" style={{ padding: 20 }}>
+        <h1>ใบสั่งซื้อสินค้า</h1>
+        <Row gutter={[24, 0]}>
+          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+            <Collapse
+              items={[
+                {
+                  key: "1",
+                  label: "ตัวกรองตามวันที่",
+                  children: (
+                    <Radio.Group onChange={onChange} value={value}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={24} sm={12} md={12} lg={12} xl={24}>
+                          <Radio style={{ paddingTop: 6 }} value={1}>
+                            เฉพาะวันนี้
+                          </Radio>
+                        </Col>
+
+                        <Col xs={24} sm={12} md={12} lg={12} xl={24}>
+                          <Radio style={{ paddingTop: 6 }} value={4}>
+                            ทั้งหมด
+                          </Radio>
+                        </Col>
+
+                        <Col xs={24} sm={24} md={12} lg={12} xl={3}>
+                          <Radio style={{ paddingTop: 6 }} value={2}>
+                            ตั้งแต่
+                          </Radio>
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                          <DatePicker format="DD-MM-YYYY" onChange={onChange} />
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={2}>
+                          <p style={{ paddingTop: 6 }}>ถึง</p>
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                          <DatePicker format="DD-MM-YYYY" onChange={onChange} />
+                        </Col>
+                      </Row>
+                    </Radio.Group>
+                  ),
+                },
+              ]}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+            <Collapse
+              items={[
+                {
+                  key: "1",
+                  label: "ประเภทบิล",
+                  children: (
+                    <Row gutter={[24, 0]}>
+                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                        <Form.Item label="การวางบิล">
+                          <Radio.Group onChange={onChange1} value={value1}>
+                            <Radio value={1}>ทั้งหมด</Radio>
+                            <Radio value={2}>ยังไม่วางบิล</Radio>
+                            <Radio value={3}>วางบิลแล้ว</Radio>
+                          </Radio.Group>
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                        <Form.Item label="การชำระเงิน">
+                          <Radio.Group onChange={onChange1} value={value1}>
+                            <Radio value={1}>ทั้งหมด</Radio>
+                            <Radio value={2}>ยังชำระไม่ครบ</Radio>
+                            <Radio value={3}>ชำระครบแล้ว</Radio>
+                          </Radio.Group>
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                        <Form.Item label="ถึงวันชำระ">
+                          <Radio.Group onChange={onChange1} value={value1}>
+                            <Radio value={1}>ทั้งหมด</Radio>
+                            <Radio value={2}>ยังไม่ถึง</Radio>
+                            <Radio value={3}>ถึงแล้ว</Radio>
+                          </Radio.Group>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  ),
+                },
+              ]}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+            <Collapse
+              items={[
+                {
+                  key: "1",
+                  label: "ประเภทบิล",
+                },
+              ]}
+            />
+          </Col>
+        </Row>
+
         <br></br>
         <Button type="primary" onClick={() => setIsOpenModal(true)}>
           เพิ่มใบสั่งซื้อสินค้า

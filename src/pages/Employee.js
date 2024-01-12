@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Header from "./PublicHeader";
 import {
-  DeleteOutlined,
   SearchOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
@@ -16,13 +15,9 @@ import {
   Modal,
   Form,
   Select,
-  Collapse,
-  Radio,
-  DatePicker,
 } from "antd";
 import Highlighter from "react-highlight-words";
 // COMPONENT
-import { EditableRow, EditableCell } from "../components/table/TableEditAble";
 
 // SERVICE
 import ItemService from "../service/ItemService";
@@ -182,16 +177,34 @@ const SR = () => {
 
   const columns = [
     {
-      title: "หมายเลข",
+      title: "รหัสพนักงาน",
       dataIndex: "srcode",
       key: "srcode",
-      width: "20%",
+      width: "5%",
       ...getColumnSearchProps("srcode"),
       sorter: (a, b) => a.srcode.length - b.srcode.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ลูกค้า",
+      title: "ชื่อ-นามสกุล",
+      dataIndex: "srdate",
+      key: "srdate",
+      width: "30%",
+      ...getColumnSearchProps("srdate"),
+      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "ชื่อเล่น",
+      dataIndex: "srdate",
+      key: "srdate",
+      width: "10%",
+      ...getColumnSearchProps("srdate"),
+      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "ตำแหน่ง",
       dataIndex: "srdate",
       key: "srdate",
       width: "20%",
@@ -200,247 +213,40 @@ const SR = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ทะเบียนรถ",
+      title: "เบอร์โทร",
       dataIndex: "srdate",
       key: "srdate",
       width: "20%",
       ...getColumnSearchProps("srdate"),
       sorter: (a, b) => a.srdate.length - b.srdate.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "จังหวัด",
-      dataIndex: "srdate",
-      key: "srdate",
-      width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "วันที่",
-      key: "operation",
-      width: "20%",
-      fixed: "right",
-      render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.srcode)}
-        >
-          Edit
-        </span>
-      ),
-    },
-    {
-      title: "ตัดสต๊อก",
-      dataIndex: "srdate",
-      key: "srdate",
-      width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "พิมพ์ VAT",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ตัดสต๊อก VAT",
-      key: "operation",
-      width: "20%",
-      fixed: "right",
-      render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.srcode)}
-        >
-          Edit
-        </span>
-      ),
-    },
-    {
-      title: "บิลออนไลน์",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ส่งด่วน",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สถานะการส่ง",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "จอง",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "สถานะ",
-      dataIndex: "srstatus",
-      key: "srstatus",
+      dataIndex: "srdate",
+      key: "srdate",
       width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      ...getColumnSearchProps("srdate"),
+      sorter: (a, b) => a.srdate.length - b.srdate.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "พนักงานขาย",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สาขา",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
+      title: "แก้ใข",
+      key: "operation",
+      width: "15%",
+      fixed: "right",
+      render: (text) => (
+        <span
+          style={{ color: "#29f", cursor: "pointer" }}
+          onClick={(e) => showEditModal(text.srcode)}
+        >
+          Edit
+        </span>
+      ),
     },
   ].filter((item) => !item.hidden);
 
-  const defaultColumns = [
-    {
-      title: "ลำดับ",
-      key: "index",
-      align: "center",
-      render: (_, record, idx) => <span key={record?.stcode}>{idx + 1}</span>,
-    },
-    {
-      title: "รหัสสินค้า",
-      key: "productCode",
-      dataIndex: "productCode",
-    },
-    {
-      title: "ชื่อสินค้า",
-      key: "productName",
-      dataIndex: "productName",
-    },
-    {
-      title: "จำนวน",
-      key: "productQty",
-      dataIndex: "productQty",
-      align: "center",
-      editable: true,
-      width: "10%",
-    },
-    {
-      title: "หน่วย",
-      align: "center",
-      key: "productUnit",
-      dataIndex: "productUnit",
-    },
-    {
-      title: "ราคาซื้อ",
-      key: "productPrice",
-      dataIndex: "productPrice",
-      align: "right",
-      width: "10%",
-    },
-    {
-      title: "ส่วนลด",
-      key: "productDiscount",
-      dataIndex: "productDiscount",
-      align: "right",
-      editable: true,
-      width: "10%",
-    },
-    {
-      title: "ราคาทั้งหมด",
-      key: "productTotalPrice",
-      dataIndex: "productTotalPrice",
-      align: "right",
-      render: (productTotalPrice) => productTotalPrice?.toLocaleString(),
-    },
-    {
-      align: "center",
-      key: "operation",
-      dataIndex: "operation",
-      render: (_, record) =>
-        selectedList.length >= 1 ? (
-          <Button
-            className="bt-icon"
-            type="primary"
-            danger
-            icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record?.productCode)}
-          />
-        ) : null,
-    },
-  ];
 
-  const components = {
-    body: { row: EditableRow, cell: EditableCell },
-  };
-
-  const columnsOrder = defaultColumns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        editable: col.editable,
-        dataIndex: col.dataIndex,
-        title: col.title,
-        handleSave,
-      }),
-    };
-  });
-
-  const handleDelete = (productCode) => {
-    const newData = selectedList.filter(
-      (item) => item?.productCode !== productCode
-    );
-    setSelectedList(newData);
-  };
-
-  const handleSave = (row) => {
-    if (row?.productQty > 0) {
-      const newData = [...selectedList];
-      const index = newData.findIndex(
-        (item) => row?.productCode === item?.productCode
-      );
-      const item = newData[index];
-      row["productTotalPrice"] =
-        row?.productQty * row?.productPrice - row?.productDiscount;
-      newData.splice(index, 1, {
-        ...item,
-        ...row,
-      });
-      setSelectedList(newData);
-    }
-  };
 
   const handleSelectedItem = (record) => {
     const newData = {
@@ -721,112 +527,16 @@ const SR = () => {
       </Modal>
     );
   };
-  // Radio ระบบงานขาย
-  const [value, setValue] = useState(1);
-  const onChange = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue(e.target.value);
-  };
-  // Radio ประเภทบิล
-  const [value1, setValue1] = useState(1);
-  const onChange1 = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue1(e.target.value);
-  };
+
   return (
     <>
       <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
-        <h1>การวางบิล</h1>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-            <Collapse
-              items={[
-                {
-                  key: "1",
-                  label: "ตัวกรองตามวันที่",
-                  children: (
-                    <Radio.Group onChange={onChange} value={value}>
-                      <Row gutter={[24, 0]}>
-                        <Col xs={24} sm={12} md={12} lg={12} xl={24}>
-                          <Radio style={{ paddingTop: 6 }} value={1}>
-                            เฉพาะวันนี้
-                          </Radio>
-                        </Col>
-
-                        <Col xs={24} sm={12} md={12} lg={12} xl={24}>
-                          <Radio style={{ paddingTop: 6 }} value={4}>
-                            ทั้งหมด
-                          </Radio>
-                        </Col>
-
-                        <Col xs={24} sm={24} md={12} lg={12} xl={3}>
-                          <Radio style={{ paddingTop: 6 }} value={2}>
-                            ตั้งแต่
-                          </Radio>
-                        </Col>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                          <DatePicker format="DD-MM-YYYY" onChange={onChange} />
-                        </Col>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={2}>
-                          <p style={{ paddingTop: 6 }}>ถึง</p>
-                        </Col>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                          <DatePicker format="DD-MM-YYYY" onChange={onChange} />
-                        </Col>
-                      </Row>
-                    </Radio.Group>
-                  ),
-                },
-              ]}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-            <Collapse
-              items={[
-                {
-                  key: "1",
-                  label: "ประเภทบิล",
-                  children: (
-                    <Row gutter={[24, 0]}>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="การวางบิล">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังไม่วางบิล</Radio>
-                            <Radio value={3}>วางบิลแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="การชำระเงิน">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังชำระไม่ครบ</Radio>
-                            <Radio value={3}>ชำระครบแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="ถึงวันชำระ">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังไม่ถึง</Radio>
-                            <Radio value={3}>ถึงแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  ),
-                },
-              ]}
-            />
-          </Col>
-        </Row>
+        <h1>พนักงาน</h1>
 
         <br></br>
         <Button type="primary" onClick={() => setIsOpenModal(true)}>
-          เพิ่มการวางบิล
+          เพิ่มพนักงาน
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
@@ -840,31 +550,15 @@ const SR = () => {
 
       <Modal
         open={isOpenModal}
-        title="ใบสั่งซื้อสินค้า"
-        okText="Create"
-        cancelText="Cancel"
+        title="เพิ่มพนักงาน"
+        okText="เพิ่ม"
+        cancelText="ยกเลิก"
         onCancel={handleCloseModal}
         onOk={handleCreate}
         width={1000}
         maskClosable={false}
       >
-        <Button
-          type="primary"
-          onClick={() => setIsShowModalItem(true)}
-          style={{ marginBottom: 16, float: "right" }}
-        >
-          เพิ่มสินค้า
-        </Button>
-
-        <Table
-          components={components}
-          rowClassName={() => "editable-row"}
-          bordered
-          dataSource={selectedList}
-          columns={columnsOrder}
-          pagination={false}
-          rowKey="productCode"
-        />
+      <p>wmfwgi</p>
       </Modal>
 
       <Modal

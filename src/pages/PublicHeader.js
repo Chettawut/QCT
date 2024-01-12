@@ -27,7 +27,7 @@ const PublicHeader = () => {
             },
             {
               label: (
-                <a href="/"  rel="noopener noreferrer">
+                <a href="/Billinginformation"  rel="noopener noreferrer">
                   ข้อมูลการเก็บเงิน
                 </a>
               ),
@@ -43,19 +43,11 @@ const PublicHeader = () => {
             },
             {
               label: (
-                <a href="/"  rel="noopener noreferrer">
+                <a href="/Quotation"  rel="noopener noreferrer">
                   ใบเสนอราคา
                 </a>
               ),
               key: 'menu1_5',
-            },
-            {
-              label: (
-                <a href="/"  rel="noopener noreferrer">
-                  รายจ่าย
-                </a>
-              ),
-              key: 'menu1_6',
             },
           ],
         },
@@ -70,7 +62,7 @@ const PublicHeader = () => {
           children: [
             {
               label: (
-                <a href="/"  rel="noopener noreferrer">
+                <a href="/PO"  rel="noopener noreferrer">
                   ใบสั่งซื้อ
                 </a>
               ),
@@ -78,19 +70,11 @@ const PublicHeader = () => {
             },
             {
               label: (
-                <a href="/"  rel="noopener noreferrer">
+                <a href="/Receivinggoods"  rel="noopener noreferrer">
                   รับสินค้า
                 </a>
               ),
               key: 'menu2_2',
-            },
-            {
-              label: (
-                <a href="/"  rel="noopener noreferrer">
-                  สั่งซื้ออัตโนมัติ
-                </a>
-              ),
-              key: 'menu2_3',
             },
           ],
         },
@@ -105,7 +89,7 @@ const PublicHeader = () => {
           children: [
             {
               label: (
-                <a href="/"  rel="noopener noreferrer">
+                <a href="/Item"  rel="noopener noreferrer">
                   สินค้า
                 </a>
               ),
@@ -124,7 +108,7 @@ const PublicHeader = () => {
           children: [
             {
               label: (
-                <a href="/"  rel="noopener noreferrer">
+                <a href="/Car"  rel="noopener noreferrer">
                   รถ
                 </a>
               ),
@@ -132,7 +116,7 @@ const PublicHeader = () => {
             },
             {
               label: (
-                <a href="/"  rel="noopener noreferrer">
+                <a href="/Individualcustomers"  rel="noopener noreferrer">
                   ลูกค้าบุคคล
                 </a>
               ),
@@ -140,7 +124,7 @@ const PublicHeader = () => {
             },
             {
               label: (
-                <a href="/"  rel="noopener noreferrer">
+                <a href="/Companycustomers"  rel="noopener noreferrer">
                   ลูกค้าบริษัท
                 </a>
               ),
@@ -148,7 +132,7 @@ const PublicHeader = () => {
             },
             {
               label: (
-                <a href="/"  rel="noopener noreferrer">
+                <a href="/Employee"  rel="noopener noreferrer">
                   พนักงาน
                 </a>
               ),

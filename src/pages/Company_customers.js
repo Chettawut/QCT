@@ -737,7 +737,7 @@ const SR = () => {
     <>
       <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
-        <h1>การวางบิล</h1>
+        <h1>ลูกค้าบริษัท</h1>
         <Row gutter={[24, 0]}>
           <Col xs={24} sm={24} md={24} lg={24} xl={8}>
             <Collapse
@@ -822,11 +822,21 @@ const SR = () => {
               ]}
             />
           </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+            <Collapse
+              items={[
+                {
+                  key: "1",
+                  label: "ประเภทบิล",
+                },
+              ]}
+            />
+          </Col>
         </Row>
 
         <br></br>
         <Button type="primary" onClick={() => setIsOpenModal(true)}>
-          เพิ่มการวางบิล
+          เพิ่มใบสั่งซื้อสินค้า
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>

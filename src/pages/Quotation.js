@@ -16,9 +16,6 @@ import {
   Modal,
   Form,
   Select,
-  Collapse,
-  Radio,
-  DatePicker,
 } from "antd";
 import Highlighter from "react-highlight-words";
 // COMPONENT
@@ -721,112 +718,16 @@ const SR = () => {
       </Modal>
     );
   };
-  // Radio ระบบงานขาย
-  const [value, setValue] = useState(1);
-  const onChange = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue(e.target.value);
-  };
-  // Radio ประเภทบิล
-  const [value1, setValue1] = useState(1);
-  const onChange1 = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue1(e.target.value);
-  };
+  
+
   return (
     <>
       <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
-        <h1>การวางบิล</h1>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-            <Collapse
-              items={[
-                {
-                  key: "1",
-                  label: "ตัวกรองตามวันที่",
-                  children: (
-                    <Radio.Group onChange={onChange} value={value}>
-                      <Row gutter={[24, 0]}>
-                        <Col xs={24} sm={12} md={12} lg={12} xl={24}>
-                          <Radio style={{ paddingTop: 6 }} value={1}>
-                            เฉพาะวันนี้
-                          </Radio>
-                        </Col>
-
-                        <Col xs={24} sm={12} md={12} lg={12} xl={24}>
-                          <Radio style={{ paddingTop: 6 }} value={4}>
-                            ทั้งหมด
-                          </Radio>
-                        </Col>
-
-                        <Col xs={24} sm={24} md={12} lg={12} xl={3}>
-                          <Radio style={{ paddingTop: 6 }} value={2}>
-                            ตั้งแต่
-                          </Radio>
-                        </Col>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                          <DatePicker format="DD-MM-YYYY" onChange={onChange} />
-                        </Col>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={2}>
-                          <p style={{ paddingTop: 6 }}>ถึง</p>
-                        </Col>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                          <DatePicker format="DD-MM-YYYY" onChange={onChange} />
-                        </Col>
-                      </Row>
-                    </Radio.Group>
-                  ),
-                },
-              ]}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-            <Collapse
-              items={[
-                {
-                  key: "1",
-                  label: "ประเภทบิล",
-                  children: (
-                    <Row gutter={[24, 0]}>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="การวางบิล">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังไม่วางบิล</Radio>
-                            <Radio value={3}>วางบิลแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="การชำระเงิน">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังชำระไม่ครบ</Radio>
-                            <Radio value={3}>ชำระครบแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="ถึงวันชำระ">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังไม่ถึง</Radio>
-                            <Radio value={3}>ถึงแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  ),
-                },
-              ]}
-            />
-          </Col>
-        </Row>
-
+        <h1>ใบเสนอราคา</h1>
         <br></br>
         <Button type="primary" onClick={() => setIsOpenModal(true)}>
-          เพิ่มการวางบิล
+          เพิ่มใบเสนอราคา
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
@@ -853,7 +754,7 @@ const SR = () => {
           onClick={() => setIsShowModalItem(true)}
           style={{ marginBottom: 16, float: "right" }}
         >
-          เพิ่มสินค้า
+          ประวัติลูกค้า
         </Button>
 
         <Table
