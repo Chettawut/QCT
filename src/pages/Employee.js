@@ -1,9 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Header from "./PublicHeader";
-import {
-  SearchOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Input,
@@ -245,8 +242,6 @@ const SR = () => {
       ),
     },
   ].filter((item) => !item.hidden);
-
-
 
   const handleSelectedItem = (record) => {
     const newData = {
@@ -535,7 +530,7 @@ const SR = () => {
         <h1>พนักงาน</h1>
 
         <br></br>
-        <Button type="primary" onClick={() => setIsOpenModal(true)}>
+        <Button type="primary" danger onClick={() => setIsOpenModal(true)}>
           เพิ่มพนักงาน
         </Button>
 
@@ -555,10 +550,99 @@ const SR = () => {
         cancelText="ยกเลิก"
         onCancel={handleCloseModal}
         onOk={handleCreate}
-        width={1000}
+        width={800}
         maskClosable={false}
       >
-      <p>wmfwgi</p>
+        <Form
+          name="basic"
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 16,
+          }}
+          style={{
+            maxWidth: 600,
+          }}
+          initialValues={{
+            remember: true,
+          }}
+        >
+          <Form.Item
+            label="รหัสพนักงาน"
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="ชื่อ-นามสกุล"
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="ชื่อเล่น"
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+         
+          <Form.Item
+            label="ตำแหน่ง"
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="เบอร์โทร"
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="สถานะ"
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
       </Modal>
 
       <Modal
