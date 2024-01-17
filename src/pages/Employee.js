@@ -12,6 +12,7 @@ import {
   Modal,
   Form,
   Select,
+  ConfigProvider,
 } from "antd";
 import Highlighter from "react-highlight-words";
 // COMPONENT
@@ -530,7 +531,8 @@ const SR = () => {
         <h1>พนักงาน</h1>
 
         <br></br>
-        <Button type="primary" danger onClick={() => setIsOpenModal(true)}>
+
+        <Button type="primary" onClick={() => setIsOpenModal(true)}>
           เพิ่มพนักงาน
         </Button>
 
@@ -544,6 +546,7 @@ const SR = () => {
       </div>
 
       <Modal
+        okButtonProps={{ style: { backgroundColor: "green" } }}
         open={isOpenModal}
         title="เพิ่มพนักงาน"
         okText="เพิ่ม"
@@ -570,11 +573,11 @@ const SR = () => {
         >
           <Form.Item
             label="รหัสพนักงาน"
-            name="username"
+            name="idname"
             rules={[
               {
                 required: true,
-                message: "Please input your username!",
+                message: "ใส่ รหัสพนักงาน ของคุณอีกครั้ง",
               },
             ]}
           >
@@ -587,7 +590,7 @@ const SR = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your username!",
+                message: "ใส่ ชื่อ-นามสกุล ของคุณอีกครั้ง",
               },
             ]}
           >
@@ -595,24 +598,24 @@ const SR = () => {
           </Form.Item>
           <Form.Item
             label="ชื่อเล่น"
-            name="username"
+            name="nickname"
             rules={[
               {
                 required: true,
-                message: "Please input your username!",
+                message: "ใส่ ชื่อเล่น ของคุณอีกครั้ง!",
               },
             ]}
           >
             <Input />
           </Form.Item>
-         
+
           <Form.Item
             label="ตำแหน่ง"
-            name="username"
+            name="rank"
             rules={[
               {
                 required: true,
-                message: "Please input your username!",
+                message: "ใส่ ตำแหน่ง ของคุณอีกครั้ง!",
               },
             ]}
           >
@@ -620,23 +623,11 @@ const SR = () => {
           </Form.Item>
           <Form.Item
             label="เบอร์โทร"
-            name="username"
+            name="tol"
             rules={[
               {
                 required: true,
-                message: "Please input your username!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="สถานะ"
-            name="username"
-            rules={[
-              {
-                required: true,
-                message: "Please input your username!",
+                message: "ใส่ เบอร์โทร ของคุณอีกครั้ง!",
               },
             ]}
           >
