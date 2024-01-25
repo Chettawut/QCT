@@ -18,7 +18,7 @@ const Sidenav = () => {
     <>
       <div className="brand">
         <img src={logo} alt="" />
-        <span>Nine Star Food</span>
+        <span>QCT</span>
       </div>
       <hr />
 
