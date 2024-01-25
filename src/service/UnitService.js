@@ -3,6 +3,7 @@ import { MEDTHOD } from "../constant/constant";
 import { BACKEND_URL } from "../utils/util";
 
 const API_URL = {
+  GET_ALL_Unit: `${BACKEND_URL}/unit/get_allunit.php`,
   Add_UNIT: `${BACKEND_URL}/unit/add_unit.php`,
   GET_UNIT: `${BACKEND_URL}/unit/get_unit.php`,
   GETSUP_UNIT: `${BACKEND_URL}/unit/getsup_unit.php`,
@@ -12,6 +13,14 @@ const API_URL = {
 let contenttype = {"content-type": "application/x-www-form-urlencoded"};
 
 const UnitService = {
+  getAllUnit: () => {
+    return axios({
+      medthod: MEDTHOD.GET,
+      url: API_URL.GET_ALL_Unit,
+      headers: contenttype,
+    });
+  },
+
   addUnit: (reqData) => {
     return axios({
       method: MEDTHOD.POST,

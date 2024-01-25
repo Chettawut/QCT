@@ -7,7 +7,7 @@ import Receivinggoods from "../pages/Receiving_goods";
 import Car from "../pages/Car";
 import Companycustomers from "../pages/Company_customers";
 import Individualcustomers from "../pages/Individualcustomers";
-import Item from "../pages/Item";
+import Items from "../pages/Items";
 import Employee from "../pages/Employee";
 import History from "../pages/History";
 import PO from "../pages/PO";
@@ -33,7 +33,7 @@ const Router = () => {
         <Route path="/RB" element={<RB />} />
         <Route path="/Billing" element={<Billing />} />
         <Route path="/History" element={<History />} />
-        <Route path="/Item" element={<Item />} />
+        <Route path="/Items" element={<Items />} />
         <Route path="/Employee" element={<Employee />} />
         <Route path="/Car" element={<Car />} />
         <Route path="/Individualcustomers" element={<Individualcustomers />} />

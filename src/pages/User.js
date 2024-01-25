@@ -200,7 +200,7 @@ function User() {
       render: (text) => (
         <span
           style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.username)}
+          onClick={(e) => showEditModal(text.code)}
         >
           Edit
         </span>
@@ -230,7 +230,7 @@ function User() {
           formEdit.setFieldValue("Edittype", data.type);
           formEdit.setFieldValue("Edittel", data.tel);
           formEdit.setFieldValue("Editstatususer", data.statususer);
-
+          formEdit.setFieldValue("Editcode", data.code);
           setOpenModalEdit(true);
         }
       })
@@ -242,7 +242,7 @@ function User() {
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
-          if (data.status === '1') {
+          if (data.status) {
             await Swal.fire({
               title: "<strong>สำเร็จ</strong>",
               html: data.message,
@@ -270,7 +270,7 @@ function User() {
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
-          if (data.status === '1') {
+          if (data.status) {
             await Swal.fire({
               title: "<strong>สำเร็จ</strong>",
               html: data.message,
@@ -554,6 +554,9 @@ function User() {
               </Form.Item>
             </Col>
           </Row>
+          <Form.Item name="Editcode">
+                    <Input type="hidden" />
+                  </Form.Item>
         </Form>
       </Modal>
     );
