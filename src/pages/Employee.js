@@ -12,7 +12,6 @@ import {
   Modal,
   Form,
   Select,
-  ConfigProvider,
 } from "antd";
 import Highlighter from "react-highlight-words";
 // COMPONENT
