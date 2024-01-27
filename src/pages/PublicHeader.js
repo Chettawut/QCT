@@ -1,6 +1,17 @@
 import React, { useState } from "react";
-import { ConfigProvider, Menu } from "antd";
+import { ConfigProvider, Menu,Button } from "antd";
+import { useNavigate } from "react-router-dom";
+import { PoweroffOutlined } from "@ant-design/icons";
+import { Authenticate } from "../service/Authenticate.service";
+
+const authService = Authenticate();
 const PublicHeader = () => {
+  const navigate = useNavigate();
+  const onLogout = () => {
+    authService.removeToken();
+    
+    navigate("/", { replace: true });
+  };
   const items = [
     {
       label: "ระบบงานขาย",
@@ -176,12 +187,27 @@ const PublicHeader = () => {
           },
         }}
       ></ConfigProvider>
+      <Button
+          onClick={onLogout}
+          className="btn-sign-in"
+          icon={
+            <PoweroffOutlined
+              style={{
+                fontSize: "16px",
+              }}
+            />
+          }
+          style={{ border: "none", backgroundColor: "inherit" }}
+        >
+          <span>Log out</span>
+        </Button>
       <Menu
         onClick={onClick}
         selectedKeys={[current]}
         mode="horizontal"
         items={items}
       />
+      
     </>
   );
 };

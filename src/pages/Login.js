@@ -1,27 +1,53 @@
-import { React } from "react";
-import { useNavigate } from "react-router-dom";
+import { React, useEffect, useState } from "react";
+import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { Layout, Button, Card, Form, Input } from "antd";
 import logo4 from "../assets/images/logo_nsf.png";
 import Swal from "sweetalert2";
 import SystemService from "../service/SystemService";
+import { Authenticate } from "../service/Authenticate.service";
 
 const { Header, Footer, Content } = Layout;
+const authService = Authenticate();
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [logined, setLogined] = useState(false); 
+  useEffect( () => {
+    const isLogin = () => { 
+      const isAuthen = authService.isExpireToken(); 
+      if(!isAuthen) setLogined( true );
+      else direcetSystem();
+    }
+    
+    isLogin();
+  }, []);
 
   const onFinish = (values) => {
-    // alert(values.password, values);
     Connectapp(values);
   };
+  const direcetSystem = () => { 
+    const curr = authService.getCurrent(); 
+    navigate(!!curr ? curr : "/dashboard", { replace: true });
+  }
 
   const Connectapp = (values) => {
     SystemService.signIn(values)
       .then((res) => {
         let { status, data } = res;
+        const { token } = data; 
         if (status === 200) {
           if (data?.status === "1") {
-            navigate("/dashboard", { replace: true });
+            authService.setToken(token);
+
+            direcetSystem();
+          } else {
+              Swal.fire({
+                title: "<strong>" + data.message + "</strong>",
+                html: "ผิดพลาด",
+                icon: "error",
+              });            
           }
         } else {
           Swal.fire({
@@ -40,6 +66,9 @@ const Login = () => {
 
   return (
     <>
+    {
+        logined 
+        ? 
       <div className="layout-default ant-layout layout-sign-up">
         <Header>
           <div className="header-col header-brand">
@@ -97,8 +126,7 @@ const Login = () => {
                   style={{ width: "100%" }}
                   type="primary"
                   htmlType="submit"
-                >
-                  LOGIN
+                >LOGIN
                 </Button>
               </Form.Item>
             </Form>
@@ -113,6 +141,8 @@ const Login = () => {
           </p>
         </Footer>
       </div>
+      : ( <Navigate to="/login" state={{ from: location }} replace /> )
+      }
     </>
   );
 };

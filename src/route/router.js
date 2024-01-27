@@ -1,5 +1,5 @@
-// import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import RB from "../pages/RB";
 import Billing from "../pages/Billing";
@@ -28,8 +28,8 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/" element={<Navigate replace to="/login" />} /> */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Navigate replace to="Login" />} />
+        <Route path="/Login" element={<Login />} />
         <Route path="/RB" element={<RB />} />
         <Route path="/Billing" element={<Billing />} />
         <Route path="/History" element={<History />} />

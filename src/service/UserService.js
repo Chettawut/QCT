@@ -7,11 +7,24 @@ const API_URL = {
   GET_USER: `${BACKEND_URL}/user/get_user.php`,
   GETSUP_USER: `${BACKEND_URL}/user/getsup_user.php`,
   Edit_USER: `${BACKEND_URL}/user/edit_user.php`,
+  ResetPassword: `${BACKEND_URL}/user/resetpassword.php`,
 };
 
 let contenttype = {"content-type": "application/x-www-form-urlencoded"};
 
 const UserService = {
+  resetPassword: (pwd,id) => {
+    return axios({
+      method: MEDTHOD.POST,      
+      url: API_URL.ResetPassword,
+      data: {
+        idcode: id,
+        pwd: pwd,
+      },
+      headers: contenttype,
+    });
+  },
+
   addUser: (reqData) => {
     return axios({
       method: MEDTHOD.POST,
