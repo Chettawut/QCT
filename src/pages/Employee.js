@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Header from "./PublicHeader";
-import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import {
   Button,
   Input,
@@ -12,50 +12,28 @@ import {
   Modal,
   Form,
   Select,
-  ConfigProvider,
 } from "antd";
+import Swal from "sweetalert2";
 import Highlighter from "react-highlight-words";
 // COMPONENT
 
 // SERVICE
-import ItemService from "../service/ItemService";
-import SRService from "../service/SRService";
+import EMPService from "../service/EmpService";
 
-const SR = () => {
-  const [AllSR, setAllSR] = useState("");
-  const [itemList, setItemList] = useState([]);
-  const [selectedList, setSelectedList] = useState([]);
-  // const [formAdd] = Form.useForm();
+const Employee = () => {
+  const [AllEmp, setAllEmp] = useState("");
+  const [formAdd] = Form.useForm();
   const [formEdit] = Form.useForm();
-  // const [OpenModalAdd, setOpenModalAdd] = useState(false);
+  const [OpenModalAdd, setOpenModalAdd] = useState(false);
   const [OpenModalEdit, setOpenModalEdit] = useState(false);
 
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-
-  // MODAL CONTROLLER
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isShowModalItem, setIsShowModalItem] = useState(false);
   const searchInput = useRef(null);
 
   useEffect(() => {
-    if (isShowModalItem) fetchItem();
-  }, [isShowModalItem]);
-
-  useEffect(() => {
-    GetSR();
+    GetEmp();
   }, []);
-
-  const fetchItem = () => {
-    ItemService.getAllItems()
-      .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          setItemList(data);
-        }
-      })
-      .catch((err) => {});
-  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -67,6 +45,12 @@ const SR = () => {
     clearFilters();
     setSearchText("");
   };
+
+  const handleCloseModal = () => {
+    
+    setOpenModalAdd(false);
+  };
+
 
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -176,56 +160,56 @@ const SR = () => {
   const columns = [
     {
       title: "รหัสพนักงาน",
-      dataIndex: "srcode",
-      key: "srcode",
+      dataIndex: "empcode",
+      key: "empcode",
       width: "5%",
-      ...getColumnSearchProps("srcode"),
-      sorter: (a, b) => a.srcode.length - b.srcode.length,
+      ...getColumnSearchProps("empcode"),
+      sorter: (a, b) => a.empcode.length - b.empcode.length,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "ชื่อ-นามสกุล",
-      dataIndex: "srdate",
-      key: "srdate",
+      dataIndex: "firstname",
+      key: "firstname",
       width: "30%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      ...getColumnSearchProps("firstname"),
+      sorter: (a, b) => a.firstname.length - b.firstname.length,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "ชื่อเล่น",
-      dataIndex: "srdate",
-      key: "srdate",
+      dataIndex: "nickname",
+      key: "nickname",
       width: "10%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      ...getColumnSearchProps("nickname"),
+      sorter: (a, b) => a.nickname.length - b.nickname.length,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "ตำแหน่ง",
-      dataIndex: "srdate",
-      key: "srdate",
+      dataIndex: "position",
+      key: "position",
       width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      ...getColumnSearchProps("position"),
+      sorter: (a, b) => a.position.length - b.position.length,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "เบอร์โทร",
-      dataIndex: "srdate",
-      key: "srdate",
+      dataIndex: "tel",
+      key: "tel",
       width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      ...getColumnSearchProps("tel"),
+      sorter: (a, b) => a.tel.length - b.tel.length,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "สถานะ",
-      dataIndex: "srdate",
-      key: "srdate",
+      dataIndex: "status",
+      key: "status",
       width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      ...getColumnSearchProps("status"),
+      sorter: (a, b) => a.status.length - b.status.length,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -236,7 +220,7 @@ const SR = () => {
       render: (text) => (
         <span
           style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.srcode)}
+          onClick={(e) => showEditModal(text.empcode)}
         >
           Edit
         </span>
@@ -244,99 +228,74 @@ const SR = () => {
     },
   ].filter((item) => !item.hidden);
 
-  const handleSelectedItem = (record) => {
-    const newData = {
-      productCode: record?.stcode,
-      productName: record?.stname,
-      productQty: 1,
-      productUnit: record?.unit,
-      productPrice: +record?.price,
-      productDiscount: 0,
-      productTotalPrice: +record?.price,
-    };
-
-    setIsShowModalItem(false);
-    setSelectedList([...selectedList, newData]);
-  };
-
-  const checkDupItem = (itemCode) => {
-    let isDup = false;
-    selectedList.map((item) => {
-      if (item?.productCode === itemCode) isDup = true;
-      return item;
-    });
-    return isDup;
-  };
-
-  const resetData = () => {
-    setItemList([]);
-    setSelectedList([]);
-  };
-
-  const handleCloseModal = () => {
-    resetData();
-    setIsOpenModal(false);
-  };
-
-  const handleCreate = () => {
-    // ==== CALL API TO CREATE SR HERE ==== //
-    console.log("selectedList ==> ", selectedList);
-    resetData();
-    setIsOpenModal(false);
-  };
-
-  const selectItemColumn = [
-    {
-      title: "",
-      key: "tools",
-      align: "center",
-      render: (record) => (
-        <Button
-          type="primary"
-          className="bt-icon"
-          icon={<PlusOutlined />}
-          disabled={checkDupItem(record?.stcode)}
-          onClick={() => handleSelectedItem(record)}
-        />
-      ),
-    },
-    {
-      title: "รหัสสินค้า",
-      key: "stcode",
-      dataIndex: "stcode",
-      width: "100px",
-    },
-    {
-      title: "ชื่อสินค้า",
-      dataIndex: "stname",
-      key: "stname",
-      width: "50%",
-    },
-    {
-      title: "ราคาต่อหน่วย",
-      key: "price",
-      dataIndex: "price",
-      align: "right",
-      render: (price) => {
-        let nextPrice = parseFloat(price).toFixed(2);
-        return nextPrice?.toLocaleString();
-      },
-    },
-  ];
-
-  const GetSR = () => {
-    SRService.getSR()
+  const GetEmp = () => {
+    EMPService.getEmp()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          setAllSR(data);
+          setAllEmp(data);
         }
       })
       .catch((err) => {});
   };
 
+  const submitAdd = (dataform) => {
+    EMPService.addEmp(dataform)
+      .then(async (res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
+
+            GetEmp();
+            setOpenModalAdd(false);
+            formAdd.resetFields();
+          } else {
+            // alert(data.message)
+            Swal.fire({
+              title: "<strong>ผิดพลาด!</strong>",
+              html: data.message,
+              icon: "error",
+            });
+          }
+        }
+      })
+      .catch((err) => {});
+  };
+
+  // const submitEdit = (dataform) => {
+  //   UserService.editUser(dataform)
+  //     .then(async (res) => {
+  //       let { status, data } = res;
+  //       if (status === 200) {
+  //         if (data.status) {
+  //           await Swal.fire({
+  //             title: "<strong>สำเร็จ</strong>",
+  //             html: data.message,
+  //             icon: "success",
+  //           });
+
+  //           GetUser();
+  //           setOpenModalAdd(false);            
+  //         } else {
+  //           // alert(data.message)
+  //           Swal.fire({
+  //             title: "<strong>ผิดพลาด!</strong>",
+  //             html: data.message,
+  //             icon: "error",
+  //           });
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => {});
+  // };
+
   const showEditModal = (data) => {
-    SRService.getSupSR(data)
+    EMPService.getSupEmp(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -345,38 +304,12 @@ const SR = () => {
           formEdit.setFieldValue("Editlastname", data.lastname);
           formEdit.setFieldValue("Edittype", data.type);
           formEdit.setFieldValue("Edittel", data.tel);
-          formEdit.setFieldValue("Editstatususer", data.statususer);
+          formEdit.setFieldValue("Editstatus", data.status);
 
           setOpenModalEdit(true);
         }
       })
       .catch((err) => {});
-  };
-
-  const submitEdit = (dataform) => {
-    // UserService.editUser(dataform)
-    //   .then(async (res) => {
-    //     let { status, data } = res;
-    //     if (status === 200) {
-    //       if (data.status === '1') {
-    //         await Swal.fire({
-    //           title: "<strong>สำเร็จ</strong>",
-    //           html: data.message,
-    //           icon: "success",
-    //         });
-    //         GetUser();
-    //         setOpenModalAdd(false);
-    //       } else {
-    //         // alert(data.message)
-    //         Swal.fire({
-    //           title: "<strong>ผิดพลาด!</strong>",
-    //           html: data.message,
-    //           icon: "error",
-    //         });
-    //       }
-    //     }
-    //   })
-    //   .catch((err) => {});
   };
 
   const ModalEdit = ({ open, onCancel }) => {
@@ -394,7 +327,8 @@ const SR = () => {
             .then((values) => {
               // formEdit.resetFields();
               // console.log(values)
-              submitEdit(values);
+
+              // submitEdit(values);
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -532,14 +466,14 @@ const SR = () => {
 
         <br></br>
 
-        <Button type="primary" onClick={() => setIsOpenModal(true)}>
+        <Button type="primary" onClick={() => setOpenModalAdd(true)}>
           เพิ่มพนักงาน
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table columns={columns} dataSource={AllSR} />
+              <Table columns={columns} dataSource={AllEmp} />
             </Card>
           </Col>
         </Row>
@@ -547,12 +481,23 @@ const SR = () => {
 
       <Modal
         okButtonProps={{ style: { backgroundColor: "green" } }}
-        open={isOpenModal}
+        open={OpenModalAdd}
         title="เพิ่มพนักงาน"
         okText="เพิ่ม"
         cancelText="ยกเลิก"
         onCancel={handleCloseModal}
-        onOk={handleCreate}
+        onOk={() => {
+          formAdd
+            .validateFields()
+            .then((values) => {
+              // formAdd.resetFields();
+              // console.log(values)
+              submitAdd(values);
+            })
+            .catch((info) => {
+              console.log("Validate Failed:", info);
+            });
+        }}
         width={800}
         maskClosable={false}
       >
@@ -636,20 +581,6 @@ const SR = () => {
         </Form>
       </Modal>
 
-      <Modal
-        open={isShowModalItem}
-        title="เลือกสินค้า"
-        onCancel={() => setIsShowModalItem(false)}
-        footer={<Button onClick={() => setIsShowModalItem(false)}>ปิด</Button>}
-      >
-        <Table
-          rowClassName={() => "editable-row"}
-          bordered
-          dataSource={itemList}
-          columns={selectItemColumn}
-          rowKey="stcode"
-        />
-      </Modal>
       <ModalEdit
         open={OpenModalEdit}
         onCancel={() => {
@@ -660,4 +591,4 @@ const SR = () => {
   );
 };
 
-export default SR;
+export default Employee;
