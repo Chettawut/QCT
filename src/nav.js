@@ -77,7 +77,7 @@ let _nav = [
     to: "/sr1",
   }, 
   {
-    title: "สั่งซื้ออันโนมัติ",
+    title: "สั่งซื้ออัตโนมัติ",
     icon: <DesktopOutlined className="nav-ico" />,
     // to: "/items",
   },

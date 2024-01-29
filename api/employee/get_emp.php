@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT code,username,firstname,lastname,type,status as statususer FROM `user` ";
+$sql = "SELECT empcode,firstname+lastname as firstname,nickname,position,tel,1 as status FROM `employee` ";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

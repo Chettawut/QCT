@@ -21,8 +21,11 @@ function User() {
   const [AllUser, setAllUser] = useState("");
   const [OpenModalAdd, setOpenModalAdd] = useState(false);
   const [OpenModalEdit, setOpenModalEdit] = useState(false);
+  const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);
+
   const [formAdd] = Form.useForm();
   const [formEdit] = Form.useForm();
+  const [formReset] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
 
@@ -200,7 +203,7 @@ function User() {
       render: (text) => (
         <span
           style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.username)}
+          onClick={(e) => showEditModal(text.code)}
         >
           Edit
         </span>
@@ -230,7 +233,8 @@ function User() {
           formEdit.setFieldValue("Edittype", data.type);
           formEdit.setFieldValue("Edittel", data.tel);
           formEdit.setFieldValue("Editstatususer", data.statususer);
-
+          formEdit.setFieldValue("Editcode", data.code);
+          formReset.setFieldValue("Resetcode", data.code);
           setOpenModalEdit(true);
         }
       })
@@ -242,7 +246,7 @@ function User() {
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
-          if (data.status === '1') {
+          if (data.status) {
             await Swal.fire({
               title: "<strong>สำเร็จ</strong>",
               html: data.message,
@@ -270,7 +274,7 @@ function User() {
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
-          if (data.status === '1') {
+          if (data.status) {
             await Swal.fire({
               title: "<strong>สำเร็จ</strong>",
               html: data.message,
@@ -471,7 +475,15 @@ function User() {
             </Col>
             <Col xs={24} sm={24} md={4} lg={4} xl={4}>
               <Form.Item label="รีเซ็ต Password">
-                <Button style={{ height: 40 }}>Reset</Button>
+              <Button
+                  style={{ height: 40 }}
+                  onClick={() => {
+                    setOpenModalEdit(false);
+                    setOpenModalResetPassword(true);
+                  }}
+                >
+                  Reset
+                </Button>
               </Form.Item>
             </Col>
           </Row>
@@ -554,6 +566,9 @@ function User() {
               </Form.Item>
             </Col>
           </Row>
+          <Form.Item name="Editcode">
+                    <Input type="hidden" />
+                  </Form.Item>
         </Form>
       </Modal>
     );
@@ -583,6 +598,62 @@ function User() {
             setOpenModalEdit(false);
           }}
         />
+        {OpenModalResetPassword && (
+          <Modal
+            open={OpenModalResetPassword}
+            title="แก้ไขรหัสผ่าน"
+            width={1000}
+            onOk={() => {
+              UserService.resetPassword(formReset.getFieldValue("Resetpassword"),formReset.getFieldValue("Resetcode")).then(async (res) => {
+                let { status, data } = res;
+                if (status === 200) {
+                  if (data.status) {
+                    await Swal.fire({
+                      title: "<strong>สำเร็จ</strong>",
+                      html: data.message,
+                      icon: "success",
+                    });
+        
+                    setOpenModalResetPassword(false);
+                  } else {
+                    // alert(data.message)
+                    Swal.fire({
+                      title: "<strong>ผิดพลาด!</strong>",
+                      html: data.message,
+                      icon: "error",
+                    });
+                  }
+                }
+              })
+              .catch((err) => {});
+              
+            }}
+            onCancel={() => setOpenModalResetPassword(false)}
+          >
+            <Form
+              form={formReset}
+              layout="vertical"
+              name="form_in_modal"
+              initialValues={{
+                modifier: "public",
+              }}
+            >
+              <Row gutter={[24, 0]}>
+                <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                  Password
+                  <Form.Item
+                    name="Resetpassword"
+                  >
+                    <Input.Password placeholder="Password" />
+                  </Form.Item>
+                  <Form.Item name="Resetcode">
+                    <Input type="hidden" />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form>
+          </Modal>
+        )}
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
