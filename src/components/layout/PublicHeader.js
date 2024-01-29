@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ConfigProvider, Menu,Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { PoweroffOutlined } from "@ant-design/icons";
-import { Authenticate } from "../service/Authenticate.service";
+import { Authenticate } from "../../service/Authenticate.service";
 
 const authService = Authenticate();
 const PublicHeader = () => {
@@ -100,7 +100,7 @@ const PublicHeader = () => {
           children: [
             {
               label: (
-                <a href="/Item"  rel="noopener noreferrer">
+                <a href="/Items"  rel="noopener noreferrer">
                   สินค้า
                 </a>
               ),

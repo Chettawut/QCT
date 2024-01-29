@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import Header from "../pages/PublicHeader";
+import Header from "../components/layout/PublicHeader";
 import {
   DeleteOutlined,
   SearchOutlined,

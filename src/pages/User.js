@@ -1,5 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
-import Header from "../pages/PublicHeader";
+import Header from "../components/layout/PublicHeader";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
