@@ -13,6 +13,9 @@ import {
   Collapse,
   Checkbox,
   Tabs,
+  DatePicker,
+  Divider,
+  Form,
 } from "antd";
 import Highlighter from "react-highlight-words";
 // COMPONENT
@@ -323,29 +326,100 @@ const SR = () => {
       key: "1",
       label: "ข้อมูลพื้นฐาน",
       children: (
-        <Row gutter={[24, 0]}>
+        <Form layout="vertical">
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              ชื่อสินค้า (รหัสสินค้า)
-              <Input />
+              <Form.Item
+                name="1"
+                label="ชื่อสินค้า"
+                rules={[{ required: true, message: "กรุณาใส่ชื่อสินค้าใหม่!" }]}
+              >
+                <Input />
+              </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              ประเภทสินค้า
-              <Input />
+              <Form.Item
+                name="2"
+                label="ประเภทสินค้า"
+                rules={[
+                  { required: true, message: "กรุณาใส่ประเภทสินค้าใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              หน่วยสั่งซื้อ
-              <Input />
+              <Form.Item
+                name="3"
+                label="หน่วยสั่งซื้อ"
+                rules={[
+                  { required: true, message: "กรุณาใส่หน่วยสั่งซื้อใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
             </Col>
           </Row>
+
           <Row gutter={[24, 0]}>
-            {" "}
-            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              Material code
+          <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+            <Form.Item
+              name="4"
+              label="  Material code"
+              rules={[
+                { required: true, message: "กรุณาใส่ Material code ใหม่!" },
+              ]}
+            >
               <Input />
+            </Form.Item>
+            </Col>
+            <Col
+              style={{ paddingTop: 40 }}
+              xs={24}
+              sm={24}
+              md={24}
+              lg={24}
+              xl={12}
+            >
+              <Checkbox>ติดตามสต๊อก</Checkbox>
             </Col>
           </Row>
-        </Row>
+
+          <Divider />
+          <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+              <Form.Item
+                name="5"
+                label="ชื่อเปิดบิล VAT"
+                rules={[{ required: true, message: "กรุณาใส่ชื่อเปิดบิล VAT ใหม่!" }]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="6"
+                label="ยี่ห้อ"
+                rules={[
+                  { required: true, message: "กรุณาใส่ยี่ห้อใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="7"
+                label="ชื่อสินค้า/ดอก"
+                rules={[
+                  { required: true, message: "กรุณาใส่ชื่อ สินค้า/ดอก ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
       ),
     },
     {
@@ -379,14 +453,33 @@ const SR = () => {
                       onChange={onChange}
                     >
                       <Row>
-                        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                          <Checkbox value="A">A</Checkbox>
+                        <Col
+                          style={{ paddingTop: 9 }}
+                          xs={24}
+                          sm={24}
+                          md={24}
+                          lg={24}
+                          xl={9}
+                        >
+                          <Checkbox value="A">
+                            มีของ (สต๊อกตั้งแต่ 1 ขึ้นไป)
+                          </Checkbox>
                         </Col>
-                        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                          <Checkbox value="B">B</Checkbox>
+                        <Col
+                          style={{ paddingTop: 9 }}
+                          xs={24}
+                          sm={24}
+                          md={24}
+                          lg={24}
+                          xl={6}
+                        >
+                          <Checkbox value="B">มีของในปีที่ระบุ</Checkbox>
                         </Col>
                         <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-                          <Input size="small" />
+                          <DatePicker
+                            style={{ height: 40, width: 140 }}
+                            picker="year"
+                          />
                         </Col>
                       </Row>
                     </Checkbox.Group>
@@ -416,7 +509,7 @@ const SR = () => {
         title="เพิ่มสินค้า"
         okText="Create"
         cancelText="Cancel"
-        width={1500}
+        width={1000}
         onCancel={Modaladdclose}
         onOk={Modaladdsubmit}
         maskClosable={false}
