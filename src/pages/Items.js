@@ -21,7 +21,7 @@ import Highlighter from "react-highlight-words";
 // COMPONENT
 // SERVICE
 import SRService from "../service/SRService";
-
+const { TextArea } = Input;
 const SR = () => {
   const [AllSR, setAllSR] = useState("");
   // const [formAdd] = Form.useForm();
@@ -360,18 +360,17 @@ const SR = () => {
               </Form.Item>
             </Col>
           </Row>
-
           <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-            <Form.Item
-              name="4"
-              label="  Material code"
-              rules={[
-                { required: true, message: "กรุณาใส่ Material code ใหม่!" },
-              ]}
-            >
-              <Input />
-            </Form.Item>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="4"
+                label="  Material code"
+                rules={[
+                  { required: true, message: "กรุณาใส่ Material code ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
             </Col>
             <Col
               style={{ paddingTop: 40 }}
@@ -384,14 +383,15 @@ const SR = () => {
               <Checkbox>ติดตามสต๊อก</Checkbox>
             </Col>
           </Row>
-
           <Divider />
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
                 name="5"
                 label="ชื่อเปิดบิล VAT"
-                rules={[{ required: true, message: "กรุณาใส่ชื่อเปิดบิล VAT ใหม่!" }]}
+                rules={[
+                  { required: true, message: "กรุณาใส่ชื่อเปิดบิล VAT ใหม่!" },
+                ]}
               >
                 <Input />
               </Form.Item>
@@ -400,9 +400,7 @@ const SR = () => {
               <Form.Item
                 name="6"
                 label="ยี่ห้อ"
-                rules={[
-                  { required: true, message: "กรุณาใส่ยี่ห้อใหม่!" },
-                ]}
+                rules={[{ required: true, message: "กรุณาใส่ยี่ห้อใหม่!" }]}
               >
                 <Input />
               </Form.Item>
@@ -419,18 +417,303 @@ const SR = () => {
               </Form.Item>
             </Col>
           </Row>
+          <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="1-1"
+                label="รุ่น1/หน้า"
+                rules={[
+                  { required: true, message: "กรุณาใส่ รุ่น1/หน้า ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="2-2"
+                label="รุ่น2/ซี่รี่ย์"
+                rules={[
+                  { required: true, message: "กรุณาใส่ รุ่น2/ซี่รี่ย์ ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="3-3"
+                label="รุ่น3/ขอบ"
+                rules={[
+                  { required: true, message: "กรุณาใส่ชื่อ รุ่น3/ขอบ ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="4-4"
+                label="รุ่น4/โหลด"
+                rules={[
+                  { required: true, message: "กรุณาใส่ชื่อ รุ่น4/โหลด ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="5-5"
+                label="รุ่น5/สปีด"
+                rules={[
+                  { required: true, message: "กรุณาใส่ รุ่น5/สปีด ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="6-6"
+                label="รุ่น6/TW"
+                rules={[{ required: true, message: "กรุณาใส่ รุ่น6/TW ใหม่!" }]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="7-7"
+                label="รุ่น7/น้ำหนัก"
+                rules={[
+                  { required: true, message: "กรุณาใส่ รุ่น7/น้ำหนัก ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="8-8"
+                label="รุ่น8/กว้าง"
+                rules={[
+                  { required: true, message: "กรุณาใส่ รุ่น8/กว้าง ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="9-9"
+                label="รุ่น9/ยาว"
+                rules={[
+                  { required: true, message: "กรุณาใส่ รุ่น5/สปีด ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="10-10"
+                label="รุ่น10/สูง"
+                rules={[{ required: true, message: "กรุณาใส่ รุ่น6/TW ใหม่!" }]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="รอบการเปลี่ยน"
+                label="รอบการเปลี่ยน"
+                rules={[
+                  { required: true, message: "กรุณาใส่ รอบการเปลี่ยน ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="เวลาในการเปลี่ยน"
+                label="เวลาในการเปลี่ยน"
+                rules={[
+                  {
+                    required: true,
+                    message: "กรุณาใส่ เวลาในการเปลี่ยน ใหม่!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+              <Form.Item
+                name="ยี่ห้อรถ"
+                label="ยี่ห้อรถ"
+                rules={[{ required: true, message: "กรุณาใส่ ยี่ห้อรถ ใหม่!" }]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+              <Form.Item
+                name="รุ่นรถ"
+                label="รุ่นรถ"
+                rules={[{ required: true, message: "กรุณาใส่ รุ่นรถ ใหม่!" }]}
+              >
+                <TextArea rows={3} />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+              <Form.Item
+                name="หมายเหตุ"
+                label="หมายเหตุ"
+                rules={[
+                  { required: true, message: "กรุณาใส่ชื่อ หมายเหตุ ใหม่!" },
+                ]}
+              >
+                <TextArea rows={3} />
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       ),
     },
     {
       key: "2",
       label: "สต๊อก",
-      children: "Content of Tab Pane 2",
+      children: (
+        <Form layout="vertical">
+          <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+              <Form.Item
+                name="สต๊อกจริง"
+                label="สต๊อกจริง"
+                rules={[
+                  { required: true, message: "กรุณาใส่ สต๊อกจริง ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+              <Form.Item
+                name="สต๊อก VAT"
+                label="สต๊อก VAT"
+                rules={[
+                  { required: true, message: "กรุณาใส่ สต๊อก VAT ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+              <Form.Item
+                name="จำนวนขายต่อชุด"
+                label="จำนวนขายต่อชุด"
+                rules={[
+                  { required: true, message: "กรุณาใส่ จำนวนขายต่อชุด ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={5}>
+              <Form.Item name="check-1">
+                <Checkbox>แยกสต๊อกตามล็อตการผลิต</Checkbox>
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={5}>
+              <Form.Item name="check-1">
+                <Checkbox>แยกสต๊อกตามที่เก็บ</Checkbox>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Divider />
+          <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={5}>
+              <Form.Item name="check-1">
+                <Checkbox>แยกสต๊อกตามล็อตการผลิต</Checkbox>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={8}>
+              <Form.Item
+                name="สต๊อกขั้นต่ำ (ชิ้น)"
+                label="สต๊อกขั้นต่ำ (ชิ้น)"
+                rules={[
+                  {
+                    required: true,
+                    message: "กรุณาใส่ สต๊อกขั้นต่ำ (ชิ้น) ใหม่!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      ),
     },
     {
       key: "3",
       label: "ราคา",
-      children: "Content of Tab Pane 3",
+      children: (
+        <Form layout="vertical">
+          <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="ราคาขายปลีก"
+                label="ราคาขายปลีก"
+                rules={[
+                  { required: true, message: "กรุณาใส่ ราคาขายปลีก ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="ราคาส่ง A"
+                label="ราคาส่ง A"
+                rules={[
+                  { required: true, message: "กรุณาใส่ ราคาส่ง A ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="ราคาส่ง B"
+                label="ราคาส่ง B"
+                rules={[
+                  { required: true, message: "กรุณาใส่ ราคาส่ง B ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item
+                name="ราคา Online"
+                label="ราคา Online"
+                rules={[
+                  { required: true, message: "กรุณาใส่ ราคา Online ใหม่!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      ),
     },
   ];
   return (
@@ -509,7 +792,7 @@ const SR = () => {
         title="เพิ่มสินค้า"
         okText="Create"
         cancelText="Cancel"
-        width={1000}
+        width={1200}
         onCancel={Modaladdclose}
         onOk={Modaladdsubmit}
         maskClosable={false}
