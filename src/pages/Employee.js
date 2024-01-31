@@ -518,7 +518,7 @@ const Employee = () => {
         >
           <Form.Item
             label="รหัสพนักงาน"
-            name="idname"
+            name="empcode"
             rules={[
               {
                 required: true,
@@ -530,12 +530,24 @@ const Employee = () => {
           </Form.Item>
 
           <Form.Item
-            label="ชื่อ-นามสกุล"
-            name="username"
+            label="ชื่อ"
+            name="firstname"
             rules={[
               {
                 required: true,
-                message: "ใส่ ชื่อ-นามสกุล ของคุณอีกครั้ง",
+                message: "ใส่ ชื่อ ของคุณอีกครั้ง",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="นามสกุล"
+            name="lastname"
+            rules={[
+              {
+                required: true,
+                message: "ใส่ นามสกุล ของคุณอีกครั้ง",
               },
             ]}
           >
@@ -556,7 +568,7 @@ const Employee = () => {
 
           <Form.Item
             label="ตำแหน่ง"
-            name="rank"
+            name="position"
             rules={[
               {
                 required: true,
@@ -568,7 +580,7 @@ const Employee = () => {
           </Form.Item>
           <Form.Item
             label="เบอร์โทร"
-            name="tol"
+            name="tel"
             rules={[
               {
                 required: true,
