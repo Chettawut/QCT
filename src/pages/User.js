@@ -16,21 +16,23 @@ import {
 } from "antd";
 import Swal from "sweetalert2";
 import UserService from "../service/UserService";
-
+import { Userdata } from "../model/Userdata.model";
 function User() {
   const [AllUser, setAllUser] = useState("");
-  const [OpenModalAdd, setOpenModalAdd] = useState(false);
-  const [OpenModalEdit, setOpenModalEdit] = useState(false);
-  const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);
-
+  // const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);
+  const [UserdataDetail, setUserdataDetail] = useState(Userdata);
+  const [actionManage, setActionManage] = useState({
+    action: "add",
+    title: "เพิ่มประเภทสินค้า",
+    confirmText: "Create",
+  });
   const [formAdd] = Form.useForm();
-  const [formEdit] = Form.useForm();
-  const [formReset] = Form.useForm();
+  // const [formReset] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-
+  const [openModalManage, setOpenModalManage] = useState(false);
   const searchInput = useRef(null);
-
+  const [formManage] = Form.useForm();
   useEffect(() => {
     GetUser();
   }, []);
@@ -223,24 +225,24 @@ function User() {
   };
 
   const showEditModal = (data) => {
+    document.body.style = "overflow: hidden !important;";
     UserService.getSupUser(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          formEdit.setFieldValue("Editusername", data.username);
-          formEdit.setFieldValue("Editfirstname", data.firstname);
-          formEdit.setFieldValue("Editlastname", data.lastname);
-          formEdit.setFieldValue("Edittype", data.type);
-          formEdit.setFieldValue("Edittel", data.tel);
-          formEdit.setFieldValue("Editstatususer", data.statususer);
-          formEdit.setFieldValue("Editcode", data.code);
-          formReset.setFieldValue("Resetcode", data.code);
-          setOpenModalEdit(true);
+          setUserdataDetail(data);
+          formManage.setFieldsValue(data);
+          setActionManage({
+            action: "edit",
+            title: "แก้ไขประเภทสินค้า",
+            confirmText: "Edit",
+          });
+          setOpenModalManage(true);
         }
       })
       .catch((err) => {});
   };
-
+  
   const submitAdd = (dataform) => {
     UserService.addUser(dataform)
       .then(async (res) => {
@@ -254,7 +256,7 @@ function User() {
             });
 
             GetUser();
-            setOpenModalAdd(false);
+            setOpenModalManage(false);
             formAdd.resetFields();
           } else {
             // alert(data.message)
@@ -270,7 +272,7 @@ function User() {
   };
 
   const submitEdit = (dataform) => {
-    UserService.editUser(dataform)
+    UserService.editUser({ ...UserdataDetail, ...dataform })
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -282,7 +284,7 @@ function User() {
             });
 
             GetUser();
-            setOpenModalAdd(false);            
+            setOpenModalManage(false);            
           } else {
             // alert(data.message)
             Swal.fire({
@@ -296,43 +298,47 @@ function User() {
       .catch((err) => {});
   };
 
+  const onModalManageClose = async () => {
+    await setUserdataDetail({});
+    formManage.resetFields();
+    setOpenModalManage(false);
+    
+  };
   ////////////////////////////////
 
-  const ModalAdd = ({ open, onCancel }) => {
+  const ModalManage = () => {
     return (
       <Modal
-        open={open}
-        title="เพิ่มผู้ใช้งาน"
-        okText="Create"
+        open={openModalManage}
+        title={actionManage.title}
+        okText={actionManage.confirmText}
         cancelText="Cancel"
-        onCancel={onCancel}
+        onCancel={() => onModalManageClose()}
         width={1000}
         onOk={() => {
-          formAdd
-            .validateFields()
-            .then((values) => {
-              // formAdd.resetFields();
-              // console.log(values)
+          formManage
+          .validateFields()
+          .then((values) => {
+            if (actionManage.action === "add") {
               submitAdd(values);
-            })
-            .catch((info) => {
-              console.log("Validate Failed:", info);
-            });
-        }}
-      >
+            } else if (actionManage.action === "edit") {
+              submitEdit(values);
+            }
+          })
+          .catch((info) => {
+            console.log("Validate Failed:", info);
+          });
+      }}
+    >
         <Form
-          form={formAdd}
+          form={formManage}
           layout="vertical"
-          name="form_in_modal"
-          initialValues={{
-            modifier: "public",
-          }}
+          autoComplete="off"
         >
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               Username
-              <Form.Item
-                name="Addusername"
+              <Form.Item name="username"
                 rules={[
                   {
                     required: true,
@@ -346,7 +352,6 @@ function User() {
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               Password
               <Form.Item
-                name="Addpassword"
                 rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}
               >
                 <Input.Password placeholder="Password" />
@@ -357,7 +362,7 @@ function User() {
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               ชื่อจริง
               <Form.Item
-                name="Addfirstname"
+                name="firstname"
                 rules={[
                   {
                     required: true,
@@ -371,7 +376,7 @@ function User() {
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               นามสกุล
               <Form.Item
-                name="Addlastname"
+                name="lastname"
                 rules={[
                   {
                     required: true,
@@ -387,7 +392,7 @@ function User() {
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               ประเภท
               <Form.Item
-                name="Addtype"
+                name="type"
                 rules={[
                   {
                     required: true,
@@ -406,169 +411,11 @@ function User() {
             </Col>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               เบอร์โทรศัพท์
-              <Form.Item name="AddTel">
+              <Form.Item name="tel">
                 <Input placeholder="เบอร์โทรศัพท์" />
               </Form.Item>
             </Col>
           </Row>
-        </Form>
-      </Modal>
-    );
-  };
-
-  const ModalEdit = ({ open, onCancel }) => {
-    return (
-      <Modal
-        open={open}
-        title="แก้ไขผู้ใช้งาน"
-        okText="Create"
-        cancelText="Cancel"
-        onCancel={onCancel}
-        width={1000}
-        onOk={() => {
-          formEdit
-            .validateFields()
-            .then((values) => {
-              // formEdit.resetFields();
-              // console.log(values)
-              submitEdit(values);
-            })
-            .catch((info) => {
-              console.log("Validate Failed:", info);
-            });
-        }}
-      >
-        <Form
-          form={formEdit}
-          layout="vertical"
-          name="form_in_modal"
-          initialValues={{
-            modifier: "public",
-          }}
-        >
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              Username
-              <Form.Item
-                name="Editusername"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อผู้ใช้!",
-                  },
-                ]}
-              >
-                <Input placeholder="Username" style={{ height: 50 }} disabled />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-              Password
-              <Form.Item
-                name="Editpassword"
-              >
-                <Input.Password
-                  defaultValue="123456789"
-                  placeholder="Password"
-                  disabled
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={4} lg={4} xl={4}>
-              <Form.Item label="รีเซ็ต Password">
-              <Button
-                  style={{ height: 40 }}
-                  onClick={() => {
-                    setOpenModalEdit(false);
-                    setOpenModalResetPassword(true);
-                  }}
-                >
-                  Reset
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ชื่อจริง
-              <Form.Item
-                name="Editfirstname"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อจริง!",
-                  },
-                ]}
-              >
-                <Input placeholder="ชื่อจริง" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              นามสกุล
-              <Form.Item
-                name="Editlastname"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อนามสกุล!",
-                  },
-                ]}
-              >
-                <Input placeholder="นามสกุล" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ประเภท
-              <Form.Item
-                name="Edittype"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อจริง!",
-                  },
-                ]}
-              >
-                <Select
-                  style={{ height: 40 }}
-                  options={[
-                    { value: "Admin", label: "Admin" },
-                    { value: "User", label: "User" },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              เบอร์โทรศัพท์
-              <Form.Item name="Edittel">
-                <Input placeholder="เบอร์โทรศัพท์" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              สถานการใช้งาน
-              <Form.Item
-                name="Editstatususer"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Select
-                  style={{ height: 40 }}
-                  options={[
-                    { value: "Y", label: "เปิดใช้งาน" },
-                    { value: "N", label: "ปิดใช้งาน" },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Form.Item name="Editcode">
-                    <Input type="hidden" />
-                  </Form.Item>
         </Form>
       </Modal>
     );
@@ -581,24 +428,18 @@ function User() {
         <Button
           type="primary"
           onClick={() => {
-            setOpenModalAdd(true);
+            setActionManage({
+              action: "add",
+              title: "เพิ่มผู้ใช้งาน",
+              confirmText: "Create",
+            });
+            setOpenModalManage(true);
           }}
         >
           เพิ่มผู้ใช้งาน
         </Button>
-        <ModalAdd
-          open={OpenModalAdd}
-          onCancel={() => {
-            setOpenModalAdd(false);
-          }}
-        />
-        <ModalEdit
-          open={OpenModalEdit}
-          onCancel={() => {
-            setOpenModalEdit(false);
-          }}
-        />
-        {OpenModalResetPassword && (
+
+        {/* {OpenModalResetPassword && (
           <Modal
             open={OpenModalResetPassword}
             title="แก้ไขรหัสผ่าน"
@@ -653,15 +494,17 @@ function User() {
               </Row>
             </Form>
           </Modal>
-        )}
+        )} */}
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table columns={columns} dataSource={AllUser} />
+              <Table  size="small" columns={columns} dataSource={AllUser} />
             </Card>
           </Col>
         </Row>
       </div>
+
+      {openModalManage && ModalManage()}
     </>
   );
 }
