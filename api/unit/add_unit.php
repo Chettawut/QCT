@@ -10,7 +10,7 @@ include '../conn.php';
 
 $sql = "INSERT INTO unit (`unit`, `status`) ";
 //  ,`s_date`,`s_time`, s_user) ";
-$sql .= " VALUES ('" . $_POST["Addunitname"] . "','Y' ";
+$sql .= " VALUES ('" . $_POST["unitname"] . "','Y' ";
 $sql .= ")";
 $stmt = $conn->prepare($sql);
 

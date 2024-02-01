@@ -9,9 +9,9 @@
         
 
     $sql = "UPDATE unit SET ";
-    $sql .= " unit='".$_POST["Editunitname"]."',status='".$_POST["Editstatusunit"]."' ";
+    $sql .= " unit='".$_POST["unitname"]."',status='".$_POST["statusunit"]."' ";
     $sql .= ",e_date='".date("Y-m-d")."',e_time='".date("H:i:s")."',e_user='0' ";
-    $sql .= "WHERE unitcode= '".$_POST["Editunitcode"]."' ";
+    $sql .= "WHERE unitcode= '".$_POST["unitcode"]."' ";
     $stmt = $conn->prepare($sql);
     
     if ($stmt->execute()) {

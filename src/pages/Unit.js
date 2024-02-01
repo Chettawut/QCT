@@ -15,17 +15,22 @@ import {
 } from "antd";
 import Swal from "sweetalert2";
 import UnitService from "../service/UnitService";
+import { unit } from "../model/unit.model";
 
 function Unit() {
   const [AllUnit, setAllUnit] = useState("");
-  const [OpenModalAdd, setOpenModalAdd] = useState(false);
-  const [OpenModalEdit, setOpenModalEdit] = useState(false);
-  const [formAdd] = Form.useForm();
-  const [formEdit] = Form.useForm();
+  const [openModalManage, setOpenModalManage] = useState(false);  
+  const [formManage] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-
+  const [UnitDetail, setUnitDetail] = useState(unit);
+  
   const searchInput = useRef(null);
+  const [actionManage, setActionManage] = useState({
+    action: "add",
+    title: "เพิ่มประเภทสินค้า",
+    confirmText: "Create",
+  });
 
   useEffect(() => {
     GetUnit();
@@ -205,11 +210,16 @@ function Unit() {
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          formEdit.setFieldValue("Editunitname", data.unitname);
-          formEdit.setFieldValue("Editstatusunit", data.statusunit);
-          formEdit.setFieldValue("Editunitcode", data.unitcode);
 
-          setOpenModalEdit(true);
+          setUnitDetail(data);
+          formManage.setFieldsValue(data);
+          setActionManage({
+            action: "edit",
+            title: "แก้ไขหน่วยสินค้า",
+            confirmText: "Edit",
+          });
+
+          setOpenModalManage(true);
         }
       })
       .catch((err) => {});
@@ -220,15 +230,22 @@ function Unit() {
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
-          await Swal.fire({
-            title: "<strong>สำเร็จ</strong>",
-            html: data.message,
-            icon: "success",
-          });
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
 
-          GetUnit();
-          setOpenModalAdd(false);
-          formAdd.resetFields();
+            GetUnit();
+            setOpenModalManage(false);
+          } else {
+            Swal.fire({
+              title: "<strong>" + data.message + "</strong>",
+              html: "ผิดพลาด",
+              icon: "error",
+            });
+          }
         } else {
           // alert(data.message)
           Swal.fire({
@@ -242,19 +259,28 @@ function Unit() {
   };
 
   const submitEdit = (dataform) => {
-    UnitService.editUnit(dataform)
+    UnitService.editUnit({ ...UnitDetail, ...dataform })
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
-          await Swal.fire({
-            title: "<strong>สำเร็จ</strong>",
-            html: data.message,
-            icon: "success",
-          });
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
 
-          GetUnit();
+            GetUnit();
 
-          setOpenModalEdit(false);
+            setOpenModalManage(false);
+          } else {
+            // alert(data.message)
+            Swal.fire({
+              title: "<strong>ผิดพลาด!</strong>",
+              html: data.message,
+              icon: "error",
+            });
+          }
         } else {
           // alert(data.message)
           Swal.fire({
@@ -267,84 +293,48 @@ function Unit() {
       .catch((err) => {});
   };
 
+  const onModalManageClose = async () => {
+    setUnitDetail({});
+    formManage.resetFields();
+    setOpenModalManage(false);
+    document.body.style = "overflow: visible !important;";
+  };
   ////////////////////////////////
 
-  const ModalAdd = ({ open, onCancel }) => {
+  const ModalManage = () => {
     return (
       <Modal
-        open={open}
-        title="เพิ่มหน่วยสินค้า"
-        okText="Create"
+        open={openModalManage}
+        title={actionManage.title}
+        okText={actionManage.confirmText}
         cancelText="Cancel"
-        onCancel={onCancel}
+        style={{ top: 20 }}
+        width={1000}
+        afterClose={() => formManage.resetFields() }
+        onCancel={() => onModalManageClose()}
         onOk={() => {
-          formAdd
+          formManage
             .validateFields()
             .then((values) => {
-              // formAdd.resetFields();
-              // console.log(values)
-              submitAdd(values);
+              if (actionManage.action === "add") {
+                submitAdd(values);
+              } else if (actionManage.action === "edit") {
+                submitEdit(values);
+              }
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
             });
         }}
       >
+        <Card title="มูลสินค้า">
         <Form
-          form={formAdd}
+          form={formManage}
           layout="vertical"
-          name="form_in_modal"
-          initialValues={{
-            modifier: "public",
-          }}
+          autoComplete="off"
         >
           <Form.Item
-            name="Addunitname"
-            rules={[
-              {
-                required: true,
-                message: "กรุณาใส่ชื่อหน่วยสินค้า!",
-              },
-            ]}
-          >
-            <Input placeholder="ใส่ชื่อหน่วยสินค้า" />
-          </Form.Item>
-        </Form>
-      </Modal>
-    );
-  };
-
-  const ModalEdit = ({ open, onCancel }) => {
-    return (
-      <Modal
-        open={open}
-        title="แก้ไขหน่วยสินค้า"
-        okText="Create"
-        cancelText="Cancel"
-        onCancel={onCancel}
-        onOk={() => {
-          formEdit
-            .validateFields()
-            .then((values) => {
-              // formEdit.resetFields();
-              // console.log(values)
-              submitEdit(values);
-            })
-            .catch((info) => {
-              console.log("Validate Failed:", info);
-            });
-        }}
-      >
-        <Form
-          form={formEdit}
-          layout="vertical"
-          name="form_in_modal"
-          initialValues={{
-            modifier: "public",
-          }}
-        >
-          <Form.Item
-            name="Editunitname"
+            name="unitname"
             rules={[
               {
                 required: true,
@@ -354,7 +344,7 @@ function Unit() {
           >
             <Input placeholder="ใส่ชื่อหน่วยสินค้า" />
           </Form.Item>
-          <Form.Item name="Editstatusunit">
+          <Form.Item name="statusunit">
             <Select
               style={{ width: 120 }}
               // disabled={isEdit}
@@ -364,13 +354,15 @@ function Unit() {
               ]}
             />
           </Form.Item>
-          <Form.Item name="Editunitcode">
+          <Form.Item name="unitcode">
             <Input type="hidden" />
           </Form.Item>
         </Form>
+        </Card>
       </Modal>
     );
   };
+
 
   return (
     <>
@@ -378,23 +370,18 @@ function Unit() {
         <Button
           type="primary"
           onClick={() => {
-            setOpenModalAdd(true);
+            setActionManage({
+              action: "add",
+              title: "เพิ่มหน่วยสินค้า",
+              confirmText: "Create",
+            });
+            formManage.resetFields();
+            setOpenModalManage(true);
+
           }}
         >
           เพิ่มหน่วยสินค้า
-        </Button>
-        <ModalAdd
-          open={OpenModalAdd}
-          onCancel={() => {
-            setOpenModalAdd(false);
-          }}
-        />
-        <ModalEdit
-          open={OpenModalEdit}
-          onCancel={() => {
-            setOpenModalEdit(false);
-          }}
-        />
+        </Button>        
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
@@ -403,6 +390,9 @@ function Unit() {
           </Col>
         </Row>
       </div>
+
+      {/* Modal จัดการสินค้า */}
+      {openModalManage && ModalManage()}
     </>
   );
 }
