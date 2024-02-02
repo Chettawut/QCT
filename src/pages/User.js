@@ -498,7 +498,7 @@ function User() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table  size="small" columns={columns} dataSource={AllUser} />
+              <Table columns={columns} dataSource={AllUser} />
             </Card>
           </Col>
         </Row>

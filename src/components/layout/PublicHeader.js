@@ -1,64 +1,71 @@
 import React, { useState } from "react";
-import { ConfigProvider, Menu,Button } from "antd";
+import { ConfigProvider, Menu } from "antd";
 import { useNavigate } from "react-router-dom";
-import { PoweroffOutlined } from "@ant-design/icons";
 import { Authenticate } from "../../service/Authenticate.service";
-
+import {
+  SettingOutlined,
+  ApartmentOutlined,
+  DatabaseOutlined,
+  ShopOutlined,
+  TagOutlined,
+  AuditOutlined,
+} from "@ant-design/icons";
 const authService = Authenticate();
 const PublicHeader = () => {
   const navigate = useNavigate();
   const onLogout = () => {
     authService.removeToken();
-    
+
     navigate("/", { replace: true });
   };
   const items = [
     {
       label: "ระบบงานขาย",
-      key: 'menu1',
+      key: "menu1",
+      icon: <AuditOutlined />,
       children: [
         {
           type: "group",
           children: [
             {
               label: (
-                <a href="/RB"  rel="noopener noreferrer">
+                <a href="/RB" rel="noopener noreferrer">
                   ใบรายการซ่อม
                 </a>
               ),
-              key: 'menu1_1',
+              key: "menu1_1",
             },
             {
               label: (
-                <a href="/Billing"  rel="noopener noreferrer">
+                <a href="/Billing" rel="noopener noreferrer">
                   การวางบิล
                 </a>
               ),
-              key: 'menu1_2',
+              key: "menu1_2",
             },
             {
               label: (
-                <a href="/Billinginformation"  rel="noopener noreferrer">
+                <a href="/Billinginformation" rel="noopener noreferrer">
                   ข้อมูลการเก็บเงิน
                 </a>
               ),
-              key: 'menu1_3',
+              key: "menu1_3",
             },
             {
               label: (
-                <a href="/History"  rel="noopener noreferrer">
+                <a href="/History" rel="noopener noreferrer">
                   ประวัติลูกค้า
                 </a>
               ),
-              key: 'menu1_4',
+              key: "menu1_4",
             },
             {
               label: (
-                <a href="/Quotation"  rel="noopener noreferrer">
+                <a href="/Quotation" rel="noopener noreferrer">
                   ใบเสนอราคา
                 </a>
               ),
-              key: 'menu1_5',
+              key: "menu1_5",
             },
           ],
         },
@@ -66,26 +73,27 @@ const PublicHeader = () => {
     },
     {
       label: "คลังสินค้า",
-      key: 'menu2',
+      key: "menu2",
+      icon: <ShopOutlined />,
       children: [
         {
           type: "group",
           children: [
             {
               label: (
-                <a href="/PO"  rel="noopener noreferrer">
+                <a href="/PO" rel="noopener noreferrer">
                   ใบสั่งซื้อ
                 </a>
               ),
-              key: 'menu2_1',
+              key: "menu2_1",
             },
             {
               label: (
-                <a href="/Receivinggoods"  rel="noopener noreferrer">
+                <a href="/Receivinggoods" rel="noopener noreferrer">
                   รับสินค้า
                 </a>
               ),
-              key: 'menu2_2',
+              key: "menu2_2",
             },
           ],
         },
@@ -93,18 +101,19 @@ const PublicHeader = () => {
     },
     {
       label: "สินค้า",
-      key: 'menu3',
+      key: "menu3",
+      icon: <TagOutlined />,
       children: [
         {
           type: "group",
           children: [
             {
               label: (
-                <a href="/Items"  rel="noopener noreferrer">
+                <a href="/Items" rel="noopener noreferrer">
                   สินค้า
                 </a>
               ),
-              key: 'menu3_1',
+              key: "menu3_1",
             },
           ],
         },
@@ -112,38 +121,39 @@ const PublicHeader = () => {
     },
     {
       label: "ข้อมูล",
-      key: 'menu4',
+      key: "menu4",
+      icon: <DatabaseOutlined />,
       children: [
         {
           type: "group",
           children: [
             {
               label: (
-                <a href="/Car"  rel="noopener noreferrer">
+                <a href="/Car" rel="noopener noreferrer">
                   รถ
                 </a>
               ),
-              key: 'menu4_1',
+              key: "menu4_1",
             },
             {
               label: (
-                <a href="/Individualcustomers"  rel="noopener noreferrer">
+                <a href="/Individualcustomers" rel="noopener noreferrer">
                   ลูกค้าบุคคล
                 </a>
               ),
-              key: 'menu4_2',
+              key: "menu4_2",
             },
             {
               label: (
-                <a href="/Companycustomers"  rel="noopener noreferrer">
+                <a href="/Companycustomers" rel="noopener noreferrer">
                   ลูกค้าบริษัท
                 </a>
               ),
-              key: 'menu4_3',
+              key: "menu4_3",
             },
             {
               label: (
-                <a href="/Employee"  rel="noopener noreferrer">
+                <a href="/Employee" rel="noopener noreferrer">
                   พนักงาน
                 </a>
               ),
@@ -154,18 +164,40 @@ const PublicHeader = () => {
     },
     {
       label: "จัดการระบบ",
-      key: 'menu5',
+      key: "menu5",
+      icon: <ApartmentOutlined />,
       children: [
         {
           type: "group",
           children: [
             {
               label: (
-                <a href="/user"  rel="noopener noreferrer">
+                <a href="/user" rel="noopener noreferrer">
                   ผู้ใช้ระบบ
                 </a>
               ),
-              key: 'menu5_1',
+
+              key: "menu5_1",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "การตั้งค่า",
+      key: "การตั้งค่า",
+      icon: <SettingOutlined />,
+      children: [
+        {
+          type: "group",
+          children: [
+            {
+              label: (
+                <p onClick={onLogout} rel="noopener noreferrer">
+                  ออกจากระบบ
+                </p>
+              ),
+              key: "ออกจากระบบ",
             },
           ],
         },
@@ -182,32 +214,21 @@ const PublicHeader = () => {
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: "#143574",
+            colorPrimary: "#FDFEFE",
             colorBgContainer: "#FDFEFE",
+            // colorText: "#FDFEFE",
+            colorBgBase: "#FDFEFE",
           },
         }}
-      ></ConfigProvider>
-      <Button
-          onClick={onLogout}
-          className="btn-sign-in"
-          icon={
-            <PoweroffOutlined
-              style={{
-                fontSize: "16px",
-              }}
-            />
-          }
-          style={{ border: "none", backgroundColor: "inherit" }}
-        >
-          <span>Log out</span>
-        </Button>
-      <Menu
-        onClick={onClick}
-        selectedKeys={[current]}
-        mode="horizontal"
-        items={items}
-      />
-      
+      >
+        <Menu
+          style={{ padding: 7, paddingLeft: 10 }}
+          onClick={onClick}
+          selectedKeys={[current]}
+          mode="horizontal"
+          items={items}
+        />
+      </ConfigProvider>
     </>
   );
 };
