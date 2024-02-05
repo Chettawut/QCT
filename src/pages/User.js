@@ -19,7 +19,7 @@ import UserService from "../service/UserService";
 import { Userdata } from "../model/Userdata.model";
 function User() {
   const [AllUser, setAllUser] = useState("");
-  // const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);
+  const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);
   const [UserdataDetail, setUserdataDetail] = useState(Userdata);
   const [actionManage, setActionManage] = useState({
     action: "add",
@@ -235,14 +235,14 @@ function User() {
           setActionManage({
             action: "edit",
             title: "แก้ไขผู้ใช้งาน",
-            confirmText: "Edit",
+            confirmText: "แก้ใข",
           });
           setOpenModalManage(true);
         }
       })
       .catch((err) => {});
   };
-  
+
   const submitAdd = (dataform) => {
     UserService.addUser(dataform)
       .then(async (res) => {
@@ -284,7 +284,7 @@ function User() {
             });
 
             GetUser();
-            setOpenModalManage(false);            
+            setOpenModalManage(false);
           } else {
             // alert(data.message)
             Swal.fire({
@@ -302,7 +302,6 @@ function User() {
     await setUserdataDetail({});
     formManage.resetFields();
     setOpenModalManage(false);
-    
   };
   ////////////////////////////////
 
@@ -312,49 +311,60 @@ function User() {
         open={openModalManage}
         title={actionManage.title}
         okText={actionManage.confirmText}
-        cancelText="Cancel"
+        cancelText="ยกเลิก"
         onCancel={() => onModalManageClose()}
         width={1000}
+        footer={[
+          <Button  onClick={OpenModalResetPassword}>
+            Return
+          </Button>,
+        ]}
         onOk={() => {
           formManage
-          .validateFields()
-          .then((values) => {
-            if (actionManage.action === "add") {
-              submitAdd(values);
-            } else if (actionManage.action === "edit") {
-              submitEdit(values);
-            }
-          })
-          .catch((info) => {
-            console.log("Validate Failed:", info);
-          });
-      }}
-    >
-        <Form
-          form={formManage}
-          layout="vertical"
-          autoComplete="off"
-        >
+            .validateFields()
+            .then((values) => {
+              if (actionManage.action === "add") {
+                submitAdd(values);
+              } else if (actionManage.action === "edit") {
+                submitEdit(values);
+              }
+            })
+            .catch((info) => {
+              console.log("Validate Failed:", info);
+            });
+        }}
+      >
+        <Form form={formManage} layout="vertical" autoComplete="off">
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               Username
-              <Form.Item name="username"
+              <Form.Item
+                name="username"
                 rules={[
                   {
                     required: true,
                     message: "กรุณาใส่ชื่อผู้ใช้!",
                   },
                 ]}
+                // style={actionManage.action === 'add' ? {display: 'inline'} : {display: 'none'}}
               >
-                <Input placeholder="Username" style={{ height: 50 }} />
+                <Input
+                  disabled={actionManage.action === "edit" ? true : false}
+                  size="small"
+                  placeholder="Username"
+                />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               Password
               <Form.Item
-                rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}                
-                style={actionManage.action === 'add' ? {display: 'inline'} : {display: 'none'}}>
-                <Input.Password placeholder="Password" />
+                rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}
+              >
+                <Input.Password
+                  disabled={actionManage.action === "edit" ? true : false}
+                  size="small"
+                  placeholder="Password"
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -390,7 +400,7 @@ function User() {
           </Row>
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ประเภท
+              ตำแหน่ง
               <Form.Item
                 name="type"
                 rules={[
@@ -404,7 +414,12 @@ function User() {
                   style={{ height: 40 }}
                   options={[
                     { value: "Admin", label: "Admin" },
-                    { value: "User", label: "User" },
+                    { value: "พนักงานขาย", label: "พนักงานขาย" },
+                    { value: "ธุรการ", label: "ธุรการ" },
+                    { value: "จัดซื้อ", label: "จัดซื้อ" },
+                    { value: "ช่าง", label: "ช่าง" },
+                    { value: "กรรมการ", label: "กรรมการ" },
+                    { value: "ผู้จัดการสาขา", label: "ผู้จัดการสาขา" },
                   ]}
                 />
               </Form.Item>
@@ -423,8 +438,8 @@ function User() {
 
   return (
     <>
-    <Header></Header>
-      <div className="layout-content" style={{padding: 20}}>
+      <Header></Header>
+      <div className="layout-content" style={{ padding: 20 }}>
         <Button
           type="primary"
           onClick={() => {
@@ -498,7 +513,7 @@ function User() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table  size="small" columns={columns} dataSource={AllUser} />
+              <Table size="small" columns={columns} dataSource={AllUser} />
             </Card>
           </Col>
         </Row>
