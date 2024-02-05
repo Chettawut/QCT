@@ -8,13 +8,13 @@ date_default_timezone_set("Asia/Bangkok");
 include '../conn.php';
 
 $strSQL = "UPDATE user SET ";
-$strSQL .= " firstname='" . $_POST["Editfirstname"] . "',lastname='" . $_POST["Editlastname"] . "' ";
-$strSQL .= ",type='" . $_POST["Edittype"] . "',tel='" . $_POST["Edittel"] . "',status='" . $_POST["Editstatususer"] . "' ";
-$strSQL .= "WHERE code= '" . $_POST["Editcode"] . "' ";
+$strSQL .= " firstname='" . $_POST["firstname"] . "',lastname='" . $_POST["lastname"] . "' ";
+$strSQL .= ",type='" . $_POST["type"] . "',tel='" . $_POST["tel"] . "',status='" . $_POST["statususer"] . "' ";
+$strSQL .= "WHERE code= '" . $_POST["code"] . "' ";
 $stmt = $conn->prepare($strSQL);
 
 if ($stmt->execute())
-    $response = ['status' => 1, 'message' => 'แก้ไข ' . $_POST["Editusername"] . ' สำเร็จ'];
+    $response = ['status' => 1, 'message' => 'แก้ไข ' . $_POST["username"] . ' สำเร็จ'];
 else
     $response = ['status' => 0, 'message' => 'Error! ติดต่อโปรแกรมเมอร์'];
 

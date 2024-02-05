@@ -23,7 +23,7 @@ function User() {
   const [UserdataDetail, setUserdataDetail] = useState(Userdata);
   const [actionManage, setActionManage] = useState({
     action: "add",
-    title: "เพิ่มประเภทสินค้า",
+    title: "เพิ่มผู้ใช้งาน",
     confirmText: "Create",
   });
   const [formAdd] = Form.useForm();
@@ -234,7 +234,7 @@ function User() {
           formManage.setFieldsValue(data);
           setActionManage({
             action: "edit",
-            title: "แก้ไขประเภทสินค้า",
+            title: "แก้ไขผู้ใช้งาน",
             confirmText: "Edit",
           });
           setOpenModalManage(true);
@@ -352,8 +352,8 @@ function User() {
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               Password
               <Form.Item
-                rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}
-              >
+                rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}                
+                style={actionManage.action === 'add' ? {display: 'inline'} : {display: 'none'}}>
                 <Input.Password placeholder="Password" />
               </Form.Item>
             </Col>
@@ -498,7 +498,7 @@ function User() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table columns={columns} dataSource={AllUser} />
+              <Table  size="small" columns={columns} dataSource={AllUser} />
             </Card>
           </Col>
         </Row>
