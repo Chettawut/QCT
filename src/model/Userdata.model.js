@@ -1,4 +1,4 @@
-export const Userdata = {
+export const userdata = {
     code: null,
     username: null,
     lastname: null,

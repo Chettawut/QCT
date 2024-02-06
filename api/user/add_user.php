@@ -8,7 +8,7 @@ date_default_timezone_set("Asia/Bangkok");
 include '../conn.php';
 
 
-$password = password_hash($_POST['Addpassword'], PASSWORD_DEFAULT);
+$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 $strSQL = "INSERT INTO user (`username`, `password`,`firstname`,`lastname`, `type`, `tel`, `status`,`date`) ";
 //  ,`s_date`,`s_time`, s_user) ";
 $strSQL .= " VALUES ('".$_POST["username"]."','".$password."','".$_POST["firstname"]."','".$_POST["lastname"]."','".$_POST["type"]."','".$_POST["tel"]."','Y','".date("Y-m-d H:i:s")."' ";

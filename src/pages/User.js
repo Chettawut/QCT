@@ -240,6 +240,7 @@ function User() {
             confirmText: "แก้ใข",
           });
           setOpenModalManage(true);
+          formReset.setFieldValue("Resetcode", data.code);
         }
       })
       .catch((err) => {});
@@ -365,6 +366,7 @@ function User() {
             >
               Password
               <Form.Item
+              name="password"
                 rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}
               >
                 <Input.Password
@@ -390,7 +392,7 @@ function User() {
               <Form.Item
                 rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}
               >
-                <Input.Password
+                <Input.Password                  
                   disabled={actionManage.action === "edit" ? true : false}
                   size="small"
                   defaultValue="12345678"
@@ -560,7 +562,7 @@ function User() {
                     <Input.Password placeholder="ใส่รหัสผ่านใหม่" />
                   </Form.Item>
                   <Form.Item name="Resetcode">
-                    <Input type="hidden" />
+                    <Input type="hidden"  />
                   </Form.Item>
                 </Col>
               </Row>
