@@ -1,4 +1,4 @@
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
 import Header from "../components/layout/PublicHeader";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
@@ -24,10 +24,10 @@ function User() {
   const [actionManage, setActionManage] = useState({
     action: "add",
     title: "เพิ่มผู้ใช้งาน",
-    confirmText: "Create",
+    confirmText: "ยืนยัน",
   });
   const [formAdd] = Form.useForm();
-  // const [formReset] = Form.useForm();
+  const [formReset] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [openModalManage, setOpenModalManage] = useState(false);
@@ -203,12 +203,14 @@ function User() {
       width: "20%",
       fixed: "right",
       render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
+        <Button
+        icon={<ToolTwoTone twoToneColor="#E74C3C" />}
+        style={{ cursor: "pointer" }}
+        danger
           onClick={(e) => showEditModal(text.code)}
         >
-          Edit
-        </span>
+          แก้ใข
+        </Button>
       ),
     },
   ].filter((item) => !item.hidden);
@@ -314,11 +316,6 @@ function User() {
         cancelText="ยกเลิก"
         onCancel={() => onModalManageClose()}
         width={1000}
-        footer={[
-          <Button  onClick={OpenModalResetPassword}>
-            Return
-          </Button>,
-        ]}
         onOk={() => {
           formManage
             .validateFields()
@@ -346,7 +343,6 @@ function User() {
                     message: "กรุณาใส่ชื่อผู้ใช้!",
                   },
                 ]}
-                // style={actionManage.action === 'add' ? {display: 'inline'} : {display: 'none'}}
               >
                 <Input
                   disabled={actionManage.action === "edit" ? true : false}
@@ -355,7 +351,18 @@ function User() {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+            <Col
+              xs={24}
+              sm={24}
+              md={12}
+              lg={12}
+              xl={12}
+              style={
+                actionManage.action === "add"
+                  ? { display: "inline" }
+                  : { display: "none" }
+              }
+            >
               Password
               <Form.Item
                 rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}
@@ -365,6 +372,53 @@ function User() {
                   size="small"
                   placeholder="Password"
                 />
+              </Form.Item>
+            </Col>
+            <Col
+              xs={24}
+              sm={24}
+              md={12}
+              lg={12}
+              xl={9}
+              style={
+                actionManage.action === "edit"
+                  ? { display: "inline" }
+                  : { display: "none" }
+              }
+            >
+              Password
+              <Form.Item
+                rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}
+              >
+                <Input.Password
+                  disabled={actionManage.action === "edit" ? true : false}
+                  size="small"
+                  defaultValue="12345678"
+                />
+              </Form.Item>
+            </Col>
+            <Col
+              xs={24}
+              sm={24}
+              md={4}
+              lg={4}
+              xl={3}
+              style={
+                actionManage.action === "edit"
+                  ? { display: "inline" }
+                  : { display: "none" }
+              }
+            >
+              <Form.Item>
+                รีเซ็ต Password
+                <Button
+                  style={{ width: 100}}
+                  onClick={() => {
+                    setOpenModalResetPassword(true);
+                  }}
+                >
+                  Reset
+                </Button>
               </Form.Item>
             </Col>
           </Row>
@@ -446,7 +500,7 @@ function User() {
             setActionManage({
               action: "add",
               title: "เพิ่มผู้ใช้งาน",
-              confirmText: "Create",
+              confirmText: "เพิ่ม",
             });
             setOpenModalManage(true);
           }}
@@ -454,35 +508,40 @@ function User() {
           เพิ่มผู้ใช้งาน
         </Button>
 
-        {/* {OpenModalResetPassword && (
+        {OpenModalResetPassword && (
           <Modal
             open={OpenModalResetPassword}
             title="แก้ไขรหัสผ่าน"
-            width={1000}
+            width={500}
+            okText="ยืนยัน"
+            cancelText="ยกเลิก"
             onOk={() => {
-              UserService.resetPassword(formReset.getFieldValue("Resetpassword"),formReset.getFieldValue("Resetcode")).then(async (res) => {
-                let { status, data } = res;
-                if (status === 200) {
-                  if (data.status) {
-                    await Swal.fire({
-                      title: "<strong>สำเร็จ</strong>",
-                      html: data.message,
-                      icon: "success",
-                    });
-        
-                    setOpenModalResetPassword(false);
-                  } else {
-                    // alert(data.message)
-                    Swal.fire({
-                      title: "<strong>ผิดพลาด!</strong>",
-                      html: data.message,
-                      icon: "error",
-                    });
+              UserService.resetPassword(
+                formReset.getFieldValue("Resetpassword"),
+                formReset.getFieldValue("Resetcode")
+              )
+                .then(async (res) => {
+                  let { status, data } = res;
+                  if (status === 200) {
+                    if (data.status) {
+                      await Swal.fire({
+                        title: "<strong>สำเร็จ</strong>",
+                        html: data.message,
+                        icon: "success",
+                      });
+
+                      setOpenModalResetPassword(false);
+                    } else {
+                      // alert(data.message)
+                      Swal.fire({
+                        title: "<strong>ผิดพลาด!</strong>",
+                        html: data.message,
+                        icon: "error",
+                      });
+                    }
                   }
-                }
-              })
-              .catch((err) => {});
-              
+                })
+                .catch((err) => {});
             }}
             onCancel={() => setOpenModalResetPassword(false)}
           >
@@ -495,12 +554,10 @@ function User() {
               }}
             >
               <Row gutter={[24, 0]}>
-                <Col xs={24} sm={24} md={16} lg={16} xl={16}>
-                  Password
-                  <Form.Item
-                    name="Resetpassword"
-                  >
-                    <Input.Password placeholder="Password" />
+                <Col xs={24} sm={24} md={16} lg={16} xl={24}>
+                  รหัสผ่านใหม่
+                  <Form.Item name="Resetpassword">
+                    <Input.Password placeholder="ใส่รหัสผ่านใหม่" />
                   </Form.Item>
                   <Form.Item name="Resetcode">
                     <Input type="hidden" />
@@ -509,7 +566,7 @@ function User() {
               </Row>
             </Form>
           </Modal>
-        )} */}
+        )}
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
