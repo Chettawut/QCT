@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Modal } from "antd";
 import { ConfigProvider, Menu } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Authenticate } from "../../service/Authenticate.service";
@@ -12,6 +13,13 @@ import {
 } from "@ant-design/icons";
 const authService = Authenticate();
 const PublicHeader = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const navigate = useNavigate();
   const onLogout = () => {
     authService.removeToken();
@@ -157,6 +165,15 @@ const PublicHeader = () => {
                   พนักงาน
                 </a>
               ),
+              key: "menu4_4",
+            },
+            {
+              label: (
+                <a href="/Unit" rel="noopener noreferrer">
+                  หน่วยสินค้า
+                </a>
+              ),
+              key: "menu4_5",
             },
           ],
         },
@@ -193,7 +210,7 @@ const PublicHeader = () => {
           children: [
             {
               label: (
-                <p onClick={onLogout} rel="noopener noreferrer">
+                <p onClick={showModal} rel="noopener noreferrer">
                   ออกจากระบบ
                 </p>
               ),
@@ -214,10 +231,10 @@ const PublicHeader = () => {
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: "#FDFEFE",
-            colorBgContainer: "#FDFEFE",
+            // colorPrimary: "#FDFEFE",
+            // colorBgContainer: "#FDFEFE",
             // colorText: "#FDFEFE",
-            colorBgBase: "#FDFEFE",
+            // colorBgBase: "#FDFEFE",
           },
         }}
       >
@@ -228,6 +245,16 @@ const PublicHeader = () => {
           mode="horizontal"
           items={items}
         />
+        <Modal
+          title="แจ้งเตือน"
+          open={isModalOpen}
+          onOk={onLogout}
+          onCancel={handleCancel}
+          okText="ยืนยัน"
+          cancelText="ยกเลิก"
+        >
+          <p>คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ</p>
+        </Modal>
       </ConfigProvider>
     </>
   );

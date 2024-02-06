@@ -1,4 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
+import Header from "../components/layout/PublicHeader";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -19,12 +20,12 @@ import { unit } from "../model/unit.model";
 
 function Unit() {
   const [AllUnit, setAllUnit] = useState("");
-  const [openModalManage, setOpenModalManage] = useState(false);  
+  const [openModalManage, setOpenModalManage] = useState(false);
   const [formManage] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [UnitDetail, setUnitDetail] = useState(unit);
-  
+
   const searchInput = useRef(null);
   const [actionManage, setActionManage] = useState({
     action: "add",
@@ -210,7 +211,6 @@ function Unit() {
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-
           setUnitDetail(data);
           formManage.setFieldsValue(data);
           setActionManage({
@@ -310,7 +310,7 @@ function Unit() {
         cancelText="Cancel"
         style={{ top: 20 }}
         width={1000}
-        afterClose={() => formManage.resetFields() }
+        afterClose={() => formManage.resetFields()}
         onCancel={() => onModalManageClose()}
         onOk={() => {
           formManage
@@ -328,44 +328,40 @@ function Unit() {
         }}
       >
         <Card title="มูลสินค้า">
-        <Form
-          form={formManage}
-          layout="vertical"
-          autoComplete="off"
-        >
-          <Form.Item
-            name="unitname"
-            rules={[
-              {
-                required: true,
-                message: "กรุณากรอกชื่อหน่วยสินค้า",
-              },
-            ]}
-          >
-            <Input placeholder="ใส่ชื่อหน่วยสินค้า" />
-          </Form.Item>
-          <Form.Item name="statusunit">
-            <Select
-              style={{ width: 120 }}
-              // disabled={isEdit}
-              options={[
-                { value: "Y", label: "เปิดใช้งาน" },
-                { value: "N", label: "ปิดใช้งาน" },
+          <Form form={formManage} layout="vertical" autoComplete="off">
+            <Form.Item
+              name="unitname"
+              rules={[
+                {
+                  required: true,
+                  message: "กรุณากรอกชื่อหน่วยสินค้า",
+                },
               ]}
-            />
-          </Form.Item>
-          <Form.Item name="unitcode">
-            <Input type="hidden" />
-          </Form.Item>
-        </Form>
+            >
+              <Input placeholder="ใส่ชื่อหน่วยสินค้า" />
+            </Form.Item>
+            <Form.Item name="statusunit">
+              <Select
+                style={{ width: 120 }}
+                // disabled={isEdit}
+                options={[
+                  { value: "Y", label: "เปิดใช้งาน" },
+                  { value: "N", label: "ปิดใช้งาน" },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item name="unitcode">
+              <Input type="hidden" />
+            </Form.Item>
+          </Form>
         </Card>
       </Modal>
     );
   };
 
-
   return (
     <>
+      <Header></Header>
       <div className="layout-content">
         <Button
           type="primary"
@@ -377,11 +373,10 @@ function Unit() {
             });
             formManage.resetFields();
             setOpenModalManage(true);
-
           }}
         >
           เพิ่มหน่วยสินค้า
-        </Button>        
+        </Button>
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
