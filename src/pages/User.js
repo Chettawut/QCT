@@ -16,7 +16,7 @@ import {
 } from "antd";
 import Swal from "sweetalert2";
 import UserService from "../service/UserService";
-import { Userdata } from "../model/Userdata.model";
+import { Userdata } from "../model/userdata.model";
 function User() {
   const [AllUser, setAllUser] = useState("");
   // const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);

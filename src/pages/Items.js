@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Header from "../components/layout/PublicHeader";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined,ToolTwoTone } from "@ant-design/icons";
 import {
   Button,
   Input,
@@ -16,27 +16,50 @@ import {
   DatePicker,
   Divider,
   Form,
+  Badge  
 } from "antd";
 import Highlighter from "react-highlight-words";
+import Swal from "sweetalert2";
 // COMPONENT
 // SERVICE
-import SRService from "../service/SRService";
-const { TextArea } = Input;
-const SR = () => {
-  const [AllSR, setAllSR] = useState("");
-  // const [formAdd] = Form.useForm();
-  // const [OpenModalAdd, setOpenModalAdd] = useState(false);
+import ItemService from "../service/ItemService";
+import { items } from "../model/items.model";
 
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
-
-  // MODAL CONTROLLER
-  const [isOpenModal, setIsOpenModal] = useState(false);
+const Items = () => {
+  const { TextArea } = Input;
+  const [AllItems, setAllItems] = useState("");
   const searchInput = useRef(null);
 
+  // MODAL CONTROLLER
+  const [openModalManage, setOpenModalManage] = useState(false);
+  const [actionManage, setActionManage] = useState({
+    action: "add",
+    title: "เพิ่มประเภทสินค้า",
+    confirmText: "Create",
+  });
+
+    const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const [itemsDetail, setItemsDetail] = useState(items);
+
+  const [formAdd] = Form.useForm();
+  const [formManage] = Form.useForm();
+  
+
   useEffect(() => {
-    GetSR();
+    GetItems();
   }, []);
+
+  const GetItems = () => {
+    ItemService.getItem()
+      .then((res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          setAllItems(data);
+        }
+      })
+      .catch((err) => {});
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -156,181 +179,182 @@ const SR = () => {
 
   const columns = [
     {
-      title: "หมายเลข",
-      dataIndex: "srcode",
-      key: "srcode",
+      title: "Item Code",
+      dataIndex: "stcode",
+      key: "stcode",
       width: "20%",
-      ...getColumnSearchProps("srcode"),
-      sorter: (a, b) => a.srcode.length - b.srcode.length,
+      ...getColumnSearchProps("stname"),
+      sorter: (a, b) => a.stname.length - b.stname.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ลูกค้า",
-      dataIndex: "srdate",
-      key: "srdate",
+      title: "Item Name",
+      dataIndex: "stname",
+      key: "stname",
       width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      ...getColumnSearchProps("stname"),
+      sorter: (a, b) => a.stname.length - b.stname.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ทะเบียนรถ",
-      dataIndex: "srdate",
-      key: "srdate",
+      title: "Item Type",
+      dataIndex: "typename",
+      key: "typename",
       width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      ...getColumnSearchProps("typename"),
+      sorter: (a, b) => a.typename.length - b.typename.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "จังหวัด",
-      dataIndex: "srdate",
-      key: "srdate",
+      title: "Unit",
+      dataIndex: "unit",
+      key: "unit",
       width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      ...getColumnSearchProps("unit"),
+      sorter: (a, b) => a.unit.length - b.unit.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "วันที่",
+      title: "สถานะการใช้งาน",
+      dataIndex: "statusitem",
+      key: "statusitem",
+      width: "20%",
+      ...getColumnSearchProps("statusitem"),
+      sorter: (a, b) => a.statusitem.length - b.statusitem.length,
+      sortDirections: ["descend", "ascend"],
+      render: (data) => (
+        <div>
+          {data === "Y" ? (
+            <Badge status="success" text="เปิดการใช้งาน" />
+          ) : (
+            <Badge status="error" text="ปิดการใช้การ" />
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "แก้ใข",
       key: "operation",
       width: "20%",
       fixed: "right",
       render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => text.srcode}
+        <Button
+          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
+          danger
+          style={{ cursor: "pointer" }}
+          onClick={(e) => showEditModal(text.stcode)}
         >
-          Edit
-        </span>
+          แก้ใข
+        </Button>
       ),
-    },
-    {
-      title: "ตัดสต๊อก",
-      dataIndex: "srdate",
-      key: "srdate",
-      width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "พิมพ์ VAT",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ตัดสต๊อก VAT",
-      key: "operation",
-      width: "20%",
-      fixed: "right",
-      render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => text.srcode}
-        >
-          Edit
-        </span>
-      ),
-    },
-    {
-      title: "บิลออนไลน์",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ส่งด่วน",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สถานะการส่ง",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "จอง",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สถานะ",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "พนักงานขาย",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สาขา",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
     },
   ].filter((item) => !item.hidden);
 
-  const GetSR = () => {
-    SRService.getSR()
+  const showEditModal = (data) => {
+    document.body.style = "overflow: hidden !important;";
+    ItemService.getSupItem(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          setAllSR(data);
+          setItemsDetail(data);
+          formManage.setFieldsValue(data);
+          setActionManage({
+            action: "edit",
+            title: "แก้ไขประเภทสินค้า",
+            confirmText: "Edit",
+          });
+          setOpenModalManage(true);
         }
       })
       .catch((err) => {});
   };
-  const Modaladdclose = () => {
-    setIsOpenModal(false);
+
+  const submitAdd = (dataform) => {
+    ItemService.addItem(dataform)
+      .then(async (res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
+
+            GetItems();
+            setOpenModalManage(false);
+            formAdd.resetFields();
+          } else {
+            Swal.fire({
+              title: "<strong>" + data.message + "</strong>",
+              html: "ผิดพลาด",
+              icon: "error",
+            });
+          }
+        } else {
+          // alert(data.message)
+          Swal.fire({
+            title: "<strong>ผิดพลาด!</strong>",
+            html: data.message,
+            icon: "error",
+          });
+        }
+      })
+      .catch((err) => {});
   };
-  const Modaladdsubmit = () => {
-    setIsOpenModal(false);
+
+  const submitEdit = (dataform) => {
+    ItemService.editItem({ ...itemsDetail, ...dataform })
+      .then(async (res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
+
+            GetItems();
+
+            setOpenModalManage(false);
+          } else {
+            // alert(data.message)
+            Swal.fire({
+              title: "<strong>ผิดพลาด!</strong>",
+              html: data.message,
+              icon: "error",
+            });
+          }
+        } else {
+          // alert(data.message)
+          Swal.fire({
+            title: "<strong>ผิดพลาด!</strong>",
+            html: data.message,
+            icon: "error",
+          });
+        }
+      })
+      .catch((err) => {});
   };
-  const onChange = (checkedValues) => {
-    console.log("checked = ", checkedValues);
+  
+  const onModalManageClose = async () => {
+    setItemsDetail({});
+    formManage.resetFields();
+    setOpenModalManage(false);
+    document.body.style = "overflow: visible !important;";
   };
-  const items = [
+
+  const itemsManage = [
     {
       key: "1",
       label: "ข้อมูลพื้นฐาน",
       children: (
-        <Form layout="vertical">
+        <Form form={formManage} layout="vertical">
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                name="1"
+                name="stname"
                 label="ชื่อสินค้า"
                 rules={[{ required: true, message: "กรุณาใส่ชื่อสินค้าใหม่!" }]}
               >
@@ -339,7 +363,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="2"
+                name="typename"
                 label="ประเภทสินค้า"
                 rules={[
                   { required: true, message: "กรุณาใส่ประเภทสินค้าใหม่!" },
@@ -350,7 +374,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="3"
+                name="unit"
                 label="หน่วยสั่งซื้อ"
                 rules={[
                   { required: true, message: "กรุณาใส่หน่วยสั่งซื้อใหม่!" },
@@ -363,8 +387,8 @@ const SR = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="4"
-                label="  Material code"
+                name="material_code"
+                label="Material code"
                 rules={[
                   { required: true, message: "กรุณาใส่ Material code ใหม่!" },
                 ]}
@@ -387,7 +411,7 @@ const SR = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item
-                name="5"
+                name="stname_vat"
                 label="ชื่อเปิดบิล VAT"
                 rules={[
                   { required: true, message: "กรุณาใส่ชื่อเปิดบิล VAT ใหม่!" },
@@ -398,7 +422,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="6"
+                name="brand"
                 label="ยี่ห้อ"
                 rules={[{ required: true, message: "กรุณาใส่ยี่ห้อใหม่!" }]}
               >
@@ -407,7 +431,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="7"
+                name="stname_per"
                 label="ชื่อสินค้า/ดอก"
                 rules={[
                   { required: true, message: "กรุณาใส่ชื่อ สินค้า/ดอก ใหม่!" },
@@ -420,7 +444,7 @@ const SR = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="1-1"
+                name="stfront"
                 label="รุ่น1/หน้า"
                 rules={[
                   { required: true, message: "กรุณาใส่ รุ่น1/หน้า ใหม่!" },
@@ -431,7 +455,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="2-2"
+                name="stseries"
                 label="รุ่น2/ซี่รี่ย์"
                 rules={[
                   { required: true, message: "กรุณาใส่ รุ่น2/ซี่รี่ย์ ใหม่!" },
@@ -442,7 +466,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="3-3"
+                name="stborder"
                 label="รุ่น3/ขอบ"
                 rules={[
                   { required: true, message: "กรุณาใส่ชื่อ รุ่น3/ขอบ ใหม่!" },
@@ -453,7 +477,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="4-4"
+                name="stload"
                 label="รุ่น4/โหลด"
                 rules={[
                   { required: true, message: "กรุณาใส่ชื่อ รุ่น4/โหลด ใหม่!" },
@@ -464,7 +488,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="5-5"
+                name="stspeed"
                 label="รุ่น5/สปีด"
                 rules={[
                   { required: true, message: "กรุณาใส่ รุ่น5/สปีด ใหม่!" },
@@ -475,7 +499,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="6-6"
+                name="sttw"
                 label="รุ่น6/TW"
                 rules={[{ required: true, message: "กรุณาใส่ รุ่น6/TW ใหม่!" }]}
               >
@@ -484,7 +508,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="7-7"
+                name="stweight"
                 label="รุ่น7/น้ำหนัก"
                 rules={[
                   { required: true, message: "กรุณาใส่ รุ่น7/น้ำหนัก ใหม่!" },
@@ -495,7 +519,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="8-8"
+                name="stwidth"
                 label="รุ่น8/กว้าง"
                 rules={[
                   { required: true, message: "กรุณาใส่ รุ่น8/กว้าง ใหม่!" },
@@ -506,7 +530,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="9-9"
+                name="stlong"
                 label="รุ่น9/ยาว"
                 rules={[
                   { required: true, message: "กรุณาใส่ รุ่น5/สปีด ใหม่!" },
@@ -517,7 +541,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="10-10"
+                name="sthigh"
                 label="รุ่น10/สูง"
                 rules={[{ required: true, message: "กรุณาใส่ รุ่น6/TW ใหม่!" }]}
               >
@@ -526,7 +550,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="รอบการเปลี่ยน"
+                name="stchange_round"
                 label="รอบการเปลี่ยน"
                 rules={[
                   { required: true, message: "กรุณาใส่ รอบการเปลี่ยน ใหม่!" },
@@ -537,7 +561,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="เวลาในการเปลี่ยน"
+                name="stchange_time"
                 label="เวลาในการเปลี่ยน"
                 rules={[
                   {
@@ -553,7 +577,7 @@ const SR = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
               <Form.Item
-                name="ยี่ห้อรถ"
+                name="stcar_brand"
                 label="ยี่ห้อรถ"
                 rules={[{ required: true, message: "กรุณาใส่ ยี่ห้อรถ ใหม่!" }]}
               >
@@ -562,7 +586,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
               <Form.Item
-                name="รุ่นรถ"
+                name="stcar_model"
                 label="รุ่นรถ"
                 rules={[{ required: true, message: "กรุณาใส่ รุ่นรถ ใหม่!" }]}
               >
@@ -571,7 +595,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
               <Form.Item
-                name="หมายเหตุ"
+                name="remark"
                 label="หมายเหตุ"
                 rules={[
                   { required: true, message: "กรุณาใส่ชื่อ หมายเหตุ ใหม่!" },
@@ -588,7 +612,7 @@ const SR = () => {
       key: "2",
       label: "สต๊อก",
       children: (
-        <Form layout="vertical">
+        <Form form={formManage} layout="vertical">
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
               <Form.Item
@@ -665,11 +689,11 @@ const SR = () => {
       key: "3",
       label: "ราคา",
       children: (
-        <Form layout="vertical">
+        <Form form={formManage} layout="vertical">
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="ราคาขายปลีก"
+                name="price"
                 label="ราคาขายปลีก"
                 rules={[
                   { required: true, message: "กรุณาใส่ ราคาขายปลีก ใหม่!" },
@@ -680,7 +704,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="ราคาส่ง A"
+                name="price_A"
                 label="ราคาส่ง A"
                 rules={[
                   { required: true, message: "กรุณาใส่ ราคาส่ง A ใหม่!" },
@@ -691,7 +715,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="ราคาส่ง B"
+                name="price_B"
                 label="ราคาส่ง B"
                 rules={[
                   { required: true, message: "กรุณาใส่ ราคาส่ง B ใหม่!" },
@@ -702,7 +726,7 @@ const SR = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item
-                name="ราคา Online"
+                name="price_online"
                 label="ราคา Online"
                 rules={[
                   { required: true, message: "กรุณาใส่ ราคา Online ใหม่!" },
@@ -716,6 +740,39 @@ const SR = () => {
       ),
     },
   ];
+
+  const ModalManage = () => {
+    return (
+      <Modal
+        open={openModalManage}
+        title={actionManage.title}
+        okText={actionManage.confirmText}
+        cancelText="Cancel"
+        style={{ top: 20 }}
+        width={1000}
+        afterClose={() => formManage.resetFields() }
+        onCancel={() => onModalManageClose()}
+        onOk={() => {
+          formManage
+            .validateFields()
+            .then((values) => {
+              if (actionManage.action === "add") {
+                submitAdd(values);
+              } else if (actionManage.action === "edit") {
+                submitEdit(values);
+              }
+            })
+            .catch((info) => {
+              console.log("Validate Failed:", info);
+            });
+        }}
+      >
+        <Card title="มูลสินค้า">
+          <Tabs defaultActiveKey="1" items={itemsManage} />
+        </Card>
+      </Modal>
+    );
+  };
   return (
     <>
       <Header></Header>
@@ -732,8 +789,7 @@ const SR = () => {
                     <Checkbox.Group
                       style={{
                         width: "100%",
-                      }}
-                      onChange={onChange}
+                      }}                      
                     >
                       <Row>
                         <Col
@@ -774,41 +830,33 @@ const SR = () => {
         </Row>
 
         <br></br>
-        <Button type="primary" onClick={() => setIsOpenModal(true)}>
+        <Button
+          type="primary"
+          onClick={() => {
+            setActionManage({
+              action: "add",
+              title: "เพิ่มสินค้า",
+              confirmText: "Create",
+            });
+            setOpenModalManage(true);
+          }}
+        >
           เพิ่มสินค้า
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table columns={columns} dataSource={AllSR} />
+              <Table columns={columns} dataSource={AllItems} />
             </Card>
           </Col>
         </Row>
       </div>
 
-      <Modal
-        open={isOpenModal}
-        title="เพิ่มสินค้า"
-        okText="Create"
-        cancelText="Cancel"
-        width={1200}
-        onCancel={Modaladdclose}
-        onOk={Modaladdsubmit}
-        maskClosable={false}
-      >
-        <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={2}>
-            รหัสสินค้า
-          </Col>
-          <Col xs={24} sm={24} md={24} lg={24} xl={20}>
-            ตย144531
-          </Col>
-        </Row>
-        <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-      </Modal>
+      {/* Modal จัดการสินค้า */}
+      {openModalManage && ModalManage()}
     </>
   );
 };
 
-export default SR;
+export default Items;
