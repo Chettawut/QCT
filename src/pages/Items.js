@@ -520,6 +520,7 @@ const Items = () => {
     {
       key: "2",
       label: "สต๊อก",
+      disabled: actionManage.action === "add" ? true : false,
       children: (
         <Form form={formManage} layout="vertical">
           <Row gutter={[24, 0]}>
