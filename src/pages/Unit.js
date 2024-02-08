@@ -362,7 +362,8 @@ function Unit() {
   return (
     <>
       <Header></Header>
-      <div className="layout-content">
+      <div className="layout-content" style={{ padding: 20 }}>
+      <h1>หน่วยสินค้า</h1>
         <Button
           type="primary"
           onClick={() => {

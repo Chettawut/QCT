@@ -43,12 +43,12 @@ const Router = () => {
         <Route path="/Billinginformation" element={<Billinginformation />} />
         <Route path="/Quotation" element={<Quotation />} />
         <Route path="/unit" element={<Unit />} />
-
+        <Route path="/itemtype" element={<Itemtype />} />
         <Route
           element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER]} />}
         >
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/itemtype" element={<Itemtype />} />
+
           <Route path="/profile" element={<Profile />} />
           <Route path="/customer" element={<Customer />} />
           <Route path="bom/" element={<BomIndex />}></Route>
