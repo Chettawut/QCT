@@ -494,6 +494,7 @@ function User() {
     <>
       <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
+      <h1>ผู้ใช้ระบบ</h1>
         <Button
           type="primary"
           onClick={() => {
