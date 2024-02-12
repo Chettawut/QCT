@@ -13,6 +13,7 @@ import {
   Modal,
   Form,
   Select,
+  InputNumber,
 } from "antd";
 import Swal from "sweetalert2";
 import UserService from "../service/UserService";
@@ -204,9 +205,9 @@ function SR() {
       fixed: "right",
       render: (text) => (
         <Button
-        icon={<ToolTwoTone twoToneColor="#E74C3C" />}
-        style={{ cursor: "pointer" }}
-        danger
+          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
+          style={{ cursor: "pointer" }}
+          danger
           onClick={(e) => showEditModal(text.code)}
         >
           แก้ใข
@@ -315,7 +316,7 @@ function SR() {
         okText={actionManage.confirmText}
         cancelText="ยกเลิก"
         onCancel={() => onModalManageClose()}
-        width={1000}
+        width={1200}
         onOk={() => {
           formManage
             .validateFields()
@@ -332,159 +333,146 @@ function SR() {
         }}
       >
         <Form form={formManage} layout="vertical" autoComplete="off">
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              Username
-              <Form.Item
-                name=""
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อผู้ใช้!",
-                  },
-                ]}
-              >
-                <Input
-                  disabled={actionManage.action === "edit" ? true : false}
-                  size="small"
-                  placeholder="Username"
-                />
-              </Form.Item>
-            </Col>
-            <Col
-              xs={24}
-              sm={24}
-              md={12}
-              lg={12}
-              xl={12}
-              style={
-                actionManage.action === "add"
-                  ? { display: "inline" }
-                  : { display: "none" }
-              }
-            >
-              Password
-              <Form.Item
-                rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}
-              >
-                <Input.Password
-                  disabled={actionManage.action === "edit" ? true : false}
-                  size="small"
-                  placeholder="Password"
-                />
-              </Form.Item>
-            </Col>
-            <Col
-              xs={24}
-              sm={24}
-              md={12}
-              lg={12}
-              xl={9}
-              style={
-                actionManage.action === "edit"
-                  ? { display: "inline" }
-                  : { display: "none" }
-              }
-            >
-              Password
-              <Form.Item
-                rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}
-              >
-                <Input.Password
-                  disabled={actionManage.action === "edit" ? true : false}
-                  size="small"
-                  defaultValue="12345678"
-                />
-              </Form.Item>
-            </Col>
-            <Col
-              xs={24}
-              sm={24}
-              md={4}
-              lg={4}
-              xl={3}
-              style={
-                actionManage.action === "edit"
-                  ? { display: "inline" }
-                  : { display: "none" }
-              }
-            >
-              <Form.Item>
-                รีเซ็ต Password
-                <Button
-                  style={{ width: 100}}
-                  onClick={() => {
-                    setOpenModalResetPassword(true);
-                  }}
-                >
-                  Reset
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ชื่อจริง
-              <Form.Item
-                name=""
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อจริง!",
-                  },
-                ]}
-              >
-                <Input placeholder="ชื่อจริง" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              นามสกุล
-              <Form.Item
-                name=""
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อนามสกุล!",
-                  },
-                ]}
-              >
-                <Input placeholder="นามสกุล" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ตำแหน่ง
-              <Form.Item
-                name=""
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาระบุประเภท!",
-                  },
-                ]}
-              >
-                <Select
-                  style={{ height: 40 }}
-                  options={[
-                    { value: "Admin", label: "Admin" },
-                    { value: "พนักงานขาย", label: "พนักงานขาย" },
-                    { value: "ธุรการ", label: "ธุรการ" },
-                    { value: "จัดซื้อ", label: "จัดซื้อ" },
-                    { value: "ช่าง", label: "ช่าง" },
-                    { value: "กรรมการ", label: "กรรมการ" },
-                    { value: "ผู้จัดการสาขา", label: "ผู้จัดการสาขา" },
+          <Card title="เพิ่มข้อมูลรถ">
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ทะเบียนรถ
+                <Form.Item
+                  name="carno"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ทะเบียนรถ!",
+                    },
                   ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              เบอร์โทรศัพท์
-              <Form.Item name="">
-                <Input placeholder="เบอร์โทรศัพท์" />
-              </Form.Item>
-            </Col>
-          </Row>
+                >
+                  <Input placeholder="ทะเบียนรถ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ยี่ห้อ
+                <Form.Item
+                  name="brand"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ยี่ห้อ!",
+                    },
+                  ]}
+                >
+                  <Select size="large" placeholder="ยี่ห้อ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                รุ่น/ปี
+                <Form.Item name="รุ่น/ปี">
+                  <Input placeholder="รุ่น/ปี" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                สี
+                <Form.Item name="color">
+                  <Input placeholder="สี" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                เลขตัวรถ
+                <Form.Item name="รุ่น/ปี">
+                  <Input placeholder="เลขตัวรถ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                เลขตัวถัง
+                <Form.Item name="color">
+                  <Input placeholder="เลขตัวถัง" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                เลขเครื่อง
+                <Form.Item name="เลขเครื่อง">
+                  <Input placeholder="เลขเครื่อง" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                จังหวัด
+                <Form.Item name="province">
+                  <Input placeholder="จังหวัด" />
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                ประเภทรถ
+                <Form.Item name="car_type">
+                  <Select size="large" placeholder="ประเภทรถ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                วิ่งเฉลี่ยวันละ
+                <Form.Item name="วิ่งเฉลี่ยวันละ">
+                  <Input placeholder="วิ่งเฉลี่ยวันละ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                ความเร็วในการขับ
+                <Form.Item name="ความเร็วในการขับ">
+                  <Input placeholder="ความเร็วในการขับ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                การบรรทุก
+                <Form.Item name="">
+                  <Select
+                    size="large"
+                    placeholder="การบรรทุก"
+                    options={[
+                      {
+                        value: "ไม่บรรทุก,โดยสารเท่านั้น",
+                        label: "ไม่บรรทุก,โดยสารเท่านั้น",
+                      },
+                      {
+                        value: "บรรทุกเป็นบางครั้ง,ไม่หนัก",
+                        label: "บรรทุกเป็นบางครั้ง,ไม่หนัก",
+                      },
+                      {
+                        value: "บรรทุกหนัก",
+                        label: "บรรทุกหนัก",
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                ความจุกระบอกสูบ
+                <Form.Item name="ความจุกระบอกสูบ">
+                  <Input placeholder="เลขความจุกระบอกสูบ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={4}>
+                ลมยางล้อหน้า
+                <Form.Item name="front_tire">
+                  <InputNumber
+                    style={{
+                      width: 165,
+                    }}
+                    size="large"
+                    placeholder="ลมยางล้อหน้า"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={4}>
+                ลมยางล้อหลัง
+                <Form.Item name="back_tire">
+                  <InputNumber
+                    style={{
+                      width: 165,
+                    }}
+                    size="large"
+                    placeholder="ลมยางล้อหลัง"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
         </Form>
       </Modal>
     );
@@ -494,13 +482,12 @@ function SR() {
     <>
       <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
-      <h1>รถ</h1>
+        <h1>รถ</h1>
         <Button
           type="primary"
           onClick={() => {
             setActionManage({
               action: "add",
-              title: "เพิ่ม",
               confirmText: "เพิ่ม",
             });
             setOpenModalManage(true);
