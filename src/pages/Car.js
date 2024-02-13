@@ -307,7 +307,14 @@ function SR() {
     setOpenModalManage(false);
   };
   ////////////////////////////////
-
+  const onSearch = (value) => {
+    console.log("search:", value);
+  };
+  const onChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const ModalManage = () => {
     return (
       <Modal
@@ -351,16 +358,269 @@ function SR() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 ยี่ห้อ
-                <Form.Item
-                  name="brand"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาใส่ยี่ห้อ!",
-                    },
-                  ]}
-                >
-                  <Select size="large" placeholder="ยี่ห้อ" />
+                <Form.Item name="brand">
+                  <Select
+                    size="large"
+                    placeholder="ยี่ห้อ"
+                    showSearch
+                    onChange={onChange}
+                    onSearch={onSearch}
+                    filterOption={filterOption}
+                    options={[
+                      {
+                        value: "BMW",
+                        label: "BMW",
+                      },
+                      {
+                        value: "HONDA",
+                        label: "HONDA",
+                      },
+                      {
+                        value: "MAZDA",
+                        label: "MAZDA",
+                      },
+                      {
+                        value: "TOYOTA",
+                        label: "TOYOTA",
+                      },
+                      {
+                        value: "NISSAN",
+                        label: "NISSAN",
+                      },
+                      {
+                        value: "ISUZU",
+                        label: "ISUZU",
+                      },
+                      {
+                        value: "MITSUBISHI",
+                        label: "MITSUBISHI",
+                      },
+                      {
+                        value: "ROVER",
+                        label: "ROVER",
+                      },
+                      {
+                        value: "AUDI",
+                        label: "AUDI",
+                      },
+                      {
+                        value: "BENZ",
+                        label: "BENZ",
+                      },
+                      {
+                        value: "VOLKSWAGEN",
+                        label: "VOLKSWAGEN",
+                      },
+                      {
+                        value: "OPEL",
+                        label: "OPEL",
+                      },
+                      {
+                        value: "HINO",
+                        label: "HINO",
+                      },
+                      {
+                        value: "FORD",
+                        label: "FORD",
+                      },
+                      {
+                        value: "KIA",
+                        label: "KIA",
+                      },
+                      {
+                        value: "SUZUKI",
+                        label: "SUZUKI",
+                      },
+                      {
+                        value: "SEAT",
+                        label: "SEAT",
+                      },
+                      {
+                        value: "VOLVO",
+                        label: "VOLVO",
+                      },
+                      {
+                        value: "HOLDEN",
+                        label: "HOLDEN",
+                      },
+                      {
+                        value: "HYUNDAI",
+                        label: "HYUNDAI",
+                      },
+                      {
+                        value: "DAEWOO",
+                        label: "DAEWOO",
+                      },
+                      {
+                        value: "DAIHATSU",
+                        label: "DAIHATSU",
+                      },
+                      {
+                        value: "PEUGEOT",
+                        label: "PEUGEOT",
+                      },
+                      {
+                        value: "LAND ROVER",
+                        label: "LAND ROVER",
+                      },
+                      {
+                        value: "CHEVROLET",
+                        label: "CHEVROLET",
+                      },
+                      {
+                        value: "DATSUN",
+                        label: "DATSUN",
+                      },
+                      {
+                        value: "FIAT",
+                        label: "FIAT",
+                      },
+                      {
+                        value: "CITROEN",
+                        label: "CITROEN",
+                      },
+                      {
+                        value: "JEEP",
+                        label: "JEEP",
+                      },
+                      {
+                        value: "SSAGYONG",
+                        label: "SSAGYONG",
+                      },
+                      {
+                        value: "LEXUS",
+                        label: "LEXUS",
+                      },
+                      {
+                        value: "SUBARU",
+                        label: "SUBARU",
+                      },
+                      {
+                        value: "RENAULT",
+                        label: "RENAULT",
+                      },
+                      {
+                        value: "SAAB",
+                        label: "SAAB",
+                      },
+                      {
+                        value: "MINI",
+                        label: "MINI",
+                      },
+                      {
+                        value: "PROTON",
+                        label: "PROTON",
+                      },
+                      {
+                        value: "SKODA",
+                        label: "SKODA",
+                      },
+                      {
+                        value: "CHRYSLER",
+                        label: "CHRYSLER",
+                      },
+                      {
+                        value: "WULING",
+                        label: "WULING",
+                      },
+                      {
+                        value: "HUMBER",
+                        label: "HUMBER",
+                      },
+                      {
+                        value: "TATA",
+                        label: "TATA",
+                      },
+                      {
+                        value: "ALFA ROMEO",
+                        label: "ALFA ROMEO",
+                      },
+                      {
+                        value: "DFM",
+                        label: "DFM",
+                      },
+                      {
+                        value: "PORSCHE",
+                        label: "PORSCHE",
+                      },
+                      {
+                        value: "THAIRUNG",
+                        label: "THAIRUNG",
+                      },
+                      {
+                        value: "VOLK",
+                        label: "VOLK",
+                      },
+                      {
+                        value: "NAZA",
+                        label: "NAZA",
+                      },
+                      {
+                        value: "JAGUAR",
+                        label: "JAGUAR",
+                      },
+                      {
+                        value: "สามล้อ",
+                        label: "สามล้อ",
+                      },
+                      {
+                        value: "BENTLEY",
+                        label: "BENTLEY",
+                      },
+                      {
+                        value: "RELY",
+                        label: "RELY",
+                      },
+                      {
+                        value: "CHERRY",
+                        label: "CHERRY",
+                      },
+                      {
+                        value: "MG",
+                        label: "MG",
+                      },
+                      {
+                        value: "MERCEDES-BENZ",
+                        label: "MERCEDES-BENZ",
+                      },
+                      {
+                        value: "HAMMER",
+                        label: "HAMMER",
+                      },
+                      {
+                        value: "HAVAL",
+                        label: "HAVAL",
+                      },
+                      {
+                        value: "NETA",
+                        label: "NETA",
+                      },
+                      {
+                        value: "ORA",
+                        label: "ORA",
+                      },
+                      {
+                        value: "BYD",
+                        label: "BYD",
+                      },
+                      {
+                        value: "TESIA",
+                        label: "TESIA",
+                      },
+                      {
+                        value: "BOMA",
+                        label: "BOMA",
+                      },
+                      {
+                        value: "YARIS",
+                        label: "YARIS",
+                      },
+                      {
+                        value: "TESLA",
+                        label: "TESLA",
+                      },
+                    ]}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -375,50 +635,117 @@ function SR() {
                   <Input placeholder="สี" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 เลขตัวรถ
                 <Form.Item name="รุ่น/ปี">
                   <Input placeholder="เลขตัวรถ" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 เลขตัวถัง
                 <Form.Item name="color">
                   <Input placeholder="เลขตัวถัง" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 เลขเครื่อง
                 <Form.Item name="เลขเครื่อง">
                   <Input placeholder="เลขเครื่อง" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 จังหวัด
                 <Form.Item name="province">
                   <Input placeholder="จังหวัด" />
                 </Form.Item>
               </Col>
 
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 ประเภทรถ
                 <Form.Item name="car_type">
-                  <Select size="large" placeholder="ประเภทรถ" />
+                  <Select
+                    size="large"
+                    placeholder="ประเภทรถ"
+                    showSearch
+                    onChange={onChange}
+                    onSearch={onSearch}
+                    filterOption={filterOption}
+                    options={[
+                      {
+                        value: "เก๋ง",
+                        label: "เก๋ง",
+                      },
+                      {
+                        value: "กระบะ",
+                        label: "กระบะ",
+                      },
+                      {
+                        value: "4WD",
+                        label: "4WD",
+                      },
+                      {
+                        value: "รถบรรทุก",
+                        label: "รถบรรทุก",
+                      },
+                      {
+                        value: "บรรทุกกลาง,ใหญ่",
+                        label: "บรรทุกกลาง,ใหญ่",
+                      },
+                      {
+                        value: "ตู้,แวน",
+                        label: "ตู้,แวน",
+                      },
+
+                      {
+                        value: "จักรยานยนต์",
+                        label: "จักรยานยนต์",
+                      },
+                      {
+                        value: "บัส",
+                        label: "บัส",
+                      },
+                      {
+                        value: "โดยสารประจำทาง(Taxi,สองแถว,สมล้อ)",
+                        label: "โดยสารประจำทาง(Taxi,สองแถว,สมล้อ)",
+                      },
+                      {
+                        value: "โดยสารไม่ประจำทาง(Taxi,สองแถว,สมล้อ)",
+                        label: "โดยสารไม่ประจำทาง(Taxi,สองแถว,สมล้อ)",
+                      },
+                    ]}
+                  />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 วิ่งเฉลี่ยวันละ
                 <Form.Item name="วิ่งเฉลี่ยวันละ">
                   <Input placeholder="วิ่งเฉลี่ยวันละ" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 ความเร็วในการขับ
                 <Form.Item name="ความเร็วในการขับ">
-                  <Input placeholder="ความเร็วในการขับ" />
+                  <Select
+                    size="large"
+                    placeholder="ความเร็วในการขับ"
+                    options={[
+                      {
+                        value: "ไม่เกิน 100 กม./ชม.",
+                        label: "ไม่เกิน 100 กม./ชม.",
+                      },
+                      {
+                        value: "ไม่เกิน 140 กม./ชม.",
+                        label: "ไม่เกิน 140 กม./ชม.",
+                      },
+                      {
+                        value: "เกิน 140 กม./ชม.",
+                        label: "เกิน 140 กม./ชม.",
+                      },
+                    ]}
+                  />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 การบรรทุก
                 <Form.Item name="">
                   <Select
@@ -441,30 +768,30 @@ function SR() {
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 ความจุกระบอกสูบ
                 <Form.Item name="ความจุกระบอกสูบ">
                   <Input placeholder="เลขความจุกระบอกสูบ" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={4}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={3}>
                 ลมยางล้อหน้า
                 <Form.Item name="front_tire">
                   <InputNumber
                     style={{
-                      width: 165,
+                      width: 117,
                     }}
                     size="large"
                     placeholder="ลมยางล้อหน้า"
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={4}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={3}>
                 ลมยางล้อหลัง
                 <Form.Item name="back_tire">
                   <InputNumber
                     style={{
-                      width: 165,
+                      width: 117,
                     }}
                     size="large"
                     placeholder="ลมยางล้อหลัง"
