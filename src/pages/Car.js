@@ -14,6 +14,7 @@ import {
   Form,
   Select,
   InputNumber,
+  Divider,
 } from "antd";
 import Swal from "sweetalert2";
 import UserService from "../service/UserService";
@@ -27,6 +28,7 @@ function SR() {
     title: "เพิ่มผู้ใช้งาน",
     confirmText: "ยืนยัน",
   });
+  const { Option } = Select;
   const [formAdd] = Form.useForm();
   const [formReset] = Form.useForm();
   const [searchText, setSearchText] = useState("");
@@ -37,7 +39,7 @@ function SR() {
   useEffect(() => {
     GetUser();
   }, []);
-
+  const { TextArea } = Input;
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -307,6 +309,23 @@ function SR() {
     setOpenModalManage(false);
   };
   ////////////////////////////////
+  const [form] = Form.useForm();
+  const onGenderChange = (value) => {
+    switch (value) {
+      case "0":
+        form.setFieldsValue({
+          note: "Hi, lady!",
+        });
+        break;
+      case "1":
+        form.setFieldsValue({
+          note: "Hi there!",
+        });
+        break;
+      default:
+    }
+  };
+
   const onSearch = (value) => {
     console.log("search:", value);
   };
@@ -341,6 +360,41 @@ function SR() {
       >
         <Form form={formManage} layout="vertical" autoComplete="off">
           <Card title="เพิ่มข้อมูลรถ">
+            <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={12} lg={12} xl={24}>
+              
+              <Form form={form}>
+                  <Form.Item name="note" label="Note">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item name="businessno" label="ลักษณะรถ">
+                    <Select
+                      placeholder="Select a option and change input text above"
+                      onChange={onGenderChange}
+                      allowClear
+                    >
+                      <Option value="0">รถส่วนบุคคล</Option>
+                      <Option value="1">รถบริษัท</Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item 
+                  style={{padding : 20}}
+                    shouldUpdate={(prevValues, currentValues) =>
+                      prevValues.businessno !== currentValues.businessno
+                    }
+                  >
+                    {({ getFieldValue }) =>
+                      getFieldValue("businessno") === "1" ? (
+                        <Form.Item name="cusno">
+                          <Input />
+                        </Form.Item>
+                      ) : null
+                    }
+                  </Form.Item>
+              </Form>
+              </Col>
+            </Row>
+            <Divider />
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 ทะเบียนรถ
@@ -625,8 +679,15 @@ function SR() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 รุ่น/ปี
-                <Form.Item name="รุ่น/ปี">
-                  <Input placeholder="รุ่น/ปี" />
+                <Form.Item name="car_model">
+                  <Select
+                    size="large"
+                    placeholder="รุ่น/ปี"
+                    showSearch
+                    onChange={onChange}
+                    onSearch={onSearch}
+                    filterOption={filterOption}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -637,31 +698,37 @@ function SR() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 เลขตัวรถ
-                <Form.Item name="รุ่น/ปี">
+                <Form.Item name="modelcode">
                   <Input placeholder="เลขตัวรถ" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 เลขตัวถัง
-                <Form.Item name="color">
+                <Form.Item name="car_chassisno">
                   <Input placeholder="เลขตัวถัง" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 เลขเครื่อง
-                <Form.Item name="เลขเครื่อง">
+                <Form.Item name="car_engineno">
                   <Input placeholder="เลขเครื่อง" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 จังหวัด
                 <Form.Item name="province">
-                  <Input placeholder="จังหวัด" />
+                  <Select
+                    size="large"
+                    placeholder="จังหวัด"
+                    showSearch
+                    onChange={onChange}
+                    onSearch={onSearch}
+                    filterOption={filterOption}
+                  />
                 </Form.Item>
               </Col>
-
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                ประเภทรถ
+                ลักษณะรถ
                 <Form.Item name="car_type">
                   <Select
                     size="large"
@@ -717,14 +784,20 @@ function SR() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ความจุกระบอกสูบ
+                <Form.Item name="car_cc">
+                  <Input placeholder="เลขความจุกระบอกสูบ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 วิ่งเฉลี่ยวันละ
-                <Form.Item name="วิ่งเฉลี่ยวันละ">
+                <Form.Item name="avg_daydistance">
                   <Input placeholder="วิ่งเฉลี่ยวันละ" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 ความเร็วในการขับ
-                <Form.Item name="ความเร็วในการขับ">
+                <Form.Item name="car_speed">
                   <Select
                     size="large"
                     placeholder="ความเร็วในการขับ"
@@ -747,7 +820,7 @@ function SR() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 การบรรทุก
-                <Form.Item name="">
+                <Form.Item name="car_loading">
                   <Select
                     size="large"
                     placeholder="การบรรทุก"
@@ -766,12 +839,6 @@ function SR() {
                       },
                     ]}
                   />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                ความจุกระบอกสูบ
-                <Form.Item name="ความจุกระบอกสูบ">
-                  <Input placeholder="เลขความจุกระบอกสูบ" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={3}>
@@ -796,6 +863,12 @@ function SR() {
                     size="large"
                     placeholder="ลมยางล้อหลัง"
                   />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                หมายเหตุ
+                <Form.Item name="remark">
+                  <TextArea rows={2} placeholder="หมายเหตุ" />
                 </Form.Item>
               </Col>
             </Row>
