@@ -310,22 +310,6 @@ function SR() {
   };
   ////////////////////////////////
   const [form] = Form.useForm();
-  const onGenderChange = (value) => {
-    switch (value) {
-      case "0":
-        form.setFieldsValue({
-          note: "Hi, lady!",
-        });
-        break;
-      case "1":
-        form.setFieldsValue({
-          note: "Hi there!",
-        });
-        break;
-      default:
-    }
-  };
-
   const onSearch = (value) => {
     console.log("search:", value);
   };
@@ -359,41 +343,52 @@ function SR() {
         }}
       >
         <Form form={formManage} layout="vertical" autoComplete="off">
-          <Card title="เพิ่มข้อมูลรถ">
-            <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={24}>
-              
-              <Form form={form}>
-                  <Form.Item name="note" label="Note">
-                    <Input />
-                  </Form.Item>
+          <Card>
+            <Form form={form}>
+              <Row gutter={[24, 0]}>
+                <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                   <Form.Item name="businessno" label="ลักษณะรถ">
-                    <Select
-                      placeholder="Select a option and change input text above"
-                      onChange={onGenderChange}
-                      allowClear
-                    >
+                    <Select size="large" allowClear>
                       <Option value="0">รถส่วนบุคคล</Option>
                       <Option value="1">รถบริษัท</Option>
                     </Select>
                   </Form.Item>
-                  <Form.Item 
-                  style={{padding : 20}}
+                </Col>
+                <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                  <Form.Item
                     shouldUpdate={(prevValues, currentValues) =>
                       prevValues.businessno !== currentValues.businessno
                     }
                   >
                     {({ getFieldValue }) =>
-                      getFieldValue("businessno") === "1" ? (
-                        <Form.Item name="cusno">
-                          <Input />
+                      getFieldValue("businessno") === "0" ? (
+                        <Form.Item name="cusno" label="รถส่วนบุคคล">
+                          <Select
+                            size="large"
+                            placeholder="รถส่วนบุคคล"
+                            showSearch
+                            onChange={onChange}
+                            onSearch={onSearch}
+                            filterOption={filterOption}
+                          />
                         </Form.Item>
-                      ) : null
+                      ) : (
+                        <Form.Item name="business_car" label="รถบริษัท">
+                          <Select
+                            size="large"
+                            placeholder="รถบริษัท"
+                            showSearch
+                            onChange={onChange}
+                            onSearch={onSearch}
+                            filterOption={filterOption}
+                          />
+                        </Form.Item>
+                      )
                     }
                   </Form.Item>
-              </Form>
-              </Col>
-            </Row>
+                </Col>
+              </Row>
+            </Form>
             <Divider />
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -888,6 +883,7 @@ function SR() {
           onClick={() => {
             setActionManage({
               action: "add",
+              title: "เพิ่มข้อมูลรถ",
               confirmText: "เพิ่ม",
             });
             setOpenModalManage(true);
