@@ -10,7 +10,7 @@ import Individualcustomers from "../pages/Individualcustomers";
 import Items from "../pages/Items";
 import Employee from "../pages/Employee";
 import History from "../pages/History";
-import PO from "../pages/PO";
+import { PO, POIndex, POForm, POView } from "../pages/po/purchase-order";
 import Unit from "../pages/Unit";
 import Profile from "../pages/Profile";
 import Login from "../pages/Login";
@@ -38,11 +38,16 @@ const Router = () => {
         <Route path="/Car" element={<Car />} />
         <Route path="/Individualcustomers" element={<Individualcustomers />} />
         <Route path="/Companycustomers" element={<Companycustomers />} />
-        <Route path="/PO" element={<PO />} />
         <Route path="/Receivinggoods" element={<Receivinggoods />} />
         <Route path="/Billinginformation" element={<Billinginformation />} />
         <Route path="/Quotation" element={<Quotation />} />
         <Route path="/unit" element={<Unit />} />
+
+        <Route path="/purchase-order/"  exact element={<PO />} >
+                <Route index element={<POIndex />} />
+                <Route path="manage/:action" element={<POForm />} /> 
+                <Route path="view" element={<POView />} />
+              </Route>
 
         <Route
           element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER]} />}

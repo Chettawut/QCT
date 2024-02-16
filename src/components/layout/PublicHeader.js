@@ -89,12 +89,12 @@ const PublicHeader = () => {
           children: [
             {
               label: (
-                <a href="/PO" rel="noopener noreferrer">
-                  ใบสั่งซื้อ
+                <a href="/purchase-order/" rel="noopener noreferrer">
+                  ใบสั่งซื้อ 
                 </a>
               ),
               key: "menu2_1",
-            },
+            },        
             {
               label: (
                 <a href="/Receivinggoods" rel="noopener noreferrer">

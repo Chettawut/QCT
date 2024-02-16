@@ -16,11 +16,11 @@ import {
 } from "antd";
 import Swal from "sweetalert2";
 import UserService from "../service/UserService";
-import { Userdata } from "../model/userdata.model";
+import { userdata } from "../model/userdata.model";
 function User() {
   const [AllUser, setAllUser] = useState("");
   const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);
-  const [UserdataDetail, setUserdataDetail] = useState(Userdata);
+  const [UserdataDetail, setUserdataDetail] = useState(userdata);
   const [actionManage, setActionManage] = useState({
     action: "add",
     title: "เพิ่มผู้ใช้งาน",

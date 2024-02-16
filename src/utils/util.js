@@ -97,5 +97,18 @@ export const PROVINCE_OPTIONS = [
     { label: "อุทัยธานี", value: "อุทัยธานี" },
     { label: "อุบลราชธานี", value: "อุบลราชธานี" },
     { label: "อ่างทอง", value: "อ่างทอง" }
-  ];
-    
+];
+
+export const capitalized = (word) => word.split(/\s|-/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+
+export const formatFileSize = (fileSizeInBytes) => {
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']; 
+    if (Number(fileSizeInBytes) === 0) return '0 Byte'; 
+    const i = parseInt(Math.floor(Math.log(fileSizeInBytes) / Math.log(1024))); 
+    return Math.round(fileSizeInBytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
+
+export const formatCommaNumber = (number, dmax=2, dmin = 0 ) => number.toLocaleString('en-US', {
+  minimumFractionDigits: dmin,
+  maximumFractionDigits: dmax,
+});
