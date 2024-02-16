@@ -17,12 +17,12 @@ import {
   Divider,
 } from "antd";
 import Swal from "sweetalert2";
-import UserService from "../service/UserService";
-import { Userdata } from "../model/userdata.model";
+// import UserService from "../service/UserService"; ยังไม่มี CarService
+import { Cardata } from "../model/cardata.model";
 function SR() {
   const [AllUser, setAllUser] = useState("");
   const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);
-  const [UserdataDetail, setUserdataDetail] = useState(Userdata);
+  const [CardataDetail, setCardataDetail] = useState(Cardata);
   const [actionManage, setActionManage] = useState({
     action: "add",
     title: "เพิ่มผู้ใช้งาน",
@@ -235,7 +235,7 @@ function SR() {
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          setUserdataDetail(data);
+          setCardataDetail(data);
           formManage.setFieldsValue(data);
           setActionManage({
             action: "edit",
@@ -277,7 +277,7 @@ function SR() {
   };
 
   const submitEdit = (dataform) => {
-    UserService.editUser({ ...UserdataDetail, ...dataform })
+    UserService.editUser({ ...CardataDetail, ...dataform })
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -304,7 +304,7 @@ function SR() {
   };
 
   const onModalManageClose = async () => {
-    await setUserdataDetail({});
+    await setCardataDetail({});
     formManage.resetFields();
     setOpenModalManage(false);
   };
