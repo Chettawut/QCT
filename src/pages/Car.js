@@ -16,9 +16,9 @@ import {
   Divider,
 } from "antd";
 import Swal from "sweetalert2";
-import UserService from "../service/UserService"; 
+import UserService from "../service/UserService";
 // import { Cardata } from "../model/cardata.model";
-function SR() {
+function Car() {
   const [AllUser, setAllUser] = useState("");
   const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);
   // const [CardataDetail, setCardataDetail] = useState(Cardata);
@@ -286,7 +286,6 @@ function SR() {
     //           html: data.message,
     //           icon: "success",
     //         });
-
     //         GetUser();
     //         setOpenModalManage(false);
     //       } else {
@@ -308,7 +307,6 @@ function SR() {
     setOpenModalManage(false);
   };
   ////////////////////////////////
-  const [form] = Form.useForm();
   const onSearch = (value) => {
     console.log("search:", value);
   };
@@ -343,51 +341,49 @@ function SR() {
       >
         <Form form={formManage} layout="vertical" autoComplete="off">
           <Card>
-            <Form form={form}>
-              <Row gutter={[24, 0]}>
-                <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                  <Form.Item name="businessno" label="ลักษณะรถ">
-                    <Select size="large" allowClear>
-                      <Option value="0">รถส่วนบุคคล</Option>
-                      <Option value="1">รถบริษัท</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                  <Form.Item
-                    shouldUpdate={(prevValues, currentValues) =>
-                      prevValues.businessno !== currentValues.businessno
-                    }
-                  >
-                    {({ getFieldValue }) =>
-                      getFieldValue("businessno") === "0" ? (
-                        <Form.Item name="cusno" label="รถส่วนบุคคล">
-                          <Select
-                            size="large"
-                            placeholder="รถส่วนบุคคล"
-                            showSearch
-                            onChange={onChange}
-                            onSearch={onSearch}
-                            filterOption={filterOption}
-                          />
-                        </Form.Item>
-                      ) : (
-                        <Form.Item name="business_car" label="รถบริษัท">
-                          <Select
-                            size="large"
-                            placeholder="รถบริษัท"
-                            showSearch
-                            onChange={onChange}
-                            onSearch={onSearch}
-                            filterOption={filterOption}
-                          />
-                        </Form.Item>
-                      )
-                    }
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="businessno" label="ลักษณะรถ">
+                  <Select size="large" allowClear>
+                    <Option value="0">รถส่วนบุคคล</Option>
+                    <Option value="1">รถบริษัท</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  shouldUpdate={(prevValues, currentValues) =>
+                    prevValues.businessno !== currentValues.businessno
+                  }
+                >
+                  {({ getFieldValue }) =>
+                    getFieldValue("businessno") === "0" ? (
+                      <Form.Item name="cusno" label="รถส่วนบุคคล">
+                        <Select
+                          size="large"
+                          placeholder="รถส่วนบุคคล"
+                          showSearch
+                          onChange={onChange}
+                          onSearch={onSearch}
+                          filterOption={filterOption}
+                        />
+                      </Form.Item>
+                    ) : (
+                      <Form.Item name="business_car" label="รถบริษัท">
+                        <Select
+                          size="large"
+                          placeholder="รถบริษัท"
+                          showSearch
+                          onChange={onChange}
+                          onSearch={onSearch}
+                          filterOption={filterOption}
+                        />
+                      </Form.Item>
+                    )
+                  }
+                </Form.Item>
+              </Col>
+            </Row>
             <Divider />
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -963,4 +959,4 @@ function SR() {
   );
 }
 
-export default SR;
+export default Car;
