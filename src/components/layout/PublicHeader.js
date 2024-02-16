@@ -175,6 +175,14 @@ const PublicHeader = () => {
               ),
               key: "menu4_5",
             },
+            {
+              label: (
+                <a href="/itemtype" rel="noopener noreferrer">
+                  ประเภทสินค้า
+                </a>
+              ),
+              key: "menu4_5",
+            },
           ],
         },
       ],

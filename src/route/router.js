@@ -47,13 +47,14 @@ const Router = () => {
                 <Route index element={<POIndex />} />
                 <Route path="manage/:action" element={<POForm />} /> 
                 <Route path="view" element={<POView />} />
-              </Route>
+          </Route>
 
+        <Route path="/itemtype" element={<Itemtype />} />
         <Route
           element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER]} />}
         >
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/itemtype" element={<Itemtype />} />
+
           <Route path="/profile" element={<Profile />} />
           <Route path="/customer" element={<Customer />} />
           <Route path="bom/" element={<BomIndex />}></Route>

@@ -1,10 +1,7 @@
-import React, { useRef, useState, useEffect } from "react";
+import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
 import Header from "../components/layout/PublicHeader";
-import {
-  DeleteOutlined,
-  SearchOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import React, { useRef, useState, useEffect } from "react";
+import Highlighter from "react-highlight-words";
 import {
   Button,
   Input,
@@ -16,54 +13,33 @@ import {
   Modal,
   Form,
   Select,
-  Collapse,
-  Radio,
-  DatePicker,
+  InputNumber,
+  Divider,
 } from "antd";
-import Highlighter from "react-highlight-words";
-// COMPONENT
-import { EditableRow, EditableCell } from "../components/table/TableEditAble";
-
-// SERVICE
-import ItemService from "../service/ItemService";
-import SRService from "../service/SRService";
-
-const SR = () => {
-  const [AllSR, setAllSR] = useState("");
-  const [itemList, setItemList] = useState([]);
-  const [selectedList, setSelectedList] = useState([]);
-  // const [formAdd] = Form.useForm();
-  const [formEdit] = Form.useForm();
-  // const [OpenModalAdd, setOpenModalAdd] = useState(false);
-  const [OpenModalEdit, setOpenModalEdit] = useState(false);
-
+import Swal from "sweetalert2";
+// import UserService from "../service/UserService"; ยังไม่มี CarService
+import { Cardata } from "../model/cardata.model";
+function SR() {
+  const [AllUser, setAllUser] = useState("");
+  const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);
+  const [CardataDetail, setCardataDetail] = useState(Cardata);
+  const [actionManage, setActionManage] = useState({
+    action: "add",
+    title: "เพิ่มผู้ใช้งาน",
+    confirmText: "ยืนยัน",
+  });
+  const { Option } = Select;
+  const [formAdd] = Form.useForm();
+  const [formReset] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-
-  // MODAL CONTROLLER
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isShowModalItem, setIsShowModalItem] = useState(false);
+  const [openModalManage, setOpenModalManage] = useState(false);
   const searchInput = useRef(null);
-
+  const [formManage] = Form.useForm();
   useEffect(() => {
-    if (isShowModalItem) fetchItem();
-  }, [isShowModalItem]);
-
-  useEffect(() => {
-    GetSR();
+    GetUser();
   }, []);
-
-  const fetchItem = () => {
-    ItemService.getAllItems()
-      .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          setItemList(data);
-        }
-      })
-      .catch((err) => {});
-  };
-
+  const { TextArea } = Input;
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -182,723 +158,811 @@ const SR = () => {
 
   const columns = [
     {
-      title: "หมายเลข",
-      dataIndex: "srcode",
-      key: "srcode",
+      title: "User Code",
+      dataIndex: "unitcode",
+      key: "unitcode",
+      hidden: "true",
+      width: "10%",
+    },
+    {
+      title: "Username",
+      dataIndex: "username",
+      key: "username",
       width: "20%",
-      ...getColumnSearchProps("srcode"),
-      sorter: (a, b) => a.srcode.length - b.srcode.length,
+      ...getColumnSearchProps("username"),
+      sorter: (a, b) => a.username.length - b.username.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ลูกค้า",
-      dataIndex: "srdate",
-      key: "srdate",
+      title: "ชื่อ",
+      dataIndex: "firstname",
+      key: "firstname",
       width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      ...getColumnSearchProps("firstname"),
+      sorter: (a, b) => a.firstname.length - b.firstname.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ทะเบียนรถ",
-      dataIndex: "srdate",
-      key: "srdate",
+      title: "นามสกุล",
+      dataIndex: "lastname",
+      key: "lastname",
       width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      ...getColumnSearchProps("lastname"),
+      sorter: (a, b) => a.lastname.length - b.lastname.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "จังหวัด",
-      dataIndex: "srdate",
-      key: "srdate",
+      title: "ประเภท",
+      dataIndex: "type",
+      key: "type",
       width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      ...getColumnSearchProps("type"),
+      sorter: (a, b) => a.type.length - b.type.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "วันที่",
+      title: "Action",
       key: "operation",
       width: "20%",
       fixed: "right",
       render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.srcode)}
+        <Button
+          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
+          style={{ cursor: "pointer" }}
+          danger
+          onClick={(e) => showEditModal(text.code)}
         >
-          Edit
-        </span>
+          แก้ใข
+        </Button>
       ),
-    },
-    {
-      title: "ตัดสต๊อก",
-      dataIndex: "srdate",
-      key: "srdate",
-      width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "พิมพ์ VAT",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ตัดสต๊อก VAT",
-      key: "operation",
-      width: "20%",
-      fixed: "right",
-      render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.srcode)}
-        >
-          Edit
-        </span>
-      ),
-    },
-    {
-      title: "บิลออนไลน์",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ส่งด่วน",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สถานะการส่ง",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "จอง",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สถานะ",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "พนักงานขาย",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สาขา",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
     },
   ].filter((item) => !item.hidden);
 
-  const defaultColumns = [
-    {
-      title: "ลำดับ",
-      key: "index",
-      align: "center",
-      render: (_, record, idx) => <span key={record?.stcode}>{idx + 1}</span>,
-    },
-    {
-      title: "รหัสสินค้า",
-      key: "productCode",
-      dataIndex: "productCode",
-    },
-    {
-      title: "ชื่อสินค้า",
-      key: "productName",
-      dataIndex: "productName",
-    },
-    {
-      title: "จำนวน",
-      key: "productQty",
-      dataIndex: "productQty",
-      align: "center",
-      editable: true,
-      width: "10%",
-    },
-    {
-      title: "หน่วย",
-      align: "center",
-      key: "productUnit",
-      dataIndex: "productUnit",
-    },
-    {
-      title: "ราคาซื้อ",
-      key: "productPrice",
-      dataIndex: "productPrice",
-      align: "right",
-      width: "10%",
-    },
-    {
-      title: "ส่วนลด",
-      key: "productDiscount",
-      dataIndex: "productDiscount",
-      align: "right",
-      editable: true,
-      width: "10%",
-    },
-    {
-      title: "ราคาทั้งหมด",
-      key: "productTotalPrice",
-      dataIndex: "productTotalPrice",
-      align: "right",
-      render: (productTotalPrice) => productTotalPrice?.toLocaleString(),
-    },
-    {
-      align: "center",
-      key: "operation",
-      dataIndex: "operation",
-      render: (_, record) =>
-        selectedList.length >= 1 ? (
-          <Button
-            className="bt-icon"
-            type="primary"
-            danger
-            icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record?.productCode)}
-          />
-        ) : null,
-    },
-  ];
-
-  const components = {
-    body: { row: EditableRow, cell: EditableCell },
-  };
-
-  const columnsOrder = defaultColumns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        editable: col.editable,
-        dataIndex: col.dataIndex,
-        title: col.title,
-        handleSave,
-      }),
-    };
-  });
-
-  const handleDelete = (productCode) => {
-    const newData = selectedList.filter(
-      (item) => item?.productCode !== productCode
-    );
-    setSelectedList(newData);
-  };
-
-  const handleSave = (row) => {
-    if (row?.productQty > 0) {
-      const newData = [...selectedList];
-      const index = newData.findIndex(
-        (item) => row?.productCode === item?.productCode
-      );
-      const item = newData[index];
-      row["productTotalPrice"] =
-        row?.productQty * row?.productPrice - row?.productDiscount;
-      newData.splice(index, 1, {
-        ...item,
-        ...row,
-      });
-      setSelectedList(newData);
-    }
-  };
-
-  const handleSelectedItem = (record) => {
-    const newData = {
-      productCode: record?.stcode,
-      productName: record?.stname,
-      productQty: 1,
-      productUnit: record?.unit,
-      productPrice: +record?.price,
-      productDiscount: 0,
-      productTotalPrice: +record?.price,
-    };
-
-    setIsShowModalItem(false);
-    setSelectedList([...selectedList, newData]);
-  };
-
-  const checkDupItem = (itemCode) => {
-    let isDup = false;
-    selectedList.map((item) => {
-      if (item?.productCode === itemCode) isDup = true;
-      return item;
-    });
-    return isDup;
-  };
-
-  const resetData = () => {
-    setItemList([]);
-    setSelectedList([]);
-  };
-
-  const handleCloseModal = () => {
-    resetData();
-    setIsOpenModal(false);
-  };
-
-  const handleCreate = () => {
-    // ==== CALL API TO CREATE SR HERE ==== //
-    console.log("selectedList ==> ", selectedList);
-    resetData();
-    setIsOpenModal(false);
-  };
-
-  const selectItemColumn = [
-    {
-      title: "",
-      key: "tools",
-      align: "center",
-      render: (record) => (
-        <Button
-          type="primary"
-          className="bt-icon"
-          icon={<PlusOutlined />}
-          disabled={checkDupItem(record?.stcode)}
-          onClick={() => handleSelectedItem(record)}
-        />
-      ),
-    },
-    {
-      title: "รหัสสินค้า",
-      key: "stcode",
-      dataIndex: "stcode",
-      width: "100px",
-    },
-    {
-      title: "ชื่อสินค้า",
-      dataIndex: "stname",
-      key: "stname",
-      width: "50%",
-    },
-    {
-      title: "ราคาต่อหน่วย",
-      key: "price",
-      dataIndex: "price",
-      align: "right",
-      render: (price) => {
-        let nextPrice = parseFloat(price).toFixed(2);
-        return nextPrice?.toLocaleString();
-      },
-    },
-  ];
-
-  const GetSR = () => {
-    SRService.getSR()
+  const GetUser = () => {
+    UserService.getUser()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          setAllSR(data);
+          setAllUser(data);
         }
       })
       .catch((err) => {});
   };
 
   const showEditModal = (data) => {
-    SRService.getSupSR(data)
+    document.body.style = "overflow: hidden !important;";
+    UserService.getSupUser(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          formEdit.setFieldValue("Editusername", data.username);
-          formEdit.setFieldValue("Editfirstname", data.firstname);
-          formEdit.setFieldValue("Editlastname", data.lastname);
-          formEdit.setFieldValue("Edittype", data.type);
-          formEdit.setFieldValue("Edittel", data.tel);
-          formEdit.setFieldValue("Editstatususer", data.statususer);
+          setCardataDetail(data);
+          formManage.setFieldsValue(data);
+          setActionManage({
+            action: "edit",
+            title: "แก้ไขผู้ใช้งาน",
+            confirmText: "แก้ใข",
+          });
+          setOpenModalManage(true);
+        }
+      })
+      .catch((err) => {});
+  };
 
-          setOpenModalEdit(true);
+  const submitAdd = (dataform) => {
+    UserService.addUser(dataform)
+      .then(async (res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
+
+            GetUser();
+            setOpenModalManage(false);
+            formAdd.resetFields();
+          } else {
+            // alert(data.message)
+            Swal.fire({
+              title: "<strong>ผิดพลาด!</strong>",
+              html: data.message,
+              icon: "error",
+            });
+          }
         }
       })
       .catch((err) => {});
   };
 
   const submitEdit = (dataform) => {
-    // UserService.editUser(dataform)
-    //   .then(async (res) => {
-    //     let { status, data } = res;
-    //     if (status === 200) {
-    //       if (data.status === '1') {
-    //         await Swal.fire({
-    //           title: "<strong>สำเร็จ</strong>",
-    //           html: data.message,
-    //           icon: "success",
-    //         });
-    //         GetUser();
-    //         setOpenModalAdd(false);
-    //       } else {
-    //         // alert(data.message)
-    //         Swal.fire({
-    //           title: "<strong>ผิดพลาด!</strong>",
-    //           html: data.message,
-    //           icon: "error",
-    //         });
-    //       }
-    //     }
-    //   })
-    //   .catch((err) => {});
+    UserService.editUser({ ...CardataDetail, ...dataform })
+      .then(async (res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
+
+            GetUser();
+            setOpenModalManage(false);
+          } else {
+            // alert(data.message)
+            Swal.fire({
+              title: "<strong>ผิดพลาด!</strong>",
+              html: data.message,
+              icon: "error",
+            });
+          }
+        }
+      })
+      .catch((err) => {});
   };
 
-  const ModalEdit = ({ open, onCancel }) => {
+  const onModalManageClose = async () => {
+    await setCardataDetail({});
+    formManage.resetFields();
+    setOpenModalManage(false);
+  };
+  ////////////////////////////////
+  const [form] = Form.useForm();
+  const onSearch = (value) => {
+    console.log("search:", value);
+  };
+  const onChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  const ModalManage = () => {
     return (
       <Modal
-        open={open}
-        title="แก้ไขผู้ใช้งาน"
-        okText="Create"
-        cancelText="Cancel"
-        onCancel={onCancel}
-        width={1000}
+        open={openModalManage}
+        title={actionManage.title}
+        okText={actionManage.confirmText}
+        cancelText="ยกเลิก"
+        onCancel={() => onModalManageClose()}
+        width={1200}
         onOk={() => {
-          formEdit
+          formManage
             .validateFields()
             .then((values) => {
-              // formEdit.resetFields();
-              // console.log(values)
-              submitEdit(values);
+              if (actionManage.action === "add") {
+                submitAdd(values);
+              } else if (actionManage.action === "edit") {
+                submitEdit(values);
+              }
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
             });
         }}
       >
-        <Form
-          form={formEdit}
-          layout="vertical"
-          name="form_in_modal"
-          initialValues={{
-            modifier: "public",
-          }}
-        >
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              Username
-              <Form.Item
-                name="Editusername"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อผู้ใช้!",
-                  },
-                ]}
-              >
-                <Input placeholder="Username" style={{ height: 50 }} disabled />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-              Password
-              <Form.Item name="Editpassword">
-                <Input.Password
-                  defaultValue="123456789"
-                  placeholder="Password"
-                  disabled
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={4} lg={4} xl={4}>
-              <Form.Item label="รีเซ็ต Password">
-                <Button style={{ height: 40 }}>Reset</Button>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ชื่อจริง
-              <Form.Item
-                name="Editfirstname"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อจริง!",
-                  },
-                ]}
-              >
-                <Input placeholder="ชื่อจริง" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              นามสกุล
-              <Form.Item
-                name="Editlastname"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อนามสกุล!",
-                  },
-                ]}
-              >
-                <Input placeholder="นามสกุล" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ประเภท
-              <Form.Item
-                name="Edittype"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อจริง!",
-                  },
-                ]}
-              >
-                <Select
-                  style={{ height: 40 }}
-                  options={[
-                    { value: "Admin", label: "Admin" },
-                    { value: "User", label: "User" },
+        <Form form={formManage} layout="vertical" autoComplete="off">
+          <Card>
+            <Form form={form}>
+              <Row gutter={[24, 0]}>
+                <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                  <Form.Item name="businessno" label="ลักษณะรถ">
+                    <Select size="large" allowClear>
+                      <Option value="0">รถส่วนบุคคล</Option>
+                      <Option value="1">รถบริษัท</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                  <Form.Item
+                    shouldUpdate={(prevValues, currentValues) =>
+                      prevValues.businessno !== currentValues.businessno
+                    }
+                  >
+                    {({ getFieldValue }) =>
+                      getFieldValue("businessno") === "0" ? (
+                        <Form.Item name="cusno" label="รถส่วนบุคคล">
+                          <Select
+                            size="large"
+                            placeholder="รถส่วนบุคคล"
+                            showSearch
+                            onChange={onChange}
+                            onSearch={onSearch}
+                            filterOption={filterOption}
+                          />
+                        </Form.Item>
+                      ) : (
+                        <Form.Item name="business_car" label="รถบริษัท">
+                          <Select
+                            size="large"
+                            placeholder="รถบริษัท"
+                            showSearch
+                            onChange={onChange}
+                            onSearch={onSearch}
+                            filterOption={filterOption}
+                          />
+                        </Form.Item>
+                      )
+                    }
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form>
+            <Divider />
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ทะเบียนรถ
+                <Form.Item
+                  name="carno"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ทะเบียนรถ!",
+                    },
                   ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              เบอร์โทรศัพท์
-              <Form.Item name="Edittel">
-                <Input placeholder="เบอร์โทรศัพท์" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              สถานการใช้งาน
-              <Form.Item
-                name="Editstatususer"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Select
-                  style={{ height: 40 }}
-                  options={[
-                    { value: "Y", label: "เปิดใช้งาน" },
-                    { value: "N", label: "ปิดใช้งาน" },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+                >
+                  <Input placeholder="ทะเบียนรถ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ยี่ห้อ
+                <Form.Item name="brand">
+                  <Select
+                    size="large"
+                    placeholder="ยี่ห้อ"
+                    showSearch
+                    onChange={onChange}
+                    onSearch={onSearch}
+                    filterOption={filterOption}
+                    options={[
+                      {
+                        value: "BMW",
+                        label: "BMW",
+                      },
+                      {
+                        value: "HONDA",
+                        label: "HONDA",
+                      },
+                      {
+                        value: "MAZDA",
+                        label: "MAZDA",
+                      },
+                      {
+                        value: "TOYOTA",
+                        label: "TOYOTA",
+                      },
+                      {
+                        value: "NISSAN",
+                        label: "NISSAN",
+                      },
+                      {
+                        value: "ISUZU",
+                        label: "ISUZU",
+                      },
+                      {
+                        value: "MITSUBISHI",
+                        label: "MITSUBISHI",
+                      },
+                      {
+                        value: "ROVER",
+                        label: "ROVER",
+                      },
+                      {
+                        value: "AUDI",
+                        label: "AUDI",
+                      },
+                      {
+                        value: "BENZ",
+                        label: "BENZ",
+                      },
+                      {
+                        value: "VOLKSWAGEN",
+                        label: "VOLKSWAGEN",
+                      },
+                      {
+                        value: "OPEL",
+                        label: "OPEL",
+                      },
+                      {
+                        value: "HINO",
+                        label: "HINO",
+                      },
+                      {
+                        value: "FORD",
+                        label: "FORD",
+                      },
+                      {
+                        value: "KIA",
+                        label: "KIA",
+                      },
+                      {
+                        value: "SUZUKI",
+                        label: "SUZUKI",
+                      },
+                      {
+                        value: "SEAT",
+                        label: "SEAT",
+                      },
+                      {
+                        value: "VOLVO",
+                        label: "VOLVO",
+                      },
+                      {
+                        value: "HOLDEN",
+                        label: "HOLDEN",
+                      },
+                      {
+                        value: "HYUNDAI",
+                        label: "HYUNDAI",
+                      },
+                      {
+                        value: "DAEWOO",
+                        label: "DAEWOO",
+                      },
+                      {
+                        value: "DAIHATSU",
+                        label: "DAIHATSU",
+                      },
+                      {
+                        value: "PEUGEOT",
+                        label: "PEUGEOT",
+                      },
+                      {
+                        value: "LAND ROVER",
+                        label: "LAND ROVER",
+                      },
+                      {
+                        value: "CHEVROLET",
+                        label: "CHEVROLET",
+                      },
+                      {
+                        value: "DATSUN",
+                        label: "DATSUN",
+                      },
+                      {
+                        value: "FIAT",
+                        label: "FIAT",
+                      },
+                      {
+                        value: "CITROEN",
+                        label: "CITROEN",
+                      },
+                      {
+                        value: "JEEP",
+                        label: "JEEP",
+                      },
+                      {
+                        value: "SSAGYONG",
+                        label: "SSAGYONG",
+                      },
+                      {
+                        value: "LEXUS",
+                        label: "LEXUS",
+                      },
+                      {
+                        value: "SUBARU",
+                        label: "SUBARU",
+                      },
+                      {
+                        value: "RENAULT",
+                        label: "RENAULT",
+                      },
+                      {
+                        value: "SAAB",
+                        label: "SAAB",
+                      },
+                      {
+                        value: "MINI",
+                        label: "MINI",
+                      },
+                      {
+                        value: "PROTON",
+                        label: "PROTON",
+                      },
+                      {
+                        value: "SKODA",
+                        label: "SKODA",
+                      },
+                      {
+                        value: "CHRYSLER",
+                        label: "CHRYSLER",
+                      },
+                      {
+                        value: "WULING",
+                        label: "WULING",
+                      },
+                      {
+                        value: "HUMBER",
+                        label: "HUMBER",
+                      },
+                      {
+                        value: "TATA",
+                        label: "TATA",
+                      },
+                      {
+                        value: "ALFA ROMEO",
+                        label: "ALFA ROMEO",
+                      },
+                      {
+                        value: "DFM",
+                        label: "DFM",
+                      },
+                      {
+                        value: "PORSCHE",
+                        label: "PORSCHE",
+                      },
+                      {
+                        value: "THAIRUNG",
+                        label: "THAIRUNG",
+                      },
+                      {
+                        value: "VOLK",
+                        label: "VOLK",
+                      },
+                      {
+                        value: "NAZA",
+                        label: "NAZA",
+                      },
+                      {
+                        value: "JAGUAR",
+                        label: "JAGUAR",
+                      },
+                      {
+                        value: "สามล้อ",
+                        label: "สามล้อ",
+                      },
+                      {
+                        value: "BENTLEY",
+                        label: "BENTLEY",
+                      },
+                      {
+                        value: "RELY",
+                        label: "RELY",
+                      },
+                      {
+                        value: "CHERRY",
+                        label: "CHERRY",
+                      },
+                      {
+                        value: "MG",
+                        label: "MG",
+                      },
+                      {
+                        value: "MERCEDES-BENZ",
+                        label: "MERCEDES-BENZ",
+                      },
+                      {
+                        value: "HAMMER",
+                        label: "HAMMER",
+                      },
+                      {
+                        value: "HAVAL",
+                        label: "HAVAL",
+                      },
+                      {
+                        value: "NETA",
+                        label: "NETA",
+                      },
+                      {
+                        value: "ORA",
+                        label: "ORA",
+                      },
+                      {
+                        value: "BYD",
+                        label: "BYD",
+                      },
+                      {
+                        value: "TESIA",
+                        label: "TESIA",
+                      },
+                      {
+                        value: "BOMA",
+                        label: "BOMA",
+                      },
+                      {
+                        value: "YARIS",
+                        label: "YARIS",
+                      },
+                      {
+                        value: "TESLA",
+                        label: "TESLA",
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                รุ่น/ปี
+                <Form.Item name="car_model">
+                  <Select
+                    size="large"
+                    placeholder="รุ่น/ปี"
+                    showSearch
+                    onChange={onChange}
+                    onSearch={onSearch}
+                    filterOption={filterOption}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                สี
+                <Form.Item name="color">
+                  <Input placeholder="สี" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                เลขตัวรถ
+                <Form.Item name="modelcode">
+                  <Input placeholder="เลขตัวรถ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                เลขตัวถัง
+                <Form.Item name="car_chassisno">
+                  <Input placeholder="เลขตัวถัง" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                เลขเครื่อง
+                <Form.Item name="car_engineno">
+                  <Input placeholder="เลขเครื่อง" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                จังหวัด
+                <Form.Item name="province">
+                  <Select
+                    size="large"
+                    placeholder="จังหวัด"
+                    showSearch
+                    onChange={onChange}
+                    onSearch={onSearch}
+                    filterOption={filterOption}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ลักษณะรถ
+                <Form.Item name="car_type">
+                  <Select
+                    size="large"
+                    placeholder="ประเภทรถ"
+                    showSearch
+                    onChange={onChange}
+                    onSearch={onSearch}
+                    filterOption={filterOption}
+                    options={[
+                      {
+                        value: "เก๋ง",
+                        label: "เก๋ง",
+                      },
+                      {
+                        value: "กระบะ",
+                        label: "กระบะ",
+                      },
+                      {
+                        value: "4WD",
+                        label: "4WD",
+                      },
+                      {
+                        value: "รถบรรทุก",
+                        label: "รถบรรทุก",
+                      },
+                      {
+                        value: "บรรทุกกลาง,ใหญ่",
+                        label: "บรรทุกกลาง,ใหญ่",
+                      },
+                      {
+                        value: "ตู้,แวน",
+                        label: "ตู้,แวน",
+                      },
+
+                      {
+                        value: "จักรยานยนต์",
+                        label: "จักรยานยนต์",
+                      },
+                      {
+                        value: "บัส",
+                        label: "บัส",
+                      },
+                      {
+                        value: "โดยสารประจำทาง(Taxi,สองแถว,สมล้อ)",
+                        label: "โดยสารประจำทาง(Taxi,สองแถว,สมล้อ)",
+                      },
+                      {
+                        value: "โดยสารไม่ประจำทาง(Taxi,สองแถว,สมล้อ)",
+                        label: "โดยสารไม่ประจำทาง(Taxi,สองแถว,สมล้อ)",
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ความจุกระบอกสูบ
+                <Form.Item name="car_cc">
+                  <Input placeholder="เลขความจุกระบอกสูบ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                วิ่งเฉลี่ยวันละ
+                <Form.Item name="avg_daydistance">
+                  <Input placeholder="วิ่งเฉลี่ยวันละ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ความเร็วในการขับ
+                <Form.Item name="car_speed">
+                  <Select
+                    size="large"
+                    placeholder="ความเร็วในการขับ"
+                    options={[
+                      {
+                        value: "ไม่เกิน 100 กม./ชม.",
+                        label: "ไม่เกิน 100 กม./ชม.",
+                      },
+                      {
+                        value: "ไม่เกิน 140 กม./ชม.",
+                        label: "ไม่เกิน 140 กม./ชม.",
+                      },
+                      {
+                        value: "เกิน 140 กม./ชม.",
+                        label: "เกิน 140 กม./ชม.",
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                การบรรทุก
+                <Form.Item name="car_loading">
+                  <Select
+                    size="large"
+                    placeholder="การบรรทุก"
+                    options={[
+                      {
+                        value: "ไม่บรรทุก,โดยสารเท่านั้น",
+                        label: "ไม่บรรทุก,โดยสารเท่านั้น",
+                      },
+                      {
+                        value: "บรรทุกเป็นบางครั้ง,ไม่หนัก",
+                        label: "บรรทุกเป็นบางครั้ง,ไม่หนัก",
+                      },
+                      {
+                        value: "บรรทุกหนัก",
+                        label: "บรรทุกหนัก",
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={3}>
+                ลมยางล้อหน้า
+                <Form.Item name="front_tire">
+                  <InputNumber
+                    style={{
+                      width: 117,
+                    }}
+                    size="large"
+                    placeholder="ลมยางล้อหน้า"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={3}>
+                ลมยางล้อหลัง
+                <Form.Item name="back_tire">
+                  <InputNumber
+                    style={{
+                      width: 117,
+                    }}
+                    size="large"
+                    placeholder="ลมยางล้อหลัง"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                หมายเหตุ
+                <Form.Item name="remark">
+                  <TextArea rows={2} placeholder="หมายเหตุ" />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
         </Form>
       </Modal>
     );
   };
-  // Radio ระบบงานขาย
-  const [value, setValue] = useState(1);
-  const onChange = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue(e.target.value);
-  };
-  // Radio ประเภทบิล
-  const [value1, setValue1] = useState(1);
-  const onChange1 = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue1(e.target.value);
-  };
+
   return (
     <>
       <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>รถ</h1>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-            <Collapse
-              items={[
-                {
-                  key: "1",
-                  label: "ตัวกรองตามวันที่",
-                  children: (
-                    <Radio.Group onChange={onChange} value={value}>
-                      <Row gutter={[24, 0]}>
-                        <Col xs={24} sm={12} md={12} lg={12} xl={24}>
-                          <Radio style={{ paddingTop: 6 }} value={1}>
-                            เฉพาะวันนี้
-                          </Radio>
-                        </Col>
-
-                        <Col xs={24} sm={12} md={12} lg={12} xl={24}>
-                          <Radio style={{ paddingTop: 6 }} value={4}>
-                            ทั้งหมด
-                          </Radio>
-                        </Col>
-
-                        <Col xs={24} sm={24} md={12} lg={12} xl={3}>
-                          <Radio style={{ paddingTop: 6 }} value={2}>
-                            ตั้งแต่
-                          </Radio>
-                        </Col>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                          <DatePicker format="DD-MM-YYYY" onChange={onChange} />
-                        </Col>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={2}>
-                          <p style={{ paddingTop: 6 }}>ถึง</p>
-                        </Col>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                          <DatePicker format="DD-MM-YYYY" onChange={onChange} />
-                        </Col>
-                      </Row>
-                    </Radio.Group>
-                  ),
-                },
-              ]}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-            <Collapse
-              items={[
-                {
-                  key: "1",
-                  label: "ประเภทบิล",
-                  children: (
-                    <Row gutter={[24, 0]}>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="การวางบิล">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังไม่วางบิล</Radio>
-                            <Radio value={3}>วางบิลแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="การชำระเงิน">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังชำระไม่ครบ</Radio>
-                            <Radio value={3}>ชำระครบแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <Form.Item label="ถึงวันชำระ">
-                          <Radio.Group onChange={onChange1} value={value1}>
-                            <Radio value={1}>ทั้งหมด</Radio>
-                            <Radio value={2}>ยังไม่ถึง</Radio>
-                            <Radio value={3}>ถึงแล้ว</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  ),
-                },
-              ]}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-            <Collapse
-              items={[
-                {
-                  key: "1",
-                  label: "ประเภทบิล",
-                },
-              ]}
-            />
-          </Col>
-        </Row>
-
-        <br></br>
-        <Button type="primary" onClick={() => setIsOpenModal(true)}>
-          เพิ่มใบสั่งซื้อสินค้า
+        <Button
+          type="primary"
+          onClick={() => {
+            setActionManage({
+              action: "add",
+              title: "เพิ่มข้อมูลรถ",
+              confirmText: "เพิ่ม",
+            });
+            setOpenModalManage(true);
+          }}
+        >
+          เพิ่มข้อมูลรถ
         </Button>
 
+        {OpenModalResetPassword && (
+          <Modal
+            open={OpenModalResetPassword}
+            title="แก้ไขรหัสผ่าน"
+            width={500}
+            okText="ยืนยัน"
+            cancelText="ยกเลิก"
+            onOk={() => {
+              UserService.resetPassword(
+                formReset.getFieldValue("Resetpassword"),
+                formReset.getFieldValue("Resetcode")
+              )
+                .then(async (res) => {
+                  let { status, data } = res;
+                  if (status === 200) {
+                    if (data.status) {
+                      await Swal.fire({
+                        title: "<strong>สำเร็จ</strong>",
+                        html: data.message,
+                        icon: "success",
+                      });
+
+                      setOpenModalResetPassword(false);
+                    } else {
+                      // alert(data.message)
+                      Swal.fire({
+                        title: "<strong>ผิดพลาด!</strong>",
+                        html: data.message,
+                        icon: "error",
+                      });
+                    }
+                  }
+                })
+                .catch((err) => {});
+            }}
+            onCancel={() => setOpenModalResetPassword(false)}
+          >
+            <Form
+              form={formReset}
+              layout="vertical"
+              name="form_in_modal"
+              initialValues={{
+                modifier: "public",
+              }}
+            >
+              <Row gutter={[24, 0]}>
+                <Col xs={24} sm={24} md={16} lg={16} xl={24}>
+                  รหัสผ่านใหม่
+                  <Form.Item name="Resetpassword">
+                    <Input.Password placeholder="ใส่รหัสผ่านใหม่" />
+                  </Form.Item>
+                  <Form.Item name="Resetcode">
+                    <Input type="hidden" />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form>
+          </Modal>
+        )}
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table columns={columns} dataSource={AllSR} />
+              <Table size="small" columns={columns} dataSource={AllUser} />
             </Card>
           </Col>
         </Row>
       </div>
 
-      <Modal
-        open={isOpenModal}
-        title="ใบสั่งซื้อสินค้า"
-        okText="Create"
-        cancelText="Cancel"
-        onCancel={handleCloseModal}
-        onOk={handleCreate}
-        width={1000}
-        maskClosable={false}
-      >
-        <Button
-          type="primary"
-          onClick={() => setIsShowModalItem(true)}
-          style={{ marginBottom: 16, float: "right" }}
-        >
-          เพิ่มสินค้า
-        </Button>
-
-        <Table
-          components={components}
-          rowClassName={() => "editable-row"}
-          bordered
-          dataSource={selectedList}
-          columns={columnsOrder}
-          pagination={false}
-          rowKey="productCode"
-        />
-      </Modal>
-
-      <Modal
-        open={isShowModalItem}
-        title="เลือกสินค้า"
-        onCancel={() => setIsShowModalItem(false)}
-        footer={<Button onClick={() => setIsShowModalItem(false)}>ปิด</Button>}
-      >
-        <Table
-          rowClassName={() => "editable-row"}
-          bordered
-          dataSource={itemList}
-          columns={selectItemColumn}
-          rowKey="stcode"
-        />
-      </Modal>
-      <ModalEdit
-        open={OpenModalEdit}
-        onCancel={() => {
-          setOpenModalEdit(false);
-        }}
-      />
+      {openModalManage && ModalManage()}
     </>
   );
-};
+}
 
 export default SR;

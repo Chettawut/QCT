@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Header from "../components/layout/PublicHeader";
-import { SearchOutlined,ToolTwoTone } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
 import {
   Button,
   Input,
@@ -16,7 +16,8 @@ import {
   DatePicker,
   Divider,
   Form,
-  Badge  
+  Badge,
+  Select,
 } from "antd";
 import Highlighter from "react-highlight-words";
 import Swal from "sweetalert2";
@@ -38,13 +39,12 @@ const Items = () => {
     confirmText: "Create",
   });
 
-    const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [itemsDetail, setItemsDetail] = useState(items);
 
   const [formAdd] = Form.useForm();
   const [formManage] = Form.useForm();
-  
 
   useEffect(() => {
     GetItems();
@@ -261,7 +261,7 @@ const Items = () => {
           setActionManage({
             action: "edit",
             title: "แก้ไขประเภทสินค้า",
-            confirmText: "Edit",
+            confirmText: "แก้ใข",
           });
           setOpenModalManage(true);
         }
@@ -337,7 +337,7 @@ const Items = () => {
       })
       .catch((err) => {});
   };
-  
+
   const onModalManageClose = async () => {
     setItemsDetail({});
     formManage.resetFields();
@@ -353,254 +353,163 @@ const Items = () => {
         <Form form={formManage} layout="vertical">
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                name="stname"
-                label="ชื่อสินค้า"
-                rules={[{ required: true, message: "กรุณาใส่ชื่อสินค้าใหม่!" }]}
-              >
+              <Form.Item name="stname" label="ชื่อสินค้า">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="typename"
-                label="ประเภทสินค้า"
-                rules={[
-                  { required: true, message: "กรุณาใส่ประเภทสินค้าใหม่!" },
-                ]}
-              >
-                <Input />
+              <Form.Item name="typename" label="ประเภทสินค้า">
+                <Select size="large" />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="unit"
-                label="หน่วยสั่งซื้อ"
-                rules={[
-                  { required: true, message: "กรุณาใส่หน่วยสั่งซื้อใหม่!" },
-                ]}
-              >
-                <Input />
+              <Form.Item name="unit" label="หน่วยสั่งซื้อ">
+                <Select size="large" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="material_code"
-                label="Material code"
-                rules={[
-                  { required: true, message: "กรุณาใส่ Material code ใหม่!" },
-                ]}
-              >
+              <Form.Item name="material_code" label="Material code">
                 <Input />
               </Form.Item>
             </Col>
             <Col
-              style={{ paddingTop: 40 }}
+              style={{ paddingTop: 32 }}
               xs={24}
               sm={24}
               md={24}
               lg={24}
-              xl={12}
+              xl={6}
             >
-              <Checkbox>ติดตามสต๊อก</Checkbox>
+              <Form.Item name="count_stock" valuePropName="checked">
+                <Checkbox  size="large">
+                  ติดตามสต๊อก
+                </Checkbox>
+              </Form.Item>
+            </Col>
+            <Col
+              xs={24}
+              sm={24}
+              md={12}
+              lg={12}
+              xl={6}
+              style={
+                actionManage.action === "edit"
+                  ? { display: "inline" }
+                  : { display: "none" }
+              }
+            >
+              <Form.Item label="สถานการใช้งาน" name="status">
+                <Select
+                size="large"
+                  options={[
+                    {
+                      value: "Y",
+                      label: <Badge status="success" text="เปิดการใช้งาน" />,
+                    },
+                    {
+                      value: "N",
+                      label: <Badge status="error" text="ปิดการใช้งาน" />,
+                    },
+                  ]}
+                />
+              </Form.Item>
             </Col>
           </Row>
           <Divider />
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-              <Form.Item
-                name="stname_vat"
-                label="ชื่อเปิดบิล VAT"
-                rules={[
-                  { required: true, message: "กรุณาใส่ชื่อเปิดบิล VAT ใหม่!" },
-                ]}
-              >
+              <Form.Item name="stname_vat" label="ชื่อเปิดบิล VAT">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="brand"
-                label="ยี่ห้อ"
-                rules={[{ required: true, message: "กรุณาใส่ยี่ห้อใหม่!" }]}
-              >
+              <Form.Item name="brand" label="ยี่ห้อ">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="stname_per"
-                label="ชื่อสินค้า/ดอก"
-                rules={[
-                  { required: true, message: "กรุณาใส่ชื่อ สินค้า/ดอก ใหม่!" },
-                ]}
-              >
+              <Form.Item name="stname_per" label="ชื่อสินค้า/ดอก">
                 <Input />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="stfront"
-                label="รุ่น1/หน้า"
-                rules={[
-                  { required: true, message: "กรุณาใส่ รุ่น1/หน้า ใหม่!" },
-                ]}
-              >
+              <Form.Item name="stfront" label="รุ่น1/หน้า">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="stseries"
-                label="รุ่น2/ซี่รี่ย์"
-                rules={[
-                  { required: true, message: "กรุณาใส่ รุ่น2/ซี่รี่ย์ ใหม่!" },
-                ]}
-              >
+              <Form.Item name="stseries" label="รุ่น2/ซี่รี่ย์">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="stborder"
-                label="รุ่น3/ขอบ"
-                rules={[
-                  { required: true, message: "กรุณาใส่ชื่อ รุ่น3/ขอบ ใหม่!" },
-                ]}
-              >
+              <Form.Item name="stborder" label="รุ่น3/ขอบ">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="stload"
-                label="รุ่น4/โหลด"
-                rules={[
-                  { required: true, message: "กรุณาใส่ชื่อ รุ่น4/โหลด ใหม่!" },
-                ]}
-              >
+              <Form.Item name="stload" label="รุ่น4/โหลด">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="stspeed"
-                label="รุ่น5/สปีด"
-                rules={[
-                  { required: true, message: "กรุณาใส่ รุ่น5/สปีด ใหม่!" },
-                ]}
-              >
+              <Form.Item name="stspeed" label="รุ่น5/สปีด">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="sttw"
-                label="รุ่น6/TW"
-                rules={[{ required: true, message: "กรุณาใส่ รุ่น6/TW ใหม่!" }]}
-              >
+              <Form.Item name="sttw" label="รุ่น6/TW">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="stweight"
-                label="รุ่น7/น้ำหนัก"
-                rules={[
-                  { required: true, message: "กรุณาใส่ รุ่น7/น้ำหนัก ใหม่!" },
-                ]}
-              >
+              <Form.Item name="stweight" label="รุ่น7/น้ำหนัก">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="stwidth"
-                label="รุ่น8/กว้าง"
-                rules={[
-                  { required: true, message: "กรุณาใส่ รุ่น8/กว้าง ใหม่!" },
-                ]}
-              >
+              <Form.Item name="stwidth" label="รุ่น8/กว้าง">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="stlong"
-                label="รุ่น9/ยาว"
-                rules={[
-                  { required: true, message: "กรุณาใส่ รุ่น5/สปีด ใหม่!" },
-                ]}
-              >
+              <Form.Item name="stlong" label="รุ่น9/ยาว">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="sthigh"
-                label="รุ่น10/สูง"
-                rules={[{ required: true, message: "กรุณาใส่ รุ่น6/TW ใหม่!" }]}
-              >
+              <Form.Item name="sthigh" label="รุ่น10/สูง">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="stchange_round"
-                label="รอบการเปลี่ยน"
-                rules={[
-                  { required: true, message: "กรุณาใส่ รอบการเปลี่ยน ใหม่!" },
-                ]}
-              >
+              <Form.Item name="stchange_round" label="รอบการเปลี่ยน">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="stchange_time"
-                label="เวลาในการเปลี่ยน"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ เวลาในการเปลี่ยน ใหม่!",
-                  },
-                ]}
-              >
+              <Form.Item name="stchange_time" label="เวลาในการเปลี่ยน">
                 <Input />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-              <Form.Item
-                name="stcar_brand"
-                label="ยี่ห้อรถ"
-                rules={[{ required: true, message: "กรุณาใส่ ยี่ห้อรถ ใหม่!" }]}
-              >
+              <Form.Item name="stcar_brand" label="ยี่ห้อรถ">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-              <Form.Item
-                name="stcar_model"
-                label="รุ่นรถ"
-                rules={[{ required: true, message: "กรุณาใส่ รุ่นรถ ใหม่!" }]}
-              >
+              <Form.Item name="stcar_model" label="รุ่นรถ">
                 <TextArea rows={3} />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-              <Form.Item
-                name="remark"
-                label="หมายเหตุ"
-                rules={[
-                  { required: true, message: "กรุณาใส่ชื่อ หมายเหตุ ใหม่!" },
-                ]}
-              >
+              <Form.Item name="remark" label="หมายเหตุ">
                 <TextArea rows={3} />
               </Form.Item>
             </Col>
@@ -611,73 +520,42 @@ const Items = () => {
     {
       key: "2",
       label: "สต๊อก",
+      disabled: actionManage.action === "add" ? true : false,
       children: (
         <Form form={formManage} layout="vertical">
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-              <Form.Item
-                name="สต๊อกจริง"
-                label="สต๊อกจริง"
-                rules={[
-                  { required: true, message: "กรุณาใส่ สต๊อกจริง ใหม่!" },
-                ]}
-              >
+              <Form.Item name="สต๊อกจริง" label="สต๊อกจริง">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-              <Form.Item
-                name="สต๊อก VAT"
-                label="สต๊อก VAT"
-                rules={[
-                  { required: true, message: "กรุณาใส่ สต๊อก VAT ใหม่!" },
-                ]}
-              >
+              <Form.Item name="สต๊อก VAT" label="สต๊อก VAT">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-              <Form.Item
-                name="จำนวนขายต่อชุด"
-                label="จำนวนขายต่อชุด"
-                rules={[
-                  { required: true, message: "กรุณาใส่ จำนวนขายต่อชุด ใหม่!" },
-                ]}
-              >
+              <Form.Item name="จำนวนขายต่อชุด" label="จำนวนขายต่อชุด">
                 <Input />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={24} lg={24} xl={5}>
-              <Form.Item name="check-1">
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item name="check-1" valuePropName="checked">
                 <Checkbox>แยกสต๊อกตามล็อตการผลิต</Checkbox>
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24} lg={24} xl={5}>
-              <Form.Item name="check-1">
-                <Checkbox>แยกสต๊อกตามที่เก็บ</Checkbox>
               </Form.Item>
             </Col>
           </Row>
           <Divider />
           <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={24} lg={24} xl={5}>
-              <Form.Item name="check-1">
-                <Checkbox>แยกสต๊อกตามล็อตการผลิต</Checkbox>
+            <Col xs={24} sm={24} md={24} lg={24} xl={16}>
+              <Form.Item name="check-1" valuePropName="checked">
+                <Checkbox>ใช้กำหนดสต๊อกขั้นต่ำ แบบกำหนดเป็นเดือนตามปริมาณการใช้จริง</Checkbox>
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-              <Form.Item
-                name="สต๊อกขั้นต่ำ (ชิ้น)"
-                label="สต๊อกขั้นต่ำ (ชิ้น)"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ สต๊อกขั้นต่ำ (ชิ้น) ใหม่!",
-                  },
-                ]}
-              >
+              <Form.Item name="สต๊อกขั้นต่ำ (ชิ้น)" label="สต๊อกขั้นต่ำ (ชิ้น)">
                 <Input />
               </Form.Item>
             </Col>
@@ -692,46 +570,22 @@ const Items = () => {
         <Form form={formManage} layout="vertical">
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="price"
-                label="ราคาขายปลีก"
-                rules={[
-                  { required: true, message: "กรุณาใส่ ราคาขายปลีก ใหม่!" },
-                ]}
-              >
+              <Form.Item name="price" label="ราคาขายปลีก">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="price_A"
-                label="ราคาส่ง A"
-                rules={[
-                  { required: true, message: "กรุณาใส่ ราคาส่ง A ใหม่!" },
-                ]}
-              >
+              <Form.Item name="price_A" label="ราคาส่ง A">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="price_B"
-                label="ราคาส่ง B"
-                rules={[
-                  { required: true, message: "กรุณาใส่ ราคาส่ง B ใหม่!" },
-                ]}
-              >
+              <Form.Item name="price_B" label="ราคาส่ง B">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item
-                name="price_online"
-                label="ราคา Online"
-                rules={[
-                  { required: true, message: "กรุณาใส่ ราคา Online ใหม่!" },
-                ]}
-              >
+              <Form.Item name="price_online" label="ราคา Online">
                 <Input />
               </Form.Item>
             </Col>
@@ -747,10 +601,10 @@ const Items = () => {
         open={openModalManage}
         title={actionManage.title}
         okText={actionManage.confirmText}
-        cancelText="Cancel"
+        cancelText="ยกเลิก"
         style={{ top: 20 }}
         width={1000}
-        afterClose={() => formManage.resetFields() }
+        afterClose={() => formManage.resetFields()}
         onCancel={() => onModalManageClose()}
         onOk={() => {
           formManage
@@ -767,7 +621,7 @@ const Items = () => {
             });
         }}
       >
-        <Card title="มูลสินค้า">
+        <Card title="ข้อมูลสินค้า">
           <Tabs defaultActiveKey="1" items={itemsManage} />
         </Card>
       </Modal>
@@ -789,7 +643,7 @@ const Items = () => {
                     <Checkbox.Group
                       style={{
                         width: "100%",
-                      }}                      
+                      }}
                     >
                       <Row>
                         <Col
@@ -836,7 +690,7 @@ const Items = () => {
             setActionManage({
               action: "add",
               title: "เพิ่มสินค้า",
-              confirmText: "Create",
+              confirmText: "เพิ่ม",
             });
             setOpenModalManage(true);
           }}

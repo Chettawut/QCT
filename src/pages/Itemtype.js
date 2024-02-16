@@ -1,6 +1,7 @@
 import { SearchOutlined } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
+import Header from "../components/layout/PublicHeader";
 import {
   Button,
   Input,
@@ -194,7 +195,7 @@ const ProductType = () => {
         if (status === 200) {
           formEdit.setFieldValue("Edittypename", data.typename);
           formEdit.setFieldValue("Editstatustype", data.statustype);
-          formEdit.setFieldValue("Edittypecode", data.typecode);          
+          formEdit.setFieldValue("Edittypecode", data.typecode);
 
           setOpenModalEdit(true);
         }
@@ -279,7 +280,6 @@ const ProductType = () => {
           formAdd
             .validateFields()
             .then((values) => {
-              
               // console.log(values)
               submitAdd(values);
             })
@@ -350,13 +350,9 @@ const ProductType = () => {
               },
             ]}
           >
-            <Input
-              placeholder="ใส่ชื่อประเภทสินค้า"
-            />
+            <Input placeholder="ใส่ชื่อประเภทสินค้า" />
           </Form.Item>
-          <Form.Item
-            name="Editstatustype"
-          >
+          <Form.Item name="Editstatustype">
             <Select
               style={{ width: 120 }}
               // disabled={isEdit}
@@ -366,12 +362,8 @@ const ProductType = () => {
               ]}
             />
           </Form.Item>
-          <Form.Item
-            name="Edittypecode"
-          >
-            <Input
-            type="hidden"            
-            />
+          <Form.Item name="Edittypecode">
+            <Input type="hidden" />
           </Form.Item>
         </Form>
       </Modal>
@@ -379,7 +371,9 @@ const ProductType = () => {
   };
   return (
     <>
-      <div className="layout-content">
+      <Header></Header>
+      <div className="layout-content" style={{ padding: 20 }}>
+      <h1>ประเภทสินค้า</h1>
         <Button
           type="primary"
           onClick={() => {
