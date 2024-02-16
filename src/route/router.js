@@ -21,7 +21,6 @@ import User from "../pages/User";
 import Quotation from "../pages/Quotation";
 import Customer from "../pages/Customer";
 import PrivateRoute from "../components/auth/PrivateRoutes";
-import { BomForm, BomIndex } from "../pages/bom/bom";
 import { ROLES } from "../constant/constant";
 
 const Router = () => {
@@ -43,12 +42,6 @@ const Router = () => {
         <Route path="/Quotation" element={<Quotation />} />
         <Route path="/unit" element={<Unit />} />
 
-        <Route path="/purchase-order/"  exact element={<PO />} >
-                <Route index element={<POIndex />} />
-                <Route path="manage/:action" element={<POForm />} /> 
-                <Route path="view" element={<POView />} />
-          </Route>
-
         <Route path="/itemtype" element={<Itemtype />} />
         <Route
           element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER]} />}
@@ -57,8 +50,11 @@ const Router = () => {
 
           <Route path="/profile" element={<Profile />} />
           <Route path="/customer" element={<Customer />} />
-          <Route path="bom/" element={<BomIndex />}></Route>
-          <Route path="bom/:action/:id?" element={<BomForm />} />
+          <Route path="/purchase-order/" exact element={<PO />}>
+            <Route index element={<POIndex />} />
+            <Route path="manage/:action" element={<POForm />} />
+            <Route path="view" element={<POView />} />
+          </Route>
         </Route>
 
         <Route>

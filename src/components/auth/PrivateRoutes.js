@@ -1,5 +1,7 @@
 import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { LoadingProvider } from "../../store/context/loading-context";
+import { AxiosInterceptor } from "../layout/AxiosInterceptor";
 import Main from "../layout/Main";
 
 const PrivateRoute = ({ allowdRole }) => {
@@ -23,7 +25,11 @@ const PrivateRoute = ({ allowdRole }) => {
 
   return authCheck() ? (
     <Main>
-      <Outlet />
+      <LoadingProvider>
+        <AxiosInterceptor>
+          <Outlet />
+        </AxiosInterceptor>
+      </LoadingProvider>
     </Main>
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />

@@ -14,7 +14,7 @@ import { srmaster, columnSampleEditable, componentsEditable } from "./purchase-o
 import { ModalCustomers } from "../../components/modal/customers/modal-customers";
 import { ModalPackages } from "../../components/modal/packages/modal-packages";
 
-import POService from "../../service/POService.service";
+import POService from "../../service/PO.service";
 import SRService from "../../service/SRService";
 import dayjs from 'dayjs';
 
