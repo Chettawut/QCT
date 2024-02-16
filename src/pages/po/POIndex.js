@@ -8,17 +8,17 @@ import { Button } from "antd";
 import Highlighter from "react-highlight-words"; 
 import { columns } from "./purchase-order.model"; 
 
-import SRService from "../../service/SRService"; 
+import POService from "../../service/PO.service"; 
 import dayjs from 'dayjs';
 
-// import { useLoadingContext } from "../../store/context/loading-context";
+import { useLoadingContext } from "../../store/context/loading-context";
 export default function PO() {
     const navigate = useNavigate();
-    // const { startLoading, stopLoading } = useLoadingContext(); 
+    const { startLoading, stopLoading } = useLoadingContext(); 
     const [searchText, setSearchText] = useState("");
     const [searchedColumn, setSearchedColumn] = useState("");
 
-    const [sampleRequestData, setSampleRequestData] = useState([]);
+    const [PurchaseOrderData, setPurchaseOrderData] = useState([]);
 
     const [manageConfig] = useState({title:"เพิ่ม Sample Request", textOk:null, textCancel:null, action:"create", code:null});
 
@@ -66,37 +66,38 @@ export default function PO() {
     };    
 
     const handleDelete = (data) => { 
-        // startLoading();
-        SRService.delete(data?.srcode).then( _ => {
-            const tmp = sampleRequestData.filter( d => d.srcode !== data?.srcode );
+        startLoading();
+        POService.delete(data?.srcode).then( _ => {
+            const tmp = PurchaseOrderData.filter( d => d.srcode !== data?.srcode );
 
-            setSampleRequestData([...tmp]);
+            setPurchaseOrderData([...tmp]);
 
-            // stopLoading();
+            stopLoading();
         })
         .catch(e => {
-            // stopLoading();
+            stopLoading();
         });
     };   
 
     const columnSearchProp = { handleSearch, handleFilter, handleReset, hendleRender } 
     
-    const srColumn = columns( searchInput, columnSearchProp, {handleAction:showEditModal, handleView, handleDelete} ); 
+    const poColumn = columns( searchInput, columnSearchProp, {handleAction:showEditModal, handleView, handleDelete} ); 
 
     const onload = () =>{
-        // startLoading();
-        // SRService.search().then((res) => {
-        //   let { data } = res.data; 
-        //   setSampleRequestData(data);
+        startLoading();
+        POService.getPO().then((res) => {
+          let { data } = res.data; 
+          console.log(data)
+          setPurchaseOrderData(data);
 
-        // //   stopLoading();
-        // })
-        // .catch((err) => { 
-        //     console.log(err);
-        //     message.error("Request error!");
+          stopLoading();
+        })
+        .catch((err) => { 
+            // console.log(err);
+            // message.error("Request error!");
 
-        //     // stopLoading();
-        // });
+            stopLoading();
+        });
     }
 
     useEffect( () => { 
@@ -124,8 +125,8 @@ export default function PO() {
                                 scroll={{ x: 'max-content' }} 
                                 size='small' 
                                 rowKey="srcode" 
-                                columns={srColumn} 
-                                dataSource={sampleRequestData}
+                                columns={poColumn} 
+                                dataSource={PurchaseOrderData}
                                 className='table-sample-request'
                             />
                         </Card>

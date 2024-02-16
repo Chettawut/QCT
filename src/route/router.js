@@ -28,12 +28,11 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate replace to="Login" />} />
-
+        <Route path="/Login" element={<Login />} />
         <Route
           element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER]} />}
         >
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/Login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />          
           <Route path="/RB" element={<RB />} />
           <Route path="/Billing" element={<Billing />} />
           <Route path="/History" element={<History />} />

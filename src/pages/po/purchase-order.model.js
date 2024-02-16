@@ -1,5 +1,5 @@
 import { Space } from "antd"; 
-import { Typography } from "antd"; 
+// import { Typography } from "antd"; 
 import { Button } from "antd";
 import { Popconfirm} from "antd";
 import { EditOutlined, ExclamationCircleOutlined, QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons"; 
@@ -11,61 +11,45 @@ import { ButtonAttachFiles } from "../../components/button";
 
 // import { formatCommaNumber } from "../../utils/util";
 
-const { Paragraph } = Typography; 
+// const { Paragraph } = Typography; 
 
 /** get column for show data SR Sample request */
 export const columns = (imputRef, columnSearchAction, { handleAction, handleView, handleDelete }) => [
     {
-      title: "SR Code",
-      dataIndex: "srcode",
-      key: "srcode", 
-      // ...columnSearchProp("srcode", imputRef, columnSearchAction),
-      sorter: (a, b) => a.srcode.length - b.srcode.length,
+      title: "PO Code",
+      dataIndex: "pocode",
+      key: "pocode", 
+      sorter: (a, b) => a.pocode.length - b.pocode.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "SR Date",
-      dataIndex: "srdate",
-      key: "srdate", 
-      // ...columnSearchProp("srdate", imputRef, columnSearchAction),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      title: "PO Date",
+      dataIndex: "podate",
+      key: "podate",       
+      sorter: (a, b) => a.podate.length - b.podate.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Customer Code",
-      dataIndex: "cuscode",
-      key: "cuscode",
-      render: (_, record) => `${record.cuscode}`,
-      // ...columnSearchProp("cuscode", imputRef, columnSearchAction),
-      sorter: (a, b) => a.cuscode.length - b.cuscode.length,
+      title: "รหัสผู้ขาย",
+      dataIndex: "supcode",
+      key: "supcode",
+      render: (_, record) => `${record.supcode}`,
+      sorter: (a, b) => a.supcode.length - b.supcode.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Customer Name",
-      dataIndex: "cusname",
-      key: "cusname",
-      render: (_, record) => `${record.cusname}`,
-      // ...columnSearchProp("cusname", imputRef, columnSearchAction),
-      sorter: (a, b) => a.cusname.length - b.cusname.length,
+      title: "ชื่อผู้ขาย",
+      dataIndex: "supname",
+      key: "supname",
+      render: (_, record) => `${record.supname}`,
+      sorter: (a, b) => a.supname.length - b.supname.length,
       sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Desciption",
-      dataIndex: "description",
-      key: "description",
-      width: '220px',
-      render: (_, record) =>(  
-        <Paragraph style={{margin:'0px'}}>
-          <pre style={{margin:'0px', backgroundColor:'transparent', border:'0px solid', padding:'0px',  fontSize: 'clamp(0.8rem, 0.7vw, 1rem)' }}>{record.description}</pre>
-        </Paragraph>
-      )
     },
     {
       title: "สถานะ",
-      dataIndex: "srstatus",
-      key: "srstatus", 
-      // ...columnSearchProp("srstatus", imputRef, columnSearchAction),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
+      dataIndex: "active_status",
+      key: "active_status", 
+      sorter: (a, b) => a.active_status.length - b.active_status.length,
       sortDirections: ["descend", "ascend"],
       render: (data) => <BadgeSampleRequestStatus data={data} />,
     },
