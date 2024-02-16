@@ -28,26 +28,30 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate replace to="Login" />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/RB" element={<RB />} />
-        <Route path="/Billing" element={<Billing />} />
-        <Route path="/History" element={<History />} />
-        <Route path="/Items" element={<Items />} />
-        <Route path="/Employee" element={<Employee />} />
-        <Route path="/Car" element={<Car />} />
-        <Route path="/Individualcustomers" element={<Individualcustomers />} />
-        <Route path="/Companycustomers" element={<Companycustomers />} />
-        <Route path="/Receivinggoods" element={<Receivinggoods />} />
-        <Route path="/Billinginformation" element={<Billinginformation />} />
-        <Route path="/Quotation" element={<Quotation />} />
-        <Route path="/unit" element={<Unit />} />
 
-        <Route path="/itemtype" element={<Itemtype />} />
         <Route
           element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER]} />}
         >
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/RB" element={<RB />} />
+          <Route path="/Billing" element={<Billing />} />
+          <Route path="/History" element={<History />} />
+          <Route path="/Items" element={<Items />} />
+          <Route path="/Employee" element={<Employee />} />
+          <Route path="/Car" element={<Car />} />
+          <Route
+            path="/Individualcustomers"
+            element={<Individualcustomers />}
+          />
+          <Route path="/Companycustomers" element={<Companycustomers />} />
+          <Route path="/Receivinggoods" element={<Receivinggoods />} />
+          <Route path="/Billinginformation" element={<Billinginformation />} />
+          <Route path="/Quotation" element={<Quotation />} />
+          <Route path="/unit" element={<Unit />} />
+          <Route path="/user" element={<User />} />
 
+          <Route path="/itemtype" element={<Itemtype />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/customer" element={<Customer />} />
           <Route path="/purchase-order/" exact element={<PO />}>
@@ -55,10 +59,6 @@ const Router = () => {
             <Route path="manage/:action" element={<POForm />} />
             <Route path="view" element={<POView />} />
           </Route>
-        </Route>
-
-        <Route>
-          <Route path="/user" element={<User />} />
         </Route>
 
         <Route path="/*" element={<PageNotFound />} />
