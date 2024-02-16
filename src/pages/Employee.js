@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from "react";
-import Header from "../components/layout/PublicHeader";
 import { SearchOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -460,7 +459,6 @@ const Employee = () => {
 
   return (
     <>
-      <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>พนักงาน</h1>
 

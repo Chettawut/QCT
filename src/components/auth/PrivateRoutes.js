@@ -2,6 +2,7 @@ import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { LoadingProvider } from "../../store/context/loading-context";
 import { AxiosInterceptor } from "../layout/AxiosInterceptor";
+import Header from "../layout/Header";
 import Main from "../layout/Main";
 
 const PrivateRoute = ({ allowdRole }) => {
@@ -25,6 +26,7 @@ const PrivateRoute = ({ allowdRole }) => {
 
   return authCheck() ? (
     <Main>
+      <Header></Header>
       <LoadingProvider>
         <AxiosInterceptor>
           <Outlet />

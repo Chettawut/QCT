@@ -1,5 +1,4 @@
 import { SearchOutlined } from "@ant-design/icons";
-import Header from "../components/layout/PublicHeader";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -361,7 +360,6 @@ function Unit() {
 
   return (
     <>
-      <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
       <h1>หน่วยสินค้า</h1>
         <Button

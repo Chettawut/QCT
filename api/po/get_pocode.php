@@ -7,13 +7,15 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT number as supcode FROM `supcode` ";
+include '../options/checkyear.php';
+
+$sql = "SELECT maxpocode as doccode FROM `options` ";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $res = $stmt->fetch(PDO::FETCH_ASSOC);
 extract($res, EXTR_OVERWRITE, "_");
 
-$code = sprintf("%05s", ($supcode + 1));
+$code = sprintf("%04s", ($doccode + 1));
 
 http_response_code(200);
 echo json_encode($code);

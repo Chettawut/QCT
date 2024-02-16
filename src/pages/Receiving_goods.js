@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from "react";
-import Header from "../components/layout/PublicHeader";
 
 import {
   DeleteOutlined,
@@ -730,7 +729,6 @@ const SR = () => {
 
   return (
     <>
-      <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>การรับสินค้า</h1>
         <Row gutter={[24, 0]}>

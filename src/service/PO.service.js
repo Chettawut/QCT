@@ -7,6 +7,7 @@ const API_URL = {
   GET_PO: `${BACKEND_URL}/po/get_po.php`,
   GETSUP_PO: `${BACKEND_URL}/po/getsup_po.php`,
   Edit_PO: `${BACKEND_URL}/po/edit_po.php`,
+  GET_POCODE: `${BACKEND_URL}/po/get_pocode.php`,
 };
 
 let contenttype = {"content-type": "application/x-www-form-urlencoded"};
@@ -47,6 +48,13 @@ const POService = {
       data: reqData,
     });
   },
+
+  getPOcode: () => {
+    return axios({
+      medthod: MEDTHOD.GET,
+      url: API_URL.GET_POCODE,
+    });
+  },  
 };
 
 export default POService;

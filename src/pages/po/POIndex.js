@@ -7,7 +7,6 @@ import { Button } from "antd";
 
 import Highlighter from "react-highlight-words"; 
 import { columns } from "./purchase-order.model"; 
-import Header from "../../components/layout/PublicHeader";
 
 import SRService from "../../service/SRService"; 
 import dayjs from 'dayjs';
@@ -105,7 +104,6 @@ export default function PO() {
     }, []);
     return (
         <>
-         <Header></Header>
         <div className="layout-content">
             <Space direction="vertical" size="middle" className='width-100 sample-request' >
                 <Row className='m-0'>

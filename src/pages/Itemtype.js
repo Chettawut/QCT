@@ -1,7 +1,6 @@
 import { SearchOutlined } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
-import Header from "../components/layout/PublicHeader";
 import {
   Button,
   Input,
@@ -371,7 +370,6 @@ const ProductType = () => {
   };
   return (
     <>
-      <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
       <h1>ประเภทสินค้า</h1>
         <Button

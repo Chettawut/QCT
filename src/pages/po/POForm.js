@@ -15,7 +15,6 @@ import { ModalCustomers } from "../../components/modal/customers/modal-customers
 import { ModalPackages } from "../../components/modal/packages/modal-packages";
 
 import POService from "../../service/PO.service";
-import SRService from "../../service/SRService";
 import dayjs from 'dayjs';
 
 import { useLoadingContext } from "../../store/context/loading-context";
@@ -45,33 +44,31 @@ export default function POForm( ) {
     // const [isOpenModal, setOpenModal] = useState(show); 
 
     const hendleClose = () => { 
-        setTimeout( ()=> navigate("/sample-request", {replace:true}), 400 );
+        setTimeout( ()=> navigate("/purchase-order", {replace:true}), 400 );
     }
 
-    const gettingSrCode = () => {
+    const gettingPOCode = () => {
         startLoading();
-        // SRService.get_srcode().then( async (res) => {
-        //     const code = res.data.data;
-        //     const year = dayjs().format("YY");
-        //     const mon = dayjs().format("MM");
-        //     setRefcode(`SR${year}${mon}${code}`);
-        //     const initialValues = { ...srmaster, srcode:`SR${year}${mon}${code}`, srdate:dayjs() };
+        POService.getPOcode().then( async (res) => {
+            const code = res.data;
+            const year = dayjs().format("YY");
+            const initialValues = { ...srmaster, srcode:`PO${year}/${code}`, srdate:dayjs() };
 
-        //     setFormDetail(initialValues);
-        //     form.setFieldsValue(initialValues);
-        //     stopLoading();
-        // })
-        // .catch( err => {
-        //     console.warn(err);
-        //     const {message} = err.response;
-        //     message.error( message || "error request");
-        //     stopLoading();
-        // });
+            setFormDetail(initialValues);
+            form.setFieldsValue(initialValues);
+            stopLoading();
+        })
+        .catch( err => {
+            console.warn(err);
+            const {message} = err.response;
+            message.error( message || "error request");
+            stopLoading();
+        });
     }
 
     const gettingPurchaseOrderData = () => {
-        startLoading();
-        POService.get(config?.code).then( async (res) => {
+        // startLoading();
+        POService.getPO().then( async (res) => {
             const {detail, master} = res.data.data;
             const initialValues = { ...srmaster, ...master };
             initialValues.srdate  = dayjs(initialValues.srdate);
@@ -91,7 +88,7 @@ export default function POForm( ) {
         });
     } 
 
-    useEffect( async ()=>{
+    useEffect( async ()=>{        
         if(!config) { 
             hendleClose();
             return;
@@ -100,7 +97,7 @@ export default function POForm( ) {
         if(config?.action !== "create"){
             gettingPurchaseOrderData();
         }else{
-            gettingSrCode();
+            gettingPOCode();
         }
 
         return () => { }
@@ -119,30 +116,30 @@ export default function POForm( ) {
         form.validateFields().then( value => {
             startLoading();
             const master = value;
-            const detail = samples;
+            // const detail = samples;
             master.srdate = dayjs(master.srdate).format("YYYY-MM-DD");
             master.duedate = dayjs(master.duedate).format("YYYY-MM-DD");
             if(config.action === "create"){
-                SRService.create( {master, detail} ).then( res => { 
-                    message.success("Success: Create sample requerest done.");
+                // SRService.create( {master, detail} ).then( res => { 
+                //     message.success("Success: Create sample requerest done.");
                     
-                    stopLoading();
-                    hendleClose();
-                })
-                .catch( err =>  {
-                    message.error("Error: Create sample requerest fail.");
-                    stopLoading();
-                });         
+                //     stopLoading();
+                //     hendleClose();
+                // })
+                // .catch( err =>  {
+                //     message.error("Error: Create sample requerest fail.");
+                //     stopLoading();
+                // });         
             } else {
-                SRService.update( {master, detail} ).then( res => { 
-                    message.success("Success: Update sample requerest done.");
-                    stopLoading();
-                    hendleClose();
-                })
-                .catch( err =>  {
-                    message.error("Error: Update sample requerest fail.");
-                    stopLoading();
-                });
+                // SRService.update( {master, detail} ).then( res => { 
+                //     message.success("Success: Update sample requerest done.");
+                //     stopLoading();
+                //     hendleClose();
+                // })
+                // .catch( err =>  {
+                //     message.error("Error: Update sample requerest fail.");
+                //     stopLoading();
+                // });
             } 
         })
 

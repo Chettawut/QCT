@@ -1,82 +1,270 @@
-import { useEffect } from "react";
-import { Row, Col, Breadcrumb, Button } from "antd";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Modal } from "antd";
+import { ConfigProvider, Menu } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Authenticate } from "../../service/Authenticate.service";
+import {
+  SettingOutlined,
+  ApartmentOutlined,
+  DatabaseOutlined,
+  ShopOutlined,
+  TagOutlined,
+  AuditOutlined,
+} from "@ant-design/icons";
+const authService = Authenticate();
+const Header = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const navigate = useNavigate();
+  const onLogout = () => {
+    authService.removeToken();
 
-const profile = [
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    key={0}
-  >
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10ZM12 7C12 8.10457 11.1046 9 10 9C8.89543 9 8 8.10457 8 7C8 5.89543 8.89543 5 10 5C11.1046 5 12 5.89543 12 7ZM9.99993 11C7.98239 11 6.24394 12.195 5.45374 13.9157C6.55403 15.192 8.18265 16 9.99998 16C11.8173 16 13.4459 15.1921 14.5462 13.9158C13.756 12.195 12.0175 11 9.99993 11Z"
-      fill="#111827"
-    ></path>
-  </svg>,
-];
+    navigate("/", { replace: true });
+  };
+  const items = [
+    {
+      label: "ระบบงานขาย",
+      key: "menu1",
+      icon: <AuditOutlined />,
+      children: [
+        {
+          type: "group",
+          children: [
+            {
+              label: (
+                <a href="/RB" rel="noopener noreferrer">
+                  ใบรายการซ่อม
+                </a>
+              ),
+              key: "menu1_1",
+            },
+            {
+              label: (
+                <a href="/Billing" rel="noopener noreferrer">
+                  การวางบิล
+                </a>
+              ),
+              key: "menu1_2",
+            },
+            {
+              label: (
+                <a href="/Billinginformation" rel="noopener noreferrer">
+                  ข้อมูลการเก็บเงิน
+                </a>
+              ),
+              key: "menu1_3",
+            },
+            {
+              label: (
+                <a href="/History" rel="noopener noreferrer">
+                  ประวัติลูกค้า
+                </a>
+              ),
+              key: "menu1_4",
+            },
+            {
+              label: (
+                <a href="/Quotation" rel="noopener noreferrer">
+                  ใบเสนอราคา
+                </a>
+              ),
+              key: "menu1_5",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "คลังสินค้า",
+      key: "menu2",
+      icon: <ShopOutlined />,
+      children: [
+        {
+          type: "group",
+          children: [
+            {
+              label: (
+                <a href="/purchase-order/" rel="noopener noreferrer">
+                  ใบสั่งซื้อ 
+                </a>
+              ),
+              key: "menu2_1",
+            },        
+            {
+              label: (
+                <a href="/Receivinggoods" rel="noopener noreferrer">
+                  รับสินค้า
+                </a>
+              ),
+              key: "menu2_2",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "สินค้า",
+      key: "menu3",
+      icon: <TagOutlined />,
+      children: [
+        {
+          type: "group",
+          children: [
+            {
+              label: (
+                <a href="/Items" rel="noopener noreferrer">
+                  สินค้า
+                </a>
+              ),
+              key: "menu3_1",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "ข้อมูล",
+      key: "menu4",
+      icon: <DatabaseOutlined />,
+      children: [
+        {
+          type: "group",
+          children: [
+            {
+              label: (
+                <a href="/Car" rel="noopener noreferrer">
+                  รถ
+                </a>
+              ),
+              key: "menu4_1",
+            },
+            {
+              label: (
+                <a href="/Individualcustomers" rel="noopener noreferrer">
+                  ลูกค้าบุคคล
+                </a>
+              ),
+              key: "menu4_2",
+            },
+            {
+              label: (
+                <a href="/Companycustomers" rel="noopener noreferrer">
+                  ลูกค้าบริษัท
+                </a>
+              ),
+              key: "menu4_3",
+            },
+            {
+              label: (
+                <a href="/Employee" rel="noopener noreferrer">
+                  พนักงาน
+                </a>
+              ),
+              key: "menu4_4",
+            },
+            {
+              label: (
+                <a href="/Unit" rel="noopener noreferrer">
+                  หน่วยสินค้า
+                </a>
+              ),
+              key: "menu4_5",
+            },
+            {
+              label: (
+                <a href="/itemtype" rel="noopener noreferrer">
+                  ประเภทสินค้า
+                </a>
+              ),
+              key: "menu4_6",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "จัดการระบบ",
+      key: "menu5",
+      icon: <ApartmentOutlined />,
+      children: [
+        {
+          type: "group",
+          children: [
+            {
+              label: (
+                <a href="/user" rel="noopener noreferrer">
+                  ผู้ใช้ระบบ
+                </a>
+              ),
 
-const toggler = [
-  <svg
-    width="20"
-    height="20"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 448 512"
-    key={0}
-  >
-    <path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"></path>
-  </svg>,
-];
-
-function Header({ name, subName, onPress }) {
-  useEffect(() => window.scrollTo(0, 0));
-  const getIndexRoute = (r) => {
-    const linkRoute = r.split("/");
-    let routeString = r.split("/").map((m, index) => {
-      let rInx = linkRoute.filter((f, i) => i <= index);
-
-      return { title: m, href: `/${rInx.join("/")}` };
-    });
-
-    return routeString;
+              key: "menu5_1",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "การตั้งค่า",
+      key: "การตั้งค่า",
+      icon: <SettingOutlined />,
+      children: [
+        {
+          type: "group",
+          children: [
+            {
+              label: (
+                <p onClick={showModal} rel="noopener noreferrer">
+                  ออกจากระบบ
+                </p>
+              ),
+              key: "ออกจากระบบ",
+            },
+          ],
+        },
+      ],
+    },
+  ];
+  const [current, setCurrent] = useState("Mail");
+  const onClick = (e) => {
+    console.log("click ", e);
+    setCurrent(e.key);
   };
   return (
     <>
-      <Row gutter={[24, 0]}>
-        <Col span={24} md={6}>
-          <Breadcrumb
-            items={[{ title: "Home", href: "/" }, ...getIndexRoute(name)]}
-          />
-
-          <div className="ant-page-header-heading">
-            <span
-              className="ant-page-header-heading-title"
-              style={{ textTransform: "capitalize" }}
-            >
-              {subName.replace("/", " : ")}
-            </span>
-          </div>
-        </Col>
-        <Col span={24} md={18} className="header-control">
-          <Button
-            type="link"
-            className="sidebar-toggler"
-            onClick={() => onPress()}
-          >
-            {toggler}
-          </Button>
-          <Link to="/" className="btn-sign-in">
-            {profile}
-            <span>Log out</span>
-          </Link>
-        </Col>
-      </Row>
+      <ConfigProvider
+        theme={{
+          token: {
+            // colorPrimary: "#FDFEFE",
+            // colorBgContainer: "#FDFEFE",
+            // colorText: "#FDFEFE",
+            // colorBgBase: "#FDFEFE",
+          },
+        }}
+      >
+        <Menu
+          style={{ padding: 7, paddingLeft: 10 }}
+          onClick={onClick}
+          selectedKeys={[current]}
+          mode="horizontal"
+          items={items}
+        />
+        <Modal
+          title="แจ้งเตือน"
+          open={isModalOpen}
+          onOk={onLogout}
+          onCancel={handleCancel}
+          okText="ยืนยัน"
+          cancelText="ยกเลิก"
+        >
+          <p>คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ</p>
+        </Modal>
+      </ConfigProvider>
     </>
   );
-}
-
+};
 export default Header;

@@ -1,5 +1,4 @@
 import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
-import Header from "../components/layout/PublicHeader";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -235,7 +234,7 @@ function SR() {
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          setCardataDetail(data);
+          // setCardataDetail(data);
           formManage.setFieldsValue(data);
           setActionManage({
             action: "edit",
@@ -277,34 +276,34 @@ function SR() {
   };
 
   const submitEdit = (dataform) => {
-    UserService.editUser({ ...CardataDetail, ...dataform })
-      .then(async (res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          if (data.status) {
-            await Swal.fire({
-              title: "<strong>สำเร็จ</strong>",
-              html: data.message,
-              icon: "success",
-            });
+    // UserService.editUser({ ...CardataDetail, ...dataform })
+    //   .then(async (res) => {
+    //     let { status, data } = res;
+    //     if (status === 200) {
+    //       if (data.status) {
+    //         await Swal.fire({
+    //           title: "<strong>สำเร็จ</strong>",
+    //           html: data.message,
+    //           icon: "success",
+    //         });
 
-            GetUser();
-            setOpenModalManage(false);
-          } else {
-            // alert(data.message)
-            Swal.fire({
-              title: "<strong>ผิดพลาด!</strong>",
-              html: data.message,
-              icon: "error",
-            });
-          }
-        }
-      })
-      .catch((err) => {});
+    //         GetUser();
+    //         setOpenModalManage(false);
+    //       } else {
+    //         // alert(data.message)
+    //         Swal.fire({
+    //           title: "<strong>ผิดพลาด!</strong>",
+    //           html: data.message,
+    //           icon: "error",
+    //         });
+    //       }
+    //     }
+    //   })
+    //   .catch((err) => {});
   };
 
   const onModalManageClose = async () => {
-    await setCardataDetail({});
+    // await setCardataDetail({});
     formManage.resetFields();
     setOpenModalManage(false);
   };
@@ -875,7 +874,6 @@ function SR() {
 
   return (
     <>
-      <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>รถ</h1>
         <Button

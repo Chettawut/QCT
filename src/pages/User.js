@@ -1,5 +1,4 @@
 import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
-import Header from "../components/layout/PublicHeader";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -494,7 +493,6 @@ function User() {
 
   return (
     <>
-      <Header></Header>
       <div className="layout-content" style={{ padding: 20 }}>
       <h1>ผู้ใช้ระบบ</h1>
         <Button
