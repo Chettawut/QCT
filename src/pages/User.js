@@ -25,7 +25,6 @@ function User() {
     title: "เพิ่มผู้ใช้งาน",
     confirmText: "ยืนยัน",
   });
-  const [formAdd] = Form.useForm();
   const [formReset] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -239,7 +238,6 @@ function User() {
             confirmText: "แก้ใข",
           });
           setOpenModalManage(true);
-          formReset.setFieldValue("Resetcode", data.code);
         }
       })
       .catch((err) => {});
@@ -259,9 +257,9 @@ function User() {
 
             GetUser();
             setOpenModalManage(false);
-            formAdd.resetFields();
+            formManage.resetFields();
           } else {
-            // alert(data.message)
+            console.log(data.message)
             Swal.fire({
               title: "<strong>ผิดพลาด!</strong>",
               html: data.message,
@@ -301,8 +299,10 @@ function User() {
   };
 
   const onModalManageClose = async () => {
-    await setUserdataDetail({});
-    formManage.resetFields();
+    // await setUserdataDetail({});
+    if (actionManage.action === "edit") {
+      formManage.resetFields();
+    }     
     setOpenModalManage(false);
   };
   ////////////////////////////////
@@ -314,15 +314,14 @@ function User() {
         title={actionManage.title}
         okText={actionManage.confirmText}
         cancelText="ยกเลิก"
-        onCancel={() => onModalManageClose()}
-        width={1000}
+        width={1000}        
+        onCancel={() => onModalManageClose()}        
         onOk={() => {
-          formManage
-            .validateFields()
-            .then((values) => {
+          formManage.validateFields()
+            .then((values) => {              
               if (actionManage.action === "add") {
                 submitAdd(values);
-              } else if (actionManage.action === "edit") {
+              } else if (actionManage.action === "edit") {                
                 submitEdit(values);
               }
             })
@@ -366,7 +365,12 @@ function User() {
               Password
               <Form.Item
               name="password"
-                rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}
+                rules={[
+                  
+                    actionManage.action === "add"
+                      ? { required: true, message: "กรุณาใส่รหัสผ่าน!" }
+                      : {  }
+                  ]}
               >
                 <Input.Password
                   disabled={actionManage.action === "edit" ? true : false}
@@ -389,7 +393,6 @@ function User() {
             >
               Password
               <Form.Item
-                rules={[{ required: true, message: "กรุณาใส่รหัสผ่าน!" }]}
               >
                 <Input.Password                  
                   disabled={actionManage.action === "edit" ? true : false}

@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT code,username,firstname,lastname,`type`,tel,status as statususer FROM `user` ";
+$sql = "SELECT code,username,firstname,lastname,`type`,tel,active_status as statususer FROM `user` ";
 $sql .= " where code = '".$_POST['idcode']."'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();

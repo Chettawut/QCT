@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT stcode, stname, unit, price FROM `items` where status = 'Y'";
+$sql = "SELECT stcode, stname, unit, price FROM `items` where active_status = 'Y'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT unit,unitcode,status as statusunit FROM unit";
+$sql = "SELECT unit,unitcode,active_status as statusunit FROM unit";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
