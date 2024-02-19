@@ -24,7 +24,7 @@ import Highlighter from "react-highlight-words";
 import { EditableRow, EditableCell } from "../components/table/TableEditAble";
 
 // SERVICE
-import ItemService from "../service/ItemService";
+import ItemService from "../service/Item.service";
 import SRService from "../service/SRService";
 
 const SR = () => {

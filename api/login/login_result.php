@@ -21,7 +21,7 @@ if (!isset($_POST['username'], $_POST['password'])) {
 	exit($_POST['username']);
 }
 
-$sql = 'SELECT firstname,lastname,code,password,type,status FROM user WHERE username = :username';
+$sql = 'SELECT firstname,lastname,code,password,type,active_status FROM user WHERE username = :username';
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':username', $_POST["username"]);
 // $stmt->execute(); 
@@ -33,7 +33,7 @@ if ($stmt->execute()) {
 		// Account exists, now we verify the password.
 		// Note: remember to use password_hash in your registration file to store the hashed passwords.
 		if (password_verify($_POST['password'], $password)) {
-			if ($status == 'Y') {
+			if ($active_status == 'Y') {
 				// session_regenerate_id();
 				$sKey = base64_encode(vsprintf('C%s%s-%s', str_split(bin2hex(random_bytes(16)), 4)));
 				$_SESSION['loggedin'] = TRUE;

@@ -1,7 +1,7 @@
 <?php
 	include_once(dirname(__FILE__, 2)."/onload.php");
 
-	$sql = "SELECT prodty_id ,prodty_name,status  FROM `product_type` ";
+	$sql = "SELECT prodty_id ,prodty_name,active_status  FROM `product_type` ";
 
 	$stmt = $conn->prepare($sql);
 	$stmt->execute();

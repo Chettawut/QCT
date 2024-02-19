@@ -22,7 +22,7 @@ import Highlighter from "react-highlight-words";
 import Swal from "sweetalert2";
 // COMPONENT
 // SERVICE
-import ItemService from "../service/ItemService";
+import ItemService from "../service/Item.service";
 import { items } from "../model/items.model";
 
 const Items = () => {

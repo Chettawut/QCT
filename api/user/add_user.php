@@ -9,9 +9,9 @@ include '../conn.php';
 
 
 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-$strSQL = "INSERT INTO user (`username`, `password`,`firstname`,`lastname`, `type`, `tel`, `status`,`date`) ";
+$strSQL = "INSERT INTO user (`username`, `password`,`firstname`,`lastname`, `type`, `tel`, `active_status`) ";
 //  ,`s_date`,`s_time`, s_user) ";
-$strSQL .= " VALUES ('".$_POST["username"]."','".$password."','".$_POST["firstname"]."','".$_POST["lastname"]."','".$_POST["type"]."','".$_POST["tel"]."','Y','".date("Y-m-d H:i:s")."' ";
+$strSQL .= " VALUES ('".$_POST["username"]."','".$password."','".$_POST["firstname"]."','".$_POST["lastname"]."','".$_POST["type"]."','".$_POST["tel"]."','Y' ";
 $strSQL .= ")";	
 $stmt = $conn->prepare($strSQL);
 

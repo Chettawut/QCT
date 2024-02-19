@@ -1,5 +1,4 @@
 import { Space } from "antd"; 
-// import { Typography } from "antd"; 
 import { Button } from "antd";
 import { Popconfirm} from "antd";
 import { EditOutlined, ExclamationCircleOutlined, QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons"; 
@@ -9,11 +8,8 @@ import { EditableRow, EditableCell } from "../../components/table/TableEditAble"
 import { BadgeSampleRequestStatus } from "../../components/badge-and-tag";
 import { ButtonAttachFiles } from "../../components/button";
 
-// import { formatCommaNumber } from "../../utils/util";
+import { formatCommaNumber } from "../../utils/util";
 
-// const { Paragraph } = Typography; 
-
-/** get column for show data SR Sample request */
 export const columns = (imputRef, columnSearchAction, { handleAction, handleView, handleDelete }) => [
     {
       title: "PO Code",
@@ -94,51 +90,68 @@ export const columns = (imputRef, columnSearchAction, { handleAction, handleView
     },
 ].filter((item) => !item.hidden);
 
-/** get column for show data SR Sample request Detail */
-export const sampleColumn = ({ handleAction }) => {
-    return [
+export const detailColumn = ({ handleAction }) => {
+  return [
     {
-      title: "No",
+      title: "ลำดับ",
       key: "index",
       align: "left",
       width: 80,
       render: (_, record, idx) => <span key={record?.stcode}>{idx + 1}</span>,
     },
     {
-      title: "Sample Name",
-      key: "spname",
-      dataIndex: "spname",
-      editable: true,
-      required: true,
-      type:'input',
-      width: '50%',
-      align: "left",
-      className:"field-edit pe-2"
+      title: "Code",
+      key: "stcode",
+      dataIndex: "stcode",
+      width: 200,
     },
     {
-      title: "Packing",
-      key: "pkname",
-      dataIndex: "pkname",
-      editable: true,
-      required: false,
-      width: 240,
-      type: 'modal-select',
-      align: "left",
-      className:"field-edit pe-2"
+      title: "ชื่อส่วนผสม",
+      key: "stname",
+      dataIndex: "stname",
     },
     {
-      title: "Amount",
+      title: "น้ำหนัก(g)",
       key: "amount",
       dataIndex: "amount",
-      type:'input',
       editable: true,
-      required: false,
-      align: "left",
-      width: 240,
-      className:"field-edit pe-2", 
+      required: true,
+      align: "right",
+      width: 120,
+      className:"field-edit pe-2",
+      render: (v) => formatCommaNumber(Number( v || 0 )),
     },
     {
-        title: "",
+      title: "%",
+      align: "right",
+      width: 120,
+      className:"pe-2",
+      key: "percent",
+      dataIndex: "percent",
+      render: (v) => formatCommaNumber(Number( v || 0 ) * 100,1),
+    },
+    {
+      title: "%(total)",
+      align: "right",
+      width: 120,
+      className:"pe-2",
+      key: "totalpercent",
+      dataIndex: "totalpercent",
+      render: (v, record, idx) => v !== null ? formatCommaNumber(Number( v ) * 100,1) : "",
+    },
+    {
+      title: "Method",
+      align: "left",
+      key: "method",
+      dataIndex: "method",
+      editable: true,
+      required: false,
+      // textArea: true,
+      className:"field-edit ps-2",
+      width:180,
+    },
+    {
+        title: "ตัวเลือก",
         align: "center",
         key: "operation",
         dataIndex: "operation",
@@ -150,8 +163,8 @@ export const sampleColumn = ({ handleAction }) => {
 };
 
 /** get column for edit table working in modal manage sr */
-export const columnSampleEditable = (handleSave, handleModalSelect, {handleAction} ) =>{
-    const col = sampleColumn({handleAction});
+export const columnDetailEditable = (handleSave, handleModalSelect, {handleAction} ) =>{
+    const col = detailColumn({handleAction});
     return col.map((col) => {
         if (!col.editable) { return col; }
         return {
