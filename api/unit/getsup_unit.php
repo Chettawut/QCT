@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT unit as unitname,unitcode,status as statusunit FROM unit";
+$sql = "SELECT unit as unitname,unitcode,active_status as statusunit FROM unit";
 $sql .= " where unitcode = '".$_POST['idcode']."'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();

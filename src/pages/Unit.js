@@ -1,4 +1,4 @@
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -12,6 +12,7 @@ import {
   Modal,
   Form,
   Select,
+  Badge,
 } from "antd";
 import Swal from "sweetalert2";
 import UnitService from "../service/UnitService";
@@ -24,7 +25,7 @@ function Unit() {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [UnitDetail, setUnitDetail] = useState(unit);
-
+  const [formAdd] = Form.useForm();
   const searchInput = useRef(null);
   const [actionManage, setActionManage] = useState({
     action: "add",
@@ -177,6 +178,15 @@ function Unit() {
       ...getColumnSearchProps("statusunit"),
       sorter: (a, b) => a.statusunit.length - b.statusunit.length,
       sortDirections: ["descend", "ascend"],
+      render: (data) => (
+        <div>
+          {data === "Y" ? (
+            <Badge status="success" text="เปิดการใช้งาน" />
+          ) : (
+            <Badge status="error" text="ปิดการใช้การ" />
+          )}
+        </div>
+      ),
     },
     {
       title: "Action",
@@ -184,12 +194,14 @@ function Unit() {
       width: "20%",
       fixed: "right",
       render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
+        <Button
+          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
+          style={{ cursor: "pointer" }}
+          danger
           onClick={(e) => showEditModal(text.unitcode)}
         >
           Edit
-        </span>
+        </Button>
       ),
     },
   ].filter((item) => !item.hidden);
@@ -215,7 +227,7 @@ function Unit() {
           setActionManage({
             action: "edit",
             title: "แก้ไขหน่วยสินค้า",
-            confirmText: "Edit",
+            confirmText: "แก้ไข",
           });
 
           setOpenModalManage(true);
@@ -238,6 +250,7 @@ function Unit() {
 
             GetUnit();
             setOpenModalManage(false);
+            formAdd.resetFields();
           } else {
             Swal.fire({
               title: "<strong>" + data.message + "</strong>",
@@ -306,7 +319,7 @@ function Unit() {
         open={openModalManage}
         title={actionManage.title}
         okText={actionManage.confirmText}
-        cancelText="Cancel"
+        cancelText="ยกเลิก"
         style={{ top: 20 }}
         width={1000}
         afterClose={() => formManage.resetFields()}
@@ -326,34 +339,58 @@ function Unit() {
             });
         }}
       >
-        <Card title="มูลสินค้า">
-          <Form form={formManage} layout="vertical" autoComplete="off">
-            <Form.Item
-              name="unitname"
-              rules={[
-                {
-                  required: true,
-                  message: "กรุณากรอกชื่อหน่วยสินค้า",
-                },
-              ]}
-            >
-              <Input placeholder="ใส่ชื่อหน่วยสินค้า" />
-            </Form.Item>
-            <Form.Item name="statusunit">
-              <Select
-                style={{ width: 120 }}
-                // disabled={isEdit}
-                options={[
-                  { value: "Y", label: "เปิดใช้งาน" },
-                  { value: "N", label: "ปิดใช้งาน" },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item name="unitcode">
-              <Input type="hidden" />
-            </Form.Item>
-          </Form>
-        </Card>
+        <Form form={formManage} layout="vertical" autoComplete="off">
+          <Card>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                <Form.Item
+                  name="unitname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณากรอกชื่อหน่วยสินค้า",
+                    },
+                  ]}
+                >
+                  <Input placeholder="ใส่ชื่อหน่วยสินค้า" />
+                </Form.Item>
+              </Col>
+              <Col
+                xs={24}
+                sm={24}
+                md={12}
+                lg={12}
+                xl={8}
+                style={
+                  actionManage.action === "edit"
+                    ? { display: "inline" }
+                    : { display: "none" }
+                }
+              >
+                <Form.Item name="statusunit">
+                  <Select
+                    size="large"
+                    options={[
+                      {
+                        value: "Y",
+                        label: <Badge status="success" text="เปิดการใช้งาน" />,
+                      },
+                      {
+                        value: "N",
+                        label: <Badge status="error" text="ปิดการใช้งาน" />,
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="unitcode">
+                  <Input type="hidden" />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+        </Form>
       </Modal>
     );
   };
@@ -361,14 +398,14 @@ function Unit() {
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
-      <h1>หน่วยสินค้า</h1>
+        <h1>หน่วยสินค้า</h1>
         <Button
           type="primary"
           onClick={() => {
             setActionManage({
               action: "add",
               title: "เพิ่มหน่วยสินค้า",
-              confirmText: "Create",
+              confirmText: "เพิ่ม",
             });
             formManage.resetFields();
             setOpenModalManage(true);
@@ -379,7 +416,12 @@ function Unit() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table columns={columns} dataSource={AllUnit} rowKey="unitcode" />
+              <Table
+                size="small"
+                columns={columns}
+                dataSource={AllUnit}
+                rowKey="unitcode"
+              />
             </Card>
           </Col>
         </Row>

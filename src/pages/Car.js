@@ -14,22 +14,21 @@ import {
   Select,
   InputNumber,
   Divider,
+  Badge,
 } from "antd";
 import Swal from "sweetalert2";
 import UserService from "../service/UserService";
 // import { Cardata } from "../model/cardata.model";
 function Car() {
   const [AllUser, setAllUser] = useState("");
-  const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);
   // const [CardataDetail, setCardataDetail] = useState(Cardata);
   const [actionManage, setActionManage] = useState({
     action: "add",
-    title: "เพิ่มผู้ใช้งาน",
+    title: "เพิ่มข้อมูลรถ",
     confirmText: "ยืนยัน",
   });
   const { Option } = Select;
   const [formAdd] = Form.useForm();
-  const [formReset] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [openModalManage, setOpenModalManage] = useState(false);
@@ -157,52 +156,72 @@ function Car() {
 
   const columns = [
     {
-      title: "User Code",
-      dataIndex: "unitcode",
-      key: "unitcode",
-      hidden: "true",
+      title: "ID ข้อมูลรถ",
+      dataIndex: "id",
+      key: "id",
       width: "10%",
-    },
-    {
-      title: "Username",
-      dataIndex: "username",
-      key: "username",
-      width: "20%",
-      ...getColumnSearchProps("username"),
-      sorter: (a, b) => a.username.length - b.username.length,
+      ...getColumnSearchProps("id"),
+      sorter: (a, b) => a.id.length - b.id.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ชื่อ",
-      dataIndex: "firstname",
-      key: "firstname",
+      title: "ทะเบียนรถ",
+      dataIndex: "carno",
+      key: "carno",
       width: "20%",
-      ...getColumnSearchProps("firstname"),
-      sorter: (a, b) => a.firstname.length - b.firstname.length,
+      ...getColumnSearchProps("carno"),
+      sorter: (a, b) => a.carno.length - b.carno.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "นามสกุล",
-      dataIndex: "lastname",
-      key: "lastname",
-      width: "20%",
-      ...getColumnSearchProps("lastname"),
-      sorter: (a, b) => a.lastname.length - b.lastname.length,
+      title: "จังหวัด",
+      dataIndex: "province",
+      key: "province",
+      width: "15%",
+      ...getColumnSearchProps("province"),
+      sorter: (a, b) => a.province.length - b.province.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ประเภท",
-      dataIndex: "type",
-      key: "type",
+      title: "เจ้าของ",
+      dataIndex: "cusno",
+      key: "cusno",
       width: "20%",
-      ...getColumnSearchProps("type"),
-      sorter: (a, b) => a.type.length - b.type.length,
+      ...getColumnSearchProps("cusno"),
+      sorter: (a, b) => a.cusno.length - b.cusno.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "ยี่ห้อ",
+      dataIndex: "brand",
+      key: "brand",
+      width: "10%",
+      ...getColumnSearchProps("brand"),
+      sorter: (a, b) => a.brand.length - b.brand.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "รุ่น/ปี",
+      dataIndex: "car_model",
+      key: "car_model",
+      width: "10%",
+      ...getColumnSearchProps("car_model"),
+      sorter: (a, b) => a.car_model.length - b.car_model.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "สี",
+      dataIndex: "color",
+      key: "color",
+      width: "10%",
+      ...getColumnSearchProps("color"),
+      sorter: (a, b) => a.color.length - b.color.length,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "Action",
       key: "operation",
-      width: "20%",
+      width: "5%",
       fixed: "right",
       render: (text) => (
         <Button
@@ -383,6 +402,34 @@ function Car() {
                   }
                 </Form.Item>
               </Col>
+              <Col
+              xs={24}
+              sm={24}
+              md={12}
+              lg={12}
+              xl={6}
+              style={
+                actionManage.action === "edit"
+                  ? { display: "inline" }
+                  : { display: "none" }
+              }
+            >
+              <Form.Item label="สถานการใช้งาน" name="status">
+                <Select
+                size="large"
+                  options={[
+                    {
+                      value: "Y",
+                      label: <Badge status="success" text="เปิดการใช้งาน" />,
+                    },
+                    {
+                      value: "N",
+                      label: <Badge status="error" text="ปิดการใช้งาน" />,
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </Col>
             </Row>
             <Divider />
             <Row gutter={[24, 0]}>
@@ -886,65 +933,6 @@ function Car() {
           เพิ่มข้อมูลรถ
         </Button>
 
-        {OpenModalResetPassword && (
-          <Modal
-            open={OpenModalResetPassword}
-            title="แก้ไขรหัสผ่าน"
-            width={500}
-            okText="ยืนยัน"
-            cancelText="ยกเลิก"
-            onOk={() => {
-              UserService.resetPassword(
-                formReset.getFieldValue("Resetpassword"),
-                formReset.getFieldValue("Resetcode")
-              )
-                .then(async (res) => {
-                  let { status, data } = res;
-                  if (status === 200) {
-                    if (data.status) {
-                      await Swal.fire({
-                        title: "<strong>สำเร็จ</strong>",
-                        html: data.message,
-                        icon: "success",
-                      });
-
-                      setOpenModalResetPassword(false);
-                    } else {
-                      // alert(data.message)
-                      Swal.fire({
-                        title: "<strong>ผิดพลาด!</strong>",
-                        html: data.message,
-                        icon: "error",
-                      });
-                    }
-                  }
-                })
-                .catch((err) => {});
-            }}
-            onCancel={() => setOpenModalResetPassword(false)}
-          >
-            <Form
-              form={formReset}
-              layout="vertical"
-              name="form_in_modal"
-              initialValues={{
-                modifier: "public",
-              }}
-            >
-              <Row gutter={[24, 0]}>
-                <Col xs={24} sm={24} md={16} lg={16} xl={24}>
-                  รหัสผ่านใหม่
-                  <Form.Item name="Resetpassword">
-                    <Input.Password placeholder="ใส่รหัสผ่านใหม่" />
-                  </Form.Item>
-                  <Form.Item name="Resetcode">
-                    <Input type="hidden" />
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
-          </Modal>
-        )}
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">

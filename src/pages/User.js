@@ -202,9 +202,9 @@ function User() {
       fixed: "right",
       render: (text) => (
         <Button
-        icon={<ToolTwoTone twoToneColor="#E74C3C" />}
-        style={{ cursor: "pointer" }}
-        danger
+          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
+          style={{ cursor: "pointer" }}
+          danger
           onClick={(e) => showEditModal(text.code)}
         >
           แก้ใข
@@ -259,7 +259,7 @@ function User() {
             setOpenModalManage(false);
             formManage.resetFields();
           } else {
-            console.log(data.message)
+            console.log(data.message);
             Swal.fire({
               title: "<strong>ผิดพลาด!</strong>",
               html: data.message,
@@ -302,7 +302,7 @@ function User() {
     // await setUserdataDetail({});
     if (actionManage.action === "edit") {
       formManage.resetFields();
-    }     
+    }
     setOpenModalManage(false);
   };
   ////////////////////////////////
@@ -314,14 +314,15 @@ function User() {
         title={actionManage.title}
         okText={actionManage.confirmText}
         cancelText="ยกเลิก"
-        width={1000}        
-        onCancel={() => onModalManageClose()}        
+        width={1000}
+        onCancel={() => onModalManageClose()}
         onOk={() => {
-          formManage.validateFields()
-            .then((values) => {              
+          formManage
+            .validateFields()
+            .then((values) => {
               if (actionManage.action === "add") {
                 submitAdd(values);
-              } else if (actionManage.action === "edit") {                
+              } else if (actionManage.action === "edit") {
                 submitEdit(values);
               }
             })
@@ -330,166 +331,166 @@ function User() {
             });
         }}
       >
-        <Form form={formManage} layout="vertical" autoComplete="off">
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              Username
-              <Form.Item
-                name="username"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อผู้ใช้!",
-                  },
-                ]}
+        <Card>
+          <Form form={formManage} layout="vertical" autoComplete="off">
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                Username
+                <Form.Item
+                  name="username"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ชื่อผู้ใช้!",
+                    },
+                  ]}
+                >
+                  <Input
+                    disabled={actionManage.action === "edit" ? true : false}
+                    size="small"
+                    placeholder="Username"
+                  />
+                </Form.Item>
+              </Col>
+              <Col
+                xs={24}
+                sm={24}
+                md={12}
+                lg={12}
+                xl={12}
+                style={
+                  actionManage.action === "add"
+                    ? { display: "inline" }
+                    : { display: "none" }
+                }
               >
-                <Input
-                  disabled={actionManage.action === "edit" ? true : false}
-                  size="small"
-                  placeholder="Username"
-                />
-              </Form.Item>
-            </Col>
-            <Col
-              xs={24}
-              sm={24}
-              md={12}
-              lg={12}
-              xl={12}
-              style={
-                actionManage.action === "add"
-                  ? { display: "inline" }
-                  : { display: "none" }
-              }
-            >
-              Password
-              <Form.Item
-              name="password"
-                rules={[
-                  
+                Password
+                <Form.Item
+                  name="password"
+                  rules={[
                     actionManage.action === "add"
                       ? { required: true, message: "กรุณาใส่รหัสผ่าน!" }
-                      : {  }
+                      : {},
                   ]}
-              >
-                <Input.Password
-                  disabled={actionManage.action === "edit" ? true : false}
-                  size="small"
-                  placeholder="Password"
-                />
-              </Form.Item>
-            </Col>
-            <Col
-              xs={24}
-              sm={24}
-              md={12}
-              lg={12}
-              xl={9}
-              style={
-                actionManage.action === "edit"
-                  ? { display: "inline" }
-                  : { display: "none" }
-              }
-            >
-              Password
-              <Form.Item
-              >
-                <Input.Password                  
-                  disabled={actionManage.action === "edit" ? true : false}
-                  size="small"
-                  defaultValue="12345678"
-                />
-              </Form.Item>
-            </Col>
-            <Col
-              xs={24}
-              sm={24}
-              md={4}
-              lg={4}
-              xl={3}
-              style={
-                actionManage.action === "edit"
-                  ? { display: "inline" }
-                  : { display: "none" }
-              }
-            >
-              <Form.Item>
-                รีเซ็ต Password
-                <Button
-                  style={{ width: 100}}
-                  onClick={() => {
-                    setOpenModalResetPassword(true);
-                  }}
                 >
-                  Reset
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ชื่อจริง
-              <Form.Item
-                name="firstname"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อจริง!",
-                  },
-                ]}
+                  <Input.Password
+                    disabled={actionManage.action === "edit" ? true : false}
+                    size="small"
+                    placeholder="Password"
+                  />
+                </Form.Item>
+              </Col>
+              <Col
+                xs={24}
+                sm={24}
+                md={12}
+                lg={12}
+                xl={9}
+                style={
+                  actionManage.action === "edit"
+                    ? { display: "inline" }
+                    : { display: "none" }
+                }
               >
-                <Input placeholder="ชื่อจริง" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              นามสกุล
-              <Form.Item
-                name="lastname"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อนามสกุล!",
-                  },
-                ]}
+                Password
+                <Form.Item>
+                  <Input.Password
+                    disabled={actionManage.action === "edit" ? true : false}
+                    size="small"
+                    defaultValue="12345678"
+                  />
+                </Form.Item>
+              </Col>
+              <Col
+                xs={24}
+                sm={24}
+                md={4}
+                lg={4}
+                xl={3}
+                style={
+                  actionManage.action === "edit"
+                    ? { display: "inline" }
+                    : { display: "none" }
+                }
               >
-                <Input placeholder="นามสกุล" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ตำแหน่ง
-              <Form.Item
-                name="type"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาระบุประเภท!",
-                  },
-                ]}
-              >
-                <Select
-                  style={{ height: 40 }}
-                  options={[
-                    { value: "Admin", label: "Admin" },
-                    { value: "พนักงานขาย", label: "พนักงานขาย" },
-                    { value: "ธุรการ", label: "ธุรการ" },
-                    { value: "จัดซื้อ", label: "จัดซื้อ" },
-                    { value: "ช่าง", label: "ช่าง" },
-                    { value: "กรรมการ", label: "กรรมการ" },
-                    { value: "ผู้จัดการสาขา", label: "ผู้จัดการสาขา" },
+                <Form.Item>
+                  รีเซ็ต Password
+                  <Button
+                    style={{ width: 100 }}
+                    onClick={() => {
+                      setOpenModalResetPassword(true);
+                    }}
+                  >
+                    Reset
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                ชื่อจริง
+                <Form.Item
+                  name="firstname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ชื่อจริง!",
+                    },
                   ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              เบอร์โทรศัพท์
-              <Form.Item name="tel">
-                <Input placeholder="เบอร์โทรศัพท์" />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
+                >
+                  <Input placeholder="ชื่อจริง" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                นามสกุล
+                <Form.Item
+                  name="lastname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ชื่อนามสกุล!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="นามสกุล" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                ตำแหน่ง
+                <Form.Item
+                  name="type"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาระบุประเภท!",
+                    },
+                  ]}
+                >
+                  <Select
+                    style={{ height: 40 }}
+                    options={[
+                      { value: "Admin", label: "Admin" },
+                      { value: "พนักงานขาย", label: "พนักงานขาย" },
+                      { value: "ธุรการ", label: "ธุรการ" },
+                      { value: "จัดซื้อ", label: "จัดซื้อ" },
+                      { value: "ช่าง", label: "ช่าง" },
+                      { value: "กรรมการ", label: "กรรมการ" },
+                      { value: "ผู้จัดการสาขา", label: "ผู้จัดการสาขา" },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                เบอร์โทรศัพท์
+                <Form.Item name="tel">
+                  <Input placeholder="เบอร์โทรศัพท์" />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </Card>
       </Modal>
     );
   };
@@ -497,7 +498,7 @@ function User() {
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
-      <h1>ผู้ใช้ระบบ</h1>
+        <h1>ผู้ใช้ระบบ</h1>
         <Button
           type="primary"
           onClick={() => {
@@ -564,7 +565,7 @@ function User() {
                     <Input.Password placeholder="ใส่รหัสผ่านใหม่" />
                   </Form.Item>
                   <Form.Item name="Resetcode">
-                    <Input type="hidden"  />
+                    <Input type="hidden" />
                   </Form.Item>
                 </Col>
               </Row>

@@ -1,4 +1,4 @@
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -12,6 +12,7 @@ import {
   Modal,
   Form,
   Select,
+  Badge,
 } from "antd";
 import Swal from "sweetalert2";
 import ItemTypeService from "../service/ItemTypeService";
@@ -170,6 +171,15 @@ const ProductType = () => {
       ...getColumnSearchProps("statutype"),
       sorter: (a, b) => a.statutype.length - b.statutype.length,
       sortDirections: ["descend", "ascend"],
+      render: (data) => (
+        <div>
+          {data === "Y" ? (
+            <Badge status="success" text="เปิดการใช้งาน" />
+          ) : (
+            <Badge status="error" text="ปิดการใช้การ" />
+          )}
+        </div>
+      ),
     },
     {
       title: "Action",
@@ -177,12 +187,14 @@ const ProductType = () => {
       width: "20%",
       fixed: "right",
       render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
+        <Button
+          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
+          style={{ cursor: "pointer" }}
+          danger
           onClick={(e) => showEditModal(text.typecode)}
         >
           Edit
-        </span>
+        </Button>
       ),
     },
   ].filter((item) => !item.hidden);
@@ -272,8 +284,8 @@ const ProductType = () => {
       <Modal
         open={open}
         title="เพิ่มประเภทสินค้า"
-        okText="Create"
-        cancelText="Cancel"
+        okText="เพิ่ม"
+        cancelText="ยกเลิก"
         onCancel={onCancel}
         onOk={() => {
           formAdd
@@ -316,8 +328,8 @@ const ProductType = () => {
       <Modal
         open={open}
         title="แก้ไขประเภทสินค้า"
-        okText="Create"
-        cancelText="Cancel"
+        okText="แก้ใข"
+        cancelText="ยกเลิก"
         onCancel={onCancel}
         onOk={() => {
           formEdit
@@ -371,7 +383,7 @@ const ProductType = () => {
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
-      <h1>ประเภทสินค้า</h1>
+        <h1>ประเภทสินค้า</h1>
         <Button
           type="primary"
           onClick={() => {
@@ -397,7 +409,7 @@ const ProductType = () => {
         <Row gutter={[24, 0]}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table columns={columns} dataSource={AllItemTypes} />
+              <Table size="small" columns={columns} dataSource={AllItemTypes} />
             </Card>
           </Col>
         </Row>

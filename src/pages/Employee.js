@@ -1,5 +1,6 @@
+import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
-import { SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
 import {
   Button,
   Input,
@@ -11,29 +12,29 @@ import {
   Modal,
   Form,
   Select,
+  Divider,
+  InputNumber,
+  DatePicker,
 } from "antd";
 import Swal from "sweetalert2";
-import Highlighter from "react-highlight-words";
-// COMPONENT
-
-// SERVICE
-import EMPService from "../service/EmpService";
-
-const Employee = () => {
-  const [AllEmp, setAllEmp] = useState("");
+import UserService from "../service/UserService";
+function Employee() {
+  const [AllUser, setAllUser] = useState("");
+  const [actionManage, setActionManage] = useState({
+    action: "add",
+    title: "เพิ่มพนักงาน",
+    confirmText: "ยืนยัน",
+  });
   const [formAdd] = Form.useForm();
-  const [formEdit] = Form.useForm();
-  const [OpenModalAdd, setOpenModalAdd] = useState(false);
-  const [OpenModalEdit, setOpenModalEdit] = useState(false);
-
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [openModalManage, setOpenModalManage] = useState(false);
   const searchInput = useRef(null);
-
+  const [formManage] = Form.useForm();
   useEffect(() => {
-    GetEmp();
+    GetUser();
   }, []);
-
+  const { TextArea } = Input;
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -44,13 +45,9 @@ const Employee = () => {
     clearFilters();
     setSearchText("");
   };
-
-  const handleCloseModal = () => {
-    
-    setOpenModalAdd(false);
+  const onChangeDate = (date, dateString) => {
+    console.log(date, dateString);
   };
-
-
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -161,13 +158,13 @@ const Employee = () => {
       title: "รหัสพนักงาน",
       dataIndex: "empcode",
       key: "empcode",
-      width: "5%",
+      width: "10%",
       ...getColumnSearchProps("empcode"),
       sorter: (a, b) => a.empcode.length - b.empcode.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ชื่อ-นามสกุล",
+      title: "ชื่อ",
       dataIndex: "firstname",
       key: "firstname",
       width: "30%",
@@ -176,12 +173,12 @@ const Employee = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ชื่อเล่น",
-      dataIndex: "nickname",
-      key: "nickname",
-      width: "10%",
-      ...getColumnSearchProps("nickname"),
-      sorter: (a, b) => a.nickname.length - b.nickname.length,
+      title: "นามสกุล",
+      dataIndex: "lastname",
+      key: "lastname",
+      width: "30%",
+      ...getColumnSearchProps("lastname"),
+      sorter: (a, b) => a.lastname.length - b.lastname.length,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -194,52 +191,55 @@ const Employee = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "เบอร์โทร",
-      dataIndex: "tel",
-      key: "tel",
-      width: "20%",
-      ...getColumnSearchProps("tel"),
-      sorter: (a, b) => a.tel.length - b.tel.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สถานะ",
-      dataIndex: "status",
-      key: "status",
-      width: "20%",
-      ...getColumnSearchProps("status"),
-      sorter: (a, b) => a.status.length - b.status.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "แก้ใข",
+      title: "Action",
       key: "operation",
-      width: "15%",
+      width: "10%",
       fixed: "right",
       render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.empcode)}
+        <Button
+          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
+          style={{ cursor: "pointer" }}
+          danger
+          onClick={(e) => showEditModal(text.code)}
         >
-          Edit
-        </span>
+          แก้ใข
+        </Button>
       ),
     },
   ].filter((item) => !item.hidden);
 
-  const GetEmp = () => {
-    EMPService.getEmp()
+  const GetUser = () => {
+    UserService.getUser()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          setAllEmp(data);
+          setAllUser(data);
+        }
+      })
+      .catch((err) => {});
+  };
+
+  const showEditModal = (data) => {
+    document.body.style = "overflow: hidden !important;";
+    UserService.getSupUser(data)
+      .then((res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          // setCardataDetail(data);
+          formManage.setFieldsValue(data);
+          setActionManage({
+            action: "edit",
+            title: "แก้ไขข้อมูลพนักงาน",
+            confirmText: "แก้ใข",
+          });
+          setOpenModalManage(true);
         }
       })
       .catch((err) => {});
   };
 
   const submitAdd = (dataform) => {
-    EMPService.addEmp(dataform)
+    UserService.addUser(dataform)
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -250,8 +250,8 @@ const Employee = () => {
               icon: "success",
             });
 
-            GetEmp();
-            setOpenModalAdd(false);
+            GetUser();
+            setOpenModalManage(false);
             formAdd.resetFields();
           } else {
             // alert(data.message)
@@ -266,192 +266,219 @@ const Employee = () => {
       .catch((err) => {});
   };
 
-  // const submitEdit = (dataform) => {
-  //   UserService.editUser(dataform)
-  //     .then(async (res) => {
-  //       let { status, data } = res;
-  //       if (status === 200) {
-  //         if (data.status) {
-  //           await Swal.fire({
-  //             title: "<strong>สำเร็จ</strong>",
-  //             html: data.message,
-  //             icon: "success",
-  //           });
-
-  //           GetUser();
-  //           setOpenModalAdd(false);            
-  //         } else {
-  //           // alert(data.message)
-  //           Swal.fire({
-  //             title: "<strong>ผิดพลาด!</strong>",
-  //             html: data.message,
-  //             icon: "error",
-  //           });
-  //         }
-  //       }
-  //     })
-  //     .catch((err) => {});
-  // };
-
-  const showEditModal = (data) => {
-    EMPService.getSupEmp(data)
-      .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          formEdit.setFieldValue("Editusername", data.username);
-          formEdit.setFieldValue("Editfirstname", data.firstname);
-          formEdit.setFieldValue("Editlastname", data.lastname);
-          formEdit.setFieldValue("Edittype", data.type);
-          formEdit.setFieldValue("Edittel", data.tel);
-          formEdit.setFieldValue("Editstatus", data.status);
-
-          setOpenModalEdit(true);
-        }
-      })
-      .catch((err) => {});
+  const submitEdit = (dataform) => {
+    // UserService.editUser({ ...CardataDetail, ...dataform })
+    //   .then(async (res) => {
+    //     let { status, data } = res;
+    //     if (status === 200) {
+    //       if (data.status) {
+    //         await Swal.fire({
+    //           title: "<strong>สำเร็จ</strong>",
+    //           html: data.message,
+    //           icon: "success",
+    //         });
+    //         GetUser();
+    //         setOpenModalManage(false);
+    //       } else {
+    //         // alert(data.message)
+    //         Swal.fire({
+    //           title: "<strong>ผิดพลาด!</strong>",
+    //           html: data.message,
+    //           icon: "error",
+    //         });
+    //       }
+    //     }
+    //   })
+    //   .catch((err) => {});
   };
 
-  const ModalEdit = ({ open, onCancel }) => {
+  const onModalManageClose = async () => {
+    // await setCardataDetail({});
+    formManage.resetFields();
+    setOpenModalManage(false);
+  };
+  ////////////////////////////////
+  const onSearch = (value) => {
+    console.log("search:", value);
+  };
+  const onChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  const ModalManage = () => {
     return (
       <Modal
-        open={open}
-        title="แก้ไขผู้ใช้งาน"
-        okText="Create"
-        cancelText="Cancel"
-        onCancel={onCancel}
-        width={1000}
+        open={openModalManage}
+        title={actionManage.title}
+        okText={actionManage.confirmText}
+        cancelText="ยกเลิก"
+        onCancel={() => onModalManageClose()}
+        width={1200}
         onOk={() => {
-          formEdit
+          formManage
             .validateFields()
             .then((values) => {
-              // formEdit.resetFields();
-              // console.log(values)
-
-              // submitEdit(values);
+              if (actionManage.action === "add") {
+                submitAdd(values);
+              } else if (actionManage.action === "edit") {
+                submitEdit(values);
+              }
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
             });
         }}
       >
-        <Form
-          form={formEdit}
-          layout="vertical"
-          name="form_in_modal"
-          initialValues={{
-            modifier: "public",
-          }}
-        >
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              Username
-              <Form.Item
-                name="Editusername"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อผู้ใช้!",
-                  },
-                ]}
-              >
-                <Input placeholder="Username" style={{ height: 50 }} disabled />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-              Password
-              <Form.Item name="Editpassword">
-                <Input.Password
-                  defaultValue="123456789"
-                  placeholder="Password"
-                  disabled
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={4} lg={4} xl={4}>
-              <Form.Item label="รีเซ็ต Password">
-                <Button style={{ height: 40 }}>Reset</Button>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ชื่อจริง
-              <Form.Item
-                name="Editfirstname"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อจริง!",
-                  },
-                ]}
-              >
-                <Input placeholder="ชื่อจริง" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              นามสกุล
-              <Form.Item
-                name="Editlastname"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อนามสกุล!",
-                  },
-                ]}
-              >
-                <Input placeholder="นามสกุล" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ประเภท
-              <Form.Item
-                name="Edittype"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อจริง!",
-                  },
-                ]}
-              >
-                <Select
-                  style={{ height: 40 }}
-                  options={[
-                    { value: "Admin", label: "Admin" },
-                    { value: "User", label: "User" },
+        <Form form={formManage} layout="vertical" autoComplete="off">
+          <Card>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ชื่อ
+                <Form.Item
+                  name="firstname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ ชื่อ ใหม่!",
+                    },
                   ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              เบอร์โทรศัพท์
-              <Form.Item name="Edittel">
-                <Input placeholder="เบอร์โทรศัพท์" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              สถานการใช้งาน
-              <Form.Item
-                name="Editstatususer"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Select
-                  style={{ height: 40 }}
-                  options={[
-                    { value: "Y", label: "เปิดใช้งาน" },
-                    { value: "N", label: "ปิดใช้งาน" },
+                >
+                  <Input placeholder="ชื่อ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                นามสกุล
+                <Form.Item
+                  name="lastname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ นามสกุล ใหม่!",
+                    },
                   ]}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+                >
+                  <Input placeholder="นามสกุล" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ชื่อเล่น
+                <Form.Item name="nickname">
+                  <Input placeholder="ชื่อเล่น" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                เลขประจำตัวประชาชน
+                <Form.Item name="citizen_id">
+                  <Input placeholder="เลขประจำตัวประชาชน" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                วันเกิด
+                <Form.Item name="dateofbirth">
+                  <Input placeholder="วันเกิด" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                เบอร์โทร
+                <Form.Item name="tel">
+                  <Input placeholder="เบอร์โทร" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                เบอร์โทร (สำรอง)
+                <Form.Item name="tel2">
+                  <Input placeholder="เบอร์โทร (สำรอง)" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={3}>
+                สถานภาพ
+                <Form.Item name="marital_status">
+                  <Select
+                    size="large"
+                    placeholder="สถานภาพ"
+                    showSearch
+                    onChange={onChange}
+                    onSearch={onSearch}
+                    filterOption={filterOption}
+                    options={[
+                      {
+                        value: "โสด",
+                        label: "โสด",
+                      },
+                      {
+                        value: "แต่งงาน",
+                        label: "แต่งงาน",
+                      },
+                      {
+                        value: "หย่า",
+                        label: "หย่า",
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={3}>
+                จำนวนบุตร
+                <Form.Item name="no_of_children">
+                  <InputNumber
+                    style={{
+                      width: 117,
+                    }}
+                    size="large"
+                    placeholder="จำนวนบุตร"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={24}>
+                ที่อยู่
+                <Form.Item name="cur_address">
+                  <TextArea rows={3} placeholder="ที่อยู่" />
+                </Form.Item>
+              </Col>
+              <Divider />
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ระดับการศึกษาสูงสุด
+                <Form.Item name="education">
+                  <Input placeholder="ระดับการศึกษาสูงสุด" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                ตำแหน่ง
+                <Form.Item name="position">
+                  <Input placeholder="ตำแหน่ง" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                วันที่เริ่มเข้างาน
+                <Form.Item name="dateofstart">
+                  <DatePicker
+                   style={{
+                    width: 262,
+                  }}
+                    onChange={onChangeDate}
+                    size="large"
+                    format="DD-MM-YYYY"
+                    placeholder="วันที่เริ่มเข้างาน"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                วันที่ลาออก
+                <Form.Item name="resign_date">
+                  <DatePicker
+                     style={{
+                      width: 262,
+                    }}
+                    onChange={onChangeDate}
+                    size="large"
+                    format="DD-MM-YYYY"
+                    placeholder="วันที่ลาออก	"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
         </Form>
       </Modal>
     );
@@ -461,144 +488,32 @@ const Employee = () => {
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>พนักงาน</h1>
-
-        <br></br>
-
-        <Button type="primary" onClick={() => setOpenModalAdd(true)}>
+        <Button
+          type="primary"
+          onClick={() => {
+            setActionManage({
+              action: "add",
+              title: "เพิ่มพนักงาน",
+              confirmText: "เพิ่ม",
+            });
+            setOpenModalManage(true);
+          }}
+        >
           เพิ่มพนักงาน
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table columns={columns} dataSource={AllEmp} />
+              <Table size="small" columns={columns} dataSource={AllUser} />
             </Card>
           </Col>
         </Row>
       </div>
 
-      <Modal
-        okButtonProps={{ style: { backgroundColor: "green" } }}
-        open={OpenModalAdd}
-        title="เพิ่มพนักงาน"
-        okText="เพิ่ม"
-        cancelText="ยกเลิก"
-        onCancel={handleCloseModal}
-        onOk={() => {
-          formAdd
-            .validateFields()
-            .then((values) => {
-              // formAdd.resetFields();
-              // console.log(values)
-              submitAdd(values);
-            })
-            .catch((info) => {
-              console.log("Validate Failed:", info);
-            });
-        }}
-        width={800}
-        maskClosable={false}
-      >
-        <Form
-          name="basic"
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-          style={{
-            maxWidth: 600,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-        >
-          <Form.Item
-            label="รหัสพนักงาน"
-            name="empcode"
-            rules={[
-              {
-                required: true,
-                message: "ใส่ รหัสพนักงาน ของคุณอีกครั้ง",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="ชื่อ"
-            name="firstname"
-            rules={[
-              {
-                required: true,
-                message: "ใส่ ชื่อ ของคุณอีกครั้ง",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="นามสกุล"
-            name="lastname"
-            rules={[
-              {
-                required: true,
-                message: "ใส่ นามสกุล ของคุณอีกครั้ง",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="ชื่อเล่น"
-            name="nickname"
-            rules={[
-              {
-                required: true,
-                message: "ใส่ ชื่อเล่น ของคุณอีกครั้ง!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="ตำแหน่ง"
-            name="position"
-            rules={[
-              {
-                required: true,
-                message: "ใส่ ตำแหน่ง ของคุณอีกครั้ง!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="เบอร์โทร"
-            name="tel"
-            rules={[
-              {
-                required: true,
-                message: "ใส่ เบอร์โทร ของคุณอีกครั้ง!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
-
-      <ModalEdit
-        open={OpenModalEdit}
-        onCancel={() => {
-          setOpenModalEdit(false);
-        }}
-      />
+      {openModalManage && ModalManage()}
     </>
   );
-};
+}
 
 export default Employee;
