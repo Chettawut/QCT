@@ -158,14 +158,16 @@ function Unit() {
       title: "Unit Code",
       dataIndex: "unitcode",
       key: "unitcode",
-      hidden: "true",
-      width: "30%",
+      width: "20%",
+      ...getColumnSearchProps("unitcode"),
+      sorter: (a, b) => a.unitcode.length - b.unitcode.length,
+      sortDirections: ["descend", "ascend"],
     },
     {
       title: "Unit Name",
       dataIndex: "unit",
       key: "unit",
-      width: "30%",
+      width: "40%",
       ...getColumnSearchProps("unit"),
       sorter: (a, b) => a.unit.length - b.unit.length,
       sortDirections: ["descend", "ascend"],
@@ -226,7 +228,7 @@ function Unit() {
           formManage.setFieldsValue(data);
           setActionManage({
             action: "edit",
-            title: "แก้ไขหน่วยสินค้า",
+            title: "แก้ประเภทสินค้า",
             confirmText: "แก้ไข",
           });
 
