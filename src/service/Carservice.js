@@ -3,35 +3,35 @@ import { MEDTHOD } from "../constant/constant";
 import { BACKEND_URL } from "../utils/util";
 
 const API_URL = {
-  Add_PO: `${BACKEND_URL}/po/add_po.php`,
-  GET_PO: `${BACKEND_URL}/po/get_po.php`,
-  GETSUP_PO: `${BACKEND_URL}/po/getsup_po.php`,
-  Edit_PO: `${BACKEND_URL}/po/edit_po.php`,
+  Add_Car: `${BACKEND_URL}/car/add_car.php`,
+  GET_Car: `${BACKEND_URL}/car/get_car.php`,
+  GETSUP_Car: `${BACKEND_URL}/car/getsup_car.php`,
+  Edit_Car: `${BACKEND_URL}/car/edit_car.php`,
 };
 
 let contenttype = {"content-type": "application/x-www-form-urlencoded"};
 
-const POService = {
-  addPO: (reqData) => {
+const CarService = {
+  addCar: (reqData) => {
     return axios({
       method: MEDTHOD.POST,
-      url: API_URL.Add_PO,
+      url: API_URL.Add_Car,
       headers: contenttype,
       data: reqData,
     });
   },
 
-  getPO: () => {
+  getCar: () => {
     return axios({
       medthod: MEDTHOD.GET,
-      url: API_URL.GET_PO,
+      url: API_URL.GET_Car,
     });
   },
   
-  getSupPO: (reqData) => {
+  getSupCar: (reqData) => {
     return axios({
       method: MEDTHOD.POST,      
-      url: API_URL.GETSUP_PO,
+      url: API_URL.GETSUP_Car,
       data: {
         idcode: reqData,
       },
@@ -39,14 +39,14 @@ const POService = {
     });
   },
 
-  editPO: (reqData) => {
+  editCar: (reqData) => {
     return axios({
       method: MEDTHOD.POST,
-      url: API_URL.Edit_PO,
+      url: API_URL.Edit_Car,
       headers: contenttype,
       data: reqData,
     });
   },
 };
 
-export default POService;
+export default CarService;

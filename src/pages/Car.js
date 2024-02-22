@@ -17,16 +17,12 @@ import {
   Badge,
 } from "antd";
 import Swal from "sweetalert2";
-import UserService from "../service/UserService";
-// import { Cardata } from "../model/cardata.model";
+import Carservice from "../service/Carservice";
+import { cardatabase } from "../model/cardata.model";
+
 function Car() {
-  const [AllUser, setAllUser] = useState("");
-  // const [CardataDetail, setCardataDetail] = useState(Cardata);
-  const [actionManage, setActionManage] = useState({
-    action: "add",
-    title: "เพิ่มข้อมูลรถ",
-    confirmText: "ยืนยัน",
-  });
+  const [AllCar, setAllCar] = useState("");
+  const [CardataDetail, setCardataDetail] = useState(cardatabase);
   const { Option } = Select;
   const [formAdd] = Form.useForm();
   const [searchText, setSearchText] = useState("");
@@ -35,7 +31,7 @@ function Car() {
   const searchInput = useRef(null);
   const [formManage] = Form.useForm();
   useEffect(() => {
-    GetUser();
+    GetCar();
   }, []);
   const { TextArea } = Input;
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -48,7 +44,11 @@ function Car() {
     clearFilters();
     setSearchText("");
   };
-
+  const [actionManage, setActionManage] = useState({
+    action: "add",
+    title: "เพิ่มข้อมูลรถ",
+    confirmText: "ยืนยัน",
+  });
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -228,7 +228,7 @@ function Car() {
           icon={<ToolTwoTone twoToneColor="#E74C3C" />}
           style={{ cursor: "pointer" }}
           danger
-          onClick={(e) => showEditModal(text.code)}
+          onClick={(e) => showEditModal(text.id)}
         >
           แก้ใข
         </Button>
@@ -236,12 +236,12 @@ function Car() {
     },
   ].filter((item) => !item.hidden);
 
-  const GetUser = () => {
-    UserService.getUser()
+  const GetCar = () => {
+    Carservice.getCar()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          setAllUser(data);
+          setAllCar(data);
         }
       })
       .catch((err) => {});
@@ -249,11 +249,11 @@ function Car() {
 
   const showEditModal = (data) => {
     document.body.style = "overflow: hidden !important;";
-    UserService.getSupUser(data)
+    Carservice.getSupCar(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          // setCardataDetail(data);
+          setCardataDetail(data);
           formManage.setFieldsValue(data);
           setActionManage({
             action: "edit",
@@ -267,7 +267,7 @@ function Car() {
   };
 
   const submitAdd = (dataform) => {
-    UserService.addUser(dataform)
+    Carservice.addCar(dataform)
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -278,7 +278,7 @@ function Car() {
               icon: "success",
             });
 
-            GetUser();
+            GetCar();
             setOpenModalManage(false);
             formAdd.resetFields();
           } else {
@@ -295,29 +295,29 @@ function Car() {
   };
 
   const submitEdit = (dataform) => {
-    // UserService.editUser({ ...CardataDetail, ...dataform })
-    //   .then(async (res) => {
-    //     let { status, data } = res;
-    //     if (status === 200) {
-    //       if (data.status) {
-    //         await Swal.fire({
-    //           title: "<strong>สำเร็จ</strong>",
-    //           html: data.message,
-    //           icon: "success",
-    //         });
-    //         GetUser();
-    //         setOpenModalManage(false);
-    //       } else {
-    //         // alert(data.message)
-    //         Swal.fire({
-    //           title: "<strong>ผิดพลาด!</strong>",
-    //           html: data.message,
-    //           icon: "error",
-    //         });
-    //       }
-    //     }
-    //   })
-    //   .catch((err) => {});
+    Carservice.editCar({ ...CardataDetail, ...dataform })
+      .then(async (res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
+            GetCar();
+            setOpenModalManage(false);
+          } else {
+            // alert(data.message)
+            Swal.fire({
+              title: "<strong>ผิดพลาด!</strong>",
+              html: data.message,
+              icon: "error",
+            });
+          }
+        }
+      })
+      .catch((err) => {});
   };
 
   const onModalManageClose = async () => {
@@ -403,33 +403,33 @@ function Car() {
                 </Form.Item>
               </Col>
               <Col
-              xs={24}
-              sm={24}
-              md={12}
-              lg={12}
-              xl={6}
-              style={
-                actionManage.action === "edit"
-                  ? { display: "inline" }
-                  : { display: "none" }
-              }
-            >
-              <Form.Item label="สถานการใช้งาน" name="status">
-                <Select
-                size="large"
-                  options={[
-                    {
-                      value: "Y",
-                      label: <Badge status="success" text="เปิดการใช้งาน" />,
-                    },
-                    {
-                      value: "N",
-                      label: <Badge status="error" text="ปิดการใช้งาน" />,
-                    },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
+                xs={24}
+                sm={24}
+                md={12}
+                lg={12}
+                xl={6}
+                style={
+                  actionManage.action === "edit"
+                    ? { display: "inline" }
+                    : { display: "none" }
+                }
+              >
+                <Form.Item label="สถานการใช้งาน" name="status">
+                  <Select
+                    size="large"
+                    options={[
+                      {
+                        value: "Y",
+                        label: <Badge status="success" text="เปิดการใช้งาน" />,
+                      },
+                      {
+                        value: "N",
+                        label: <Badge status="error" text="ปิดการใช้งาน" />,
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
             </Row>
             <Divider />
             <Row gutter={[24, 0]}>
@@ -936,7 +936,7 @@ function Car() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table size="small" columns={columns} dataSource={AllUser} />
+              <Table size="small" columns={columns} dataSource={AllCar} />
             </Card>
           </Col>
         </Row>

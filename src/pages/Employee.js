@@ -17,7 +17,8 @@ import {
   DatePicker,
 } from "antd";
 import Swal from "sweetalert2";
-import UserService from "../service/UserService";
+import EmpService from "../service/EmpService";
+import { employee } from "../model/emp.model";
 function Employee() {
   const [AllUser, setAllUser] = useState("");
   const [actionManage, setActionManage] = useState({
@@ -25,6 +26,7 @@ function Employee() {
     title: "เพิ่มพนักงาน",
     confirmText: "ยืนยัน",
   });
+  const [EmpDetail, setEmpDetail] = useState(employee);
   const [formAdd] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -32,7 +34,7 @@ function Employee() {
   const searchInput = useRef(null);
   const [formManage] = Form.useForm();
   useEffect(() => {
-    GetUser();
+    GetEmp();
   }, []);
   const { TextArea } = Input;
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -44,9 +46,6 @@ function Employee() {
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
-  };
-  const onChangeDate = (date, dateString) => {
-    console.log(date, dateString);
   };
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -158,13 +157,22 @@ function Employee() {
       title: "รหัสพนักงาน",
       dataIndex: "empcode",
       key: "empcode",
-      width: "10%",
+      width: "15%",
       ...getColumnSearchProps("empcode"),
       sorter: (a, b) => a.empcode.length - b.empcode.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ชื่อ",
+      title: "วันที่",
+      dataIndex: "dateofbirth",
+      key: "dateofbirth",
+      width: "15%",
+      ...getColumnSearchProps("dateofbirth"),
+      sorter: (a, b) => a.dateofbirth.length - b.dateofbirth.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "ชื่อ-นามสกุล",
       dataIndex: "firstname",
       key: "firstname",
       width: "30%",
@@ -173,21 +181,30 @@ function Employee() {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "นามสกุล",
-      dataIndex: "lastname",
-      key: "lastname",
-      width: "30%",
-      ...getColumnSearchProps("lastname"),
-      sorter: (a, b) => a.lastname.length - b.lastname.length,
+      title: "ชื่อเล่น",
+      dataIndex: "nickname",
+      key: "nickname",
+      width: "15%",
+      ...getColumnSearchProps("nickname"),
+      sorter: (a, b) => a.nickname.length - b.nickname.length,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "ตำแหน่ง",
       dataIndex: "position",
       key: "position",
-      width: "20%",
+      width: "15%",
       ...getColumnSearchProps("position"),
       sorter: (a, b) => a.position.length - b.position.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "เบอร์โทร",
+      dataIndex: "tel",
+      key: "tel",
+      width: "15%",
+      ...getColumnSearchProps("tel"),
+      sorter: (a, b) => a.tel.length - b.tel.length,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -200,7 +217,7 @@ function Employee() {
           icon={<ToolTwoTone twoToneColor="#E74C3C" />}
           style={{ cursor: "pointer" }}
           danger
-          onClick={(e) => showEditModal(text.code)}
+          onClick={(e) => showEditModal(text.empcode)}
         >
           แก้ใข
         </Button>
@@ -208,8 +225,8 @@ function Employee() {
     },
   ].filter((item) => !item.hidden);
 
-  const GetUser = () => {
-    UserService.getUser()
+  const GetEmp = () => {
+    EmpService.getEmp()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -220,12 +237,11 @@ function Employee() {
   };
 
   const showEditModal = (data) => {
-    document.body.style = "overflow: hidden !important;";
-    UserService.getSupUser(data)
+    EmpService.getSupEmp(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          // setCardataDetail(data);
+          setEmpDetail(data);
           formManage.setFieldsValue(data);
           setActionManage({
             action: "edit",
@@ -239,7 +255,7 @@ function Employee() {
   };
 
   const submitAdd = (dataform) => {
-    UserService.addUser(dataform)
+    EmpService.addEmp(dataform)
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -250,7 +266,7 @@ function Employee() {
               icon: "success",
             });
 
-            GetUser();
+            GetEmp();
             setOpenModalManage(false);
             formAdd.resetFields();
           } else {
@@ -267,29 +283,29 @@ function Employee() {
   };
 
   const submitEdit = (dataform) => {
-    // UserService.editUser({ ...CardataDetail, ...dataform })
-    //   .then(async (res) => {
-    //     let { status, data } = res;
-    //     if (status === 200) {
-    //       if (data.status) {
-    //         await Swal.fire({
-    //           title: "<strong>สำเร็จ</strong>",
-    //           html: data.message,
-    //           icon: "success",
-    //         });
-    //         GetUser();
-    //         setOpenModalManage(false);
-    //       } else {
-    //         // alert(data.message)
-    //         Swal.fire({
-    //           title: "<strong>ผิดพลาด!</strong>",
-    //           html: data.message,
-    //           icon: "error",
-    //         });
-    //       }
-    //     }
-    //   })
-    //   .catch((err) => {});
+    EmpService.editEmp({ ...EmpDetail, ...dataform })
+      .then(async (res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
+            GetEmp();
+            setOpenModalManage(false);
+          } else {
+            // alert(data.message)
+            Swal.fire({
+              title: "<strong>ผิดพลาด!</strong>",
+              html: data.message,
+              icon: "error",
+            });
+          }
+        }
+      })
+      .catch((err) => {});
   };
 
   const onModalManageClose = async () => {
@@ -376,7 +392,13 @@ function Employee() {
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 วันเกิด
                 <Form.Item name="dateofbirth">
-                  <Input placeholder="วันเกิด" />
+                  <DatePicker
+                    style={{
+                      width: 262,
+                    }}
+                    size="large"
+                    placeholder="วันเกิด"
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -452,29 +474,28 @@ function Employee() {
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 วันที่เริ่มเข้างาน
                 <Form.Item name="dateofstart">
-                  <DatePicker
+                  {/* <DatePicker
                    style={{
                     width: 262,
                   }}
                     onChange={onChangeDate}
                     size="large"
-                    format="DD-MM-YYYY"
+                   
                     placeholder="วันที่เริ่มเข้างาน"
-                  />
+                  /> */}
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 วันที่ลาออก
                 <Form.Item name="resign_date">
-                  <DatePicker
+                  {/* <DatePicker
                      style={{
                       width: 262,
                     }}
                     onChange={onChangeDate}
-                    size="large"
-                    format="DD-MM-YYYY"
+                    size="large"                   
                     placeholder="วันที่ลาออก	"
-                  />
+                  /> */}
                 </Form.Item>
               </Col>
             </Row>

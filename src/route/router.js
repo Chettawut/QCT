@@ -6,7 +6,6 @@ import Billing from "../pages/Billing";
 import Receivinggoods from "../pages/Receiving_goods";
 import Car from "../pages/Car";
 import Companycustomers from "../pages/Company_customers";
-import Individualcustomers from "../pages/Individualcustomers";
 import Items from "../pages/Items";
 import Employee from "../pages/Employee";
 import History from "../pages/History";
@@ -32,24 +31,19 @@ const Router = () => {
         <Route
           element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER]} />}
         >
-          <Route path="/dashboard" element={<Dashboard />} />          
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/RB" element={<RB />} />
           <Route path="/Billing" element={<Billing />} />
           <Route path="/History" element={<History />} />
           <Route path="/Items" element={<Items />} />
           <Route path="/Employee" element={<Employee />} />
           <Route path="/Car" element={<Car />} />
-          <Route
-            path="/Individualcustomers"
-            element={<Individualcustomers />}
-          />
           <Route path="/Companycustomers" element={<Companycustomers />} />
           <Route path="/Receivinggoods" element={<Receivinggoods />} />
           <Route path="/Billinginformation" element={<Billinginformation />} />
           <Route path="/Quotation" element={<Quotation />} />
           <Route path="/unit" element={<Unit />} />
           <Route path="/user" element={<User />} />
-
           <Route path="/itemtype" element={<Itemtype />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/customer" element={<Customer />} />
