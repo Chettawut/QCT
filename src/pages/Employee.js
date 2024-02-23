@@ -14,7 +14,8 @@ import {
   Select,
   Divider,
   InputNumber,
-  DatePicker,
+  Badge,
+  // DatePicker,
 } from "antd";
 import Swal from "sweetalert2";
 import EmpService from "../service/EmpService";
@@ -160,15 +161,6 @@ function Employee() {
       width: "15%",
       ...getColumnSearchProps("empcode"),
       sorter: (a, b) => a.empcode.length - b.empcode.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "วันที่",
-      dataIndex: "dateofbirth",
-      key: "dateofbirth",
-      width: "15%",
-      ...getColumnSearchProps("dateofbirth"),
-      sorter: (a, b) => a.dateofbirth.length - b.dateofbirth.length,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -392,7 +384,7 @@ function Employee() {
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 วันเกิด
                 <Form.Item name="dateofbirth">
-                  <DatePicker
+                  <Input
                     style={{
                       width: 262,
                     }}
@@ -474,28 +466,53 @@ function Employee() {
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 วันที่เริ่มเข้างาน
                 <Form.Item name="dateofstart">
-                  {/* <DatePicker
-                   style={{
-                    width: 262,
-                  }}
-                    onChange={onChangeDate}
+                  <Input
+                    style={{
+                      width: 262,
+                    }}
                     size="large"
-                   
                     placeholder="วันที่เริ่มเข้างาน"
-                  /> */}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 วันที่ลาออก
                 <Form.Item name="resign_date">
-                  {/* <DatePicker
-                     style={{
+                  <Input
+                    style={{
                       width: 262,
                     }}
-                    onChange={onChangeDate}
-                    size="large"                   
+                    size="large"
                     placeholder="วันที่ลาออก	"
-                  /> */}
+                  />
+                </Form.Item>
+              </Col>
+              <Col
+                xs={24}
+                sm={24}
+                md={12}
+                lg={12}
+                xl={6}
+                style={
+                  actionManage.action === "edit"
+                    ? { display: "inline" }
+                    : { display: "none" }
+                }
+              >
+                <Form.Item label="สถานการใช้งาน" name="status">
+                  <Select
+                    size="large"
+                    options={[
+                      {
+                        value: "Y",
+                        label: <Badge status="success" text="เปิดการใช้งาน" />,
+                      },
+                      {
+                        value: "N",
+                        label: <Badge status="error" text="ปิดการใช้งาน" />,
+                      },
+                    ]}
+                  />
                 </Form.Item>
               </Col>
             </Row>

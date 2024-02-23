@@ -414,7 +414,7 @@ function Car() {
                     : { display: "none" }
                 }
               >
-                <Form.Item label="สถานการใช้งาน" name="status">
+                <Form.Item label="สถานการใช้งาน" name="statusunit">
                   <Select
                     size="large"
                     options={[
