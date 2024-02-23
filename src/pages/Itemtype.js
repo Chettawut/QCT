@@ -1,4 +1,4 @@
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -12,23 +12,29 @@ import {
   Modal,
   Form,
   Select,
+  Badge,
 } from "antd";
 import Swal from "sweetalert2";
-import ItemTypeService from "../service/ItemTypeService";
+import ItemtypeService from "../service/ItemTypeService";
+import { itemtype } from "../model/itemtype.model";
 
-const ProductType = () => {
-  const [AllItemTypes, setAllItemTypes] = useState("");
-
-  const [OpenModalAdd, setOpenModalAdd] = useState(false);
-  const [OpenModalEdit, setOpenModalEdit] = useState(false);
-  const [formAdd] = Form.useForm();
-  const [formEdit] = Form.useForm();
+function Itemtype() {
+  const [AllItemtype, setAllItemtype] = useState("");
+  const [openModalManage, setOpenModalManage] = useState(false);
+  const [formManage] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-
+  const [ItemtypeDetail, setItemtypeDetail] = useState(itemtype);
+  const [formAdd] = Form.useForm();
   const searchInput = useRef(null);
+  const [actionManage, setActionManage] = useState({
+    action: "add",
+    title: "เพิ่มประเภทสินค้า",
+    confirmText: "Create",
+  });
+
   useEffect(() => {
-    GetType();
+    GetItemtype();
   }, []);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -36,10 +42,12 @@ const ProductType = () => {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
+
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
   };
+
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -144,32 +152,52 @@ const ProductType = () => {
         text
       ),
   });
-
+  const GetItemtype = () => {
+    ItemtypeService.getItemType()
+      .then((res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          setAllItemtype(data);
+        }
+      })
+      .catch((err) => {});
+  };
   const columns = [
     {
-      title: "Type Code",
+      title: "typecode",
       dataIndex: "typecode",
       key: "typecode",
-      hidden: "true",
-      width: "30%",
+      width: "20%",
+      ...getColumnSearchProps("typecode"),
+      sorter: (a, b) => a.typecode.length - b.typecode.length,
+      sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Type Name",
+      title: "ชื่อประเภท",
       dataIndex: "typename",
       key: "typename",
-      width: "30%",
+      width: "40%",
       ...getColumnSearchProps("typename"),
       sorter: (a, b) => a.typename.length - b.typename.length,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "สถานะการใช้งาน",
-      dataIndex: "statutype",
-      key: "statutype",
+      dataIndex: "statusunit",
+      key: "statusunit",
       width: "20%",
-      ...getColumnSearchProps("statutype"),
-      sorter: (a, b) => a.statutype.length - b.statutype.length,
+      ...getColumnSearchProps("statusunit"),
+      sorter: (a, b) => a.statusunit.length - b.statusunit.length,
       sortDirections: ["descend", "ascend"],
+      render: (data) => (
+        <div>
+          {data === "Y" ? (
+            <Badge status="success" text="เปิดการใช้งาน" />
+          ) : (
+            <Badge status="error" text="ปิดการใช้การ" />
+          )}
+        </div>
+      ),
     },
     {
       title: "Action",
@@ -177,45 +205,59 @@ const ProductType = () => {
       width: "20%",
       fixed: "right",
       render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
+        <Button
+          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
+          style={{ cursor: "pointer" }}
+          danger
           onClick={(e) => showEditModal(text.typecode)}
         >
           Edit
-        </span>
+        </Button>
       ),
     },
   ].filter((item) => !item.hidden);
 
   const showEditModal = (data) => {
-    ItemTypeService.getSupItemType(data)
+    ItemtypeService.getSupItemType(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          formEdit.setFieldValue("Edittypename", data.typename);
-          formEdit.setFieldValue("Editstatustype", data.statustype);
-          formEdit.setFieldValue("Edittypecode", data.typecode);
+          setItemtypeDetail(data);
+          formManage.setFieldsValue(data);
+          setActionManage({
+            action: "edit",
+            title: "แก้ไขหน่วยสินค้า",
+            confirmText: "แก้ไข",
+          });
 
-          setOpenModalEdit(true);
+          setOpenModalManage(true);
         }
       })
       .catch((err) => {});
   };
 
   const submitAdd = (dataform) => {
-    ItemTypeService.addItemType(dataform)
+    ItemtypeService.addItemType(dataform)
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
-          await Swal.fire({
-            title: "<strong>สำเร็จ</strong>",
-            html: data.message,
-            icon: "success",
-          });
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
 
-          GetType();
-          setOpenModalAdd(false);
-          formAdd.resetFields();
+            GetItemtype();
+            setOpenModalManage(false);
+            formAdd.resetFields();
+          } else {
+            Swal.fire({
+              title: "<strong>" + data.message + "</strong>",
+              html: "ผิดพลาด",
+              icon: "error",
+            });
+          }
         } else {
           // alert(data.message)
           Swal.fire({
@@ -229,19 +271,28 @@ const ProductType = () => {
   };
 
   const submitEdit = (dataform) => {
-    ItemTypeService.editItemType(dataform)
+    ItemtypeService.editItemType({ ...ItemtypeDetail, ...dataform })
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
-          await Swal.fire({
-            title: "<strong>สำเร็จ</strong>",
-            html: data.message,
-            icon: "success",
-          });
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
 
-          GetType();
+            GetItemtype();
 
-          setOpenModalEdit(false);
+            setOpenModalManage(false);
+          } else {
+            // alert(data.message)
+            Swal.fire({
+              title: "<strong>ผิดพลาด!</strong>",
+              html: data.message,
+              icon: "error",
+            });
+          }
         } else {
           // alert(data.message)
           Swal.fire({
@@ -254,156 +305,132 @@ const ProductType = () => {
       .catch((err) => {});
   };
 
+  const onModalManageClose = async () => {
+    setItemtypeDetail({});
+    formManage.resetFields();
+    setOpenModalManage(false);
+    document.body.style = "overflow: visible !important;";
+  };
   ////////////////////////////////
 
-  function GetType() {
-    ItemTypeService.getItemType()
-      .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          setAllItemTypes(data);
-        }
-      })
-      .catch((err) => {});
-  }
-
-  const ModalAdd = ({ open, onCancel }) => {
+  const ModalManage = () => {
     return (
       <Modal
-        open={open}
-        title="เพิ่มประเภทสินค้า"
-        okText="Create"
-        cancelText="Cancel"
-        onCancel={onCancel}
+        open={openModalManage}
+        title={actionManage.title}
+        okText={actionManage.confirmText}
+        cancelText="ยกเลิก"
+        style={{ top: 20 }}
+        width={1000}
+        afterClose={() => formManage.resetFields()}
+        onCancel={() => onModalManageClose()}
         onOk={() => {
-          formAdd
+          formManage
             .validateFields()
             .then((values) => {
-              // console.log(values)
-              submitAdd(values);
+              if (actionManage.action === "add") {
+                submitAdd(values);
+              } else if (actionManage.action === "edit") {
+                submitEdit(values);
+              }
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
             });
         }}
       >
-        <Form
-          form={formAdd}
-          layout="vertical"
-          name="form_in_modal"
-          initialValues={{
-            modifier: "public",
-          }}
-        >
-          <Form.Item
-            name="Addtypename"
-            rules={[
-              {
-                required: true,
-                message: "กรุณาใส่ชื่อประเภทสินค้า!",
-              },
-            ]}
-          >
-            <Input placeholder="ใส่ชื่อประเภทสินค้า" />
-          </Form.Item>
+        <Form form={formManage} layout="vertical" autoComplete="off">
+          <Card>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                <Form.Item
+                  name="typename"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณากรอกชื่อหน่วยสินค้า",
+                    },
+                  ]}
+                >
+                  <Input placeholder="ใส่ชื่อหน่วยสินค้า" />
+                </Form.Item>
+              </Col>
+              <Col
+                xs={24}
+                sm={24}
+                md={12}
+                lg={12}
+                xl={8}
+                style={
+                  actionManage.action === "edit"
+                    ? { display: "inline" }
+                    : { display: "none" }
+                }
+              >
+                <Form.Item name="statusunit">
+                  <Select
+                    size="large"
+                    options={[
+                      {
+                        value: "Y",
+                        label: <Badge status="success" text="เปิดการใช้งาน" />,
+                      },
+                      {
+                        value: "N",
+                        label: <Badge status="error" text="ปิดการใช้งาน" />,
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="typecode">
+                  <Input type="hidden" />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
         </Form>
       </Modal>
     );
   };
 
-  const ModalEdit = ({ open, onCancel }) => {
-    return (
-      <Modal
-        open={open}
-        title="แก้ไขประเภทสินค้า"
-        okText="Create"
-        cancelText="Cancel"
-        onCancel={onCancel}
-        onOk={() => {
-          formEdit
-            .validateFields()
-            .then((values) => {
-              // formEdit.resetFields();
-              // console.log(values)
-              submitEdit(values);
-            })
-            .catch((info) => {
-              console.log("Validate Failed:", info);
-            });
-        }}
-      >
-        <Form
-          form={formEdit}
-          layout="vertical"
-          name="form_in_modal"
-          initialValues={{
-            modifier: "public",
-          }}
-        >
-          <Form.Item
-            name="Edittypename"
-            rules={[
-              {
-                required: true,
-                message: "กรุณากรอกชื่อประเภทสินค้า",
-              },
-            ]}
-          >
-            <Input placeholder="ใส่ชื่อประเภทสินค้า" />
-          </Form.Item>
-          <Form.Item name="Editstatustype">
-            <Select
-              style={{ width: 120 }}
-              // disabled={isEdit}
-              options={[
-                { value: "Y", label: "เปิดใช้งาน" },
-                { value: "N", label: "ปิดใช้งาน" },
-              ]}
-            />
-          </Form.Item>
-          <Form.Item name="Edittypecode">
-            <Input type="hidden" />
-          </Form.Item>
-        </Form>
-      </Modal>
-    );
-  };
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
-      <h1>ประเภทสินค้า</h1>
+        <h1>ประเภทสินค้า</h1>
         <Button
           type="primary"
           onClick={() => {
-            setOpenModalAdd(true);
+            setActionManage({
+              action: "add",
+              title: "เพิ่มประเภทสินค้า",
+              confirmText: "เพิ่ม",
+            });
+            formManage.resetFields();
+            setOpenModalManage(true);
           }}
         >
           เพิ่มประเภทสินค้า
         </Button>
-        <br></br>
-        <br></br>
-        <ModalAdd
-          open={OpenModalAdd}
-          onCancel={() => {
-            setOpenModalAdd(false);
-          }}
-        />
-        <ModalEdit
-          open={OpenModalEdit}
-          onCancel={() => {
-            setOpenModalEdit(false);
-          }}
-        />
-        <Row gutter={[24, 0]}>
+        <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table columns={columns} dataSource={AllItemTypes} />
+              <Table
+                size="small"
+                columns={columns}
+                dataSource={AllItemtype}
+                rowKey="typecode"
+              />
             </Card>
           </Col>
         </Row>
       </div>
+
+      {/* Modal จัดการสินค้า */}
+      {openModalManage && ModalManage()}
     </>
   );
-};
+}
 
-export default ProductType;
+export default Itemtype;

@@ -7,10 +7,10 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT empcode,CONCAT(firstname, ' ', lastname) as firstname,nickname,position,tel,1 as status FROM `employee` ";
+$sql = "SELECT carno,id,active_status as statusunit FROM car";
+$sql .= " where id = '".$_POST['idcode']."'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-http_response_code(200);
 echo json_encode($data);

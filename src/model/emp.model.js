@@ -1,0 +1,17 @@
+export const employee = {
+    empcode: null,
+    firstname: null,
+    lastname: null,
+    nickname: null,
+    citizen_id: null,
+    dateofbirth: null,
+    cur_address: null,
+    tel: null,
+    dateofstart: null,
+    tel2: null,
+    position: null,
+    marital_status: null,
+    education: null,
+    resign_date: null,
+    no_of_children: null,
+}

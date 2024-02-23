@@ -1,4 +1,4 @@
-export const car = {
+export const cardatabase = {
     id: null,
     carno: null,
     cusno: null,

@@ -14,29 +14,24 @@ import {
   Select,
   InputNumber,
   Divider,
+  Badge,
 } from "antd";
 import Swal from "sweetalert2";
-import UserService from "../service/UserService"; 
-// import { Cardata } from "../model/cardata.model";
-function SR() {
-  const [AllUser, setAllUser] = useState("");
-  const [OpenModalResetPassword, setOpenModalResetPassword] = useState(false);
-  // const [CardataDetail, setCardataDetail] = useState(Cardata);
-  const [actionManage, setActionManage] = useState({
-    action: "add",
-    title: "เพิ่มผู้ใช้งาน",
-    confirmText: "ยืนยัน",
-  });
+import Carservice from "../service/Carservice";
+import { cardatabase } from "../model/cardata.model";
+
+function Car() {
+  const [AllCar, setAllCar] = useState("");
+  const [CardataDetail, setCardataDetail] = useState(cardatabase);
   const { Option } = Select;
   const [formAdd] = Form.useForm();
-  const [formReset] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [openModalManage, setOpenModalManage] = useState(false);
   const searchInput = useRef(null);
   const [formManage] = Form.useForm();
   useEffect(() => {
-    GetUser();
+    GetCar();
   }, []);
   const { TextArea } = Input;
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -49,7 +44,11 @@ function SR() {
     clearFilters();
     setSearchText("");
   };
-
+  const [actionManage, setActionManage] = useState({
+    action: "add",
+    title: "เพิ่มข้อมูลรถ",
+    confirmText: "ยืนยัน",
+  });
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -157,59 +156,79 @@ function SR() {
 
   const columns = [
     {
-      title: "User Code",
-      dataIndex: "unitcode",
-      key: "unitcode",
-      hidden: "true",
+      title: "ID ข้อมูลรถ",
+      dataIndex: "id",
+      key: "id",
       width: "10%",
-    },
-    {
-      title: "Username",
-      dataIndex: "username",
-      key: "username",
-      width: "20%",
-      ...getColumnSearchProps("username"),
-      sorter: (a, b) => a.username.length - b.username.length,
+      ...getColumnSearchProps("id"),
+      sorter: (a, b) => a.id.length - b.id.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ชื่อ",
-      dataIndex: "firstname",
-      key: "firstname",
+      title: "ทะเบียนรถ",
+      dataIndex: "carno",
+      key: "carno",
       width: "20%",
-      ...getColumnSearchProps("firstname"),
-      sorter: (a, b) => a.firstname.length - b.firstname.length,
+      ...getColumnSearchProps("carno"),
+      sorter: (a, b) => a.carno.length - b.carno.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "นามสกุล",
-      dataIndex: "lastname",
-      key: "lastname",
-      width: "20%",
-      ...getColumnSearchProps("lastname"),
-      sorter: (a, b) => a.lastname.length - b.lastname.length,
+      title: "จังหวัด",
+      dataIndex: "province",
+      key: "province",
+      width: "15%",
+      ...getColumnSearchProps("province"),
+      sorter: (a, b) => a.province.length - b.province.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ประเภท",
-      dataIndex: "type",
-      key: "type",
+      title: "เจ้าของ",
+      dataIndex: "cusno",
+      key: "cusno",
       width: "20%",
-      ...getColumnSearchProps("type"),
-      sorter: (a, b) => a.type.length - b.type.length,
+      ...getColumnSearchProps("cusno"),
+      sorter: (a, b) => a.cusno.length - b.cusno.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "ยี่ห้อ",
+      dataIndex: "brand",
+      key: "brand",
+      width: "10%",
+      ...getColumnSearchProps("brand"),
+      sorter: (a, b) => a.brand.length - b.brand.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "รุ่น/ปี",
+      dataIndex: "car_model",
+      key: "car_model",
+      width: "10%",
+      ...getColumnSearchProps("car_model"),
+      sorter: (a, b) => a.car_model.length - b.car_model.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "สี",
+      dataIndex: "color",
+      key: "color",
+      width: "10%",
+      ...getColumnSearchProps("color"),
+      sorter: (a, b) => a.color.length - b.color.length,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "Action",
       key: "operation",
-      width: "20%",
+      width: "5%",
       fixed: "right",
       render: (text) => (
         <Button
           icon={<ToolTwoTone twoToneColor="#E74C3C" />}
           style={{ cursor: "pointer" }}
           danger
-          onClick={(e) => showEditModal(text.code)}
+          onClick={(e) => showEditModal(text.id)}
         >
           แก้ใข
         </Button>
@@ -217,12 +236,12 @@ function SR() {
     },
   ].filter((item) => !item.hidden);
 
-  const GetUser = () => {
-    UserService.getUser()
+  const GetCar = () => {
+    Carservice.getCar()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          setAllUser(data);
+          setAllCar(data);
         }
       })
       .catch((err) => {});
@@ -230,11 +249,11 @@ function SR() {
 
   const showEditModal = (data) => {
     document.body.style = "overflow: hidden !important;";
-    UserService.getSupUser(data)
+    Carservice.getSupCar(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          // setCardataDetail(data);
+          setCardataDetail(data);
           formManage.setFieldsValue(data);
           setActionManage({
             action: "edit",
@@ -248,7 +267,7 @@ function SR() {
   };
 
   const submitAdd = (dataform) => {
-    UserService.addUser(dataform)
+    Carservice.addCar(dataform)
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -259,7 +278,7 @@ function SR() {
               icon: "success",
             });
 
-            GetUser();
+            GetCar();
             setOpenModalManage(false);
             formAdd.resetFields();
           } else {
@@ -276,30 +295,29 @@ function SR() {
   };
 
   const submitEdit = (dataform) => {
-    // UserService.editUser({ ...CardataDetail, ...dataform })
-    //   .then(async (res) => {
-    //     let { status, data } = res;
-    //     if (status === 200) {
-    //       if (data.status) {
-    //         await Swal.fire({
-    //           title: "<strong>สำเร็จ</strong>",
-    //           html: data.message,
-    //           icon: "success",
-    //         });
-
-    //         GetUser();
-    //         setOpenModalManage(false);
-    //       } else {
-    //         // alert(data.message)
-    //         Swal.fire({
-    //           title: "<strong>ผิดพลาด!</strong>",
-    //           html: data.message,
-    //           icon: "error",
-    //         });
-    //       }
-    //     }
-    //   })
-    //   .catch((err) => {});
+    Carservice.editCar({ ...CardataDetail, ...dataform })
+      .then(async (res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
+            GetCar();
+            setOpenModalManage(false);
+          } else {
+            // alert(data.message)
+            Swal.fire({
+              title: "<strong>ผิดพลาด!</strong>",
+              html: data.message,
+              icon: "error",
+            });
+          }
+        }
+      })
+      .catch((err) => {});
   };
 
   const onModalManageClose = async () => {
@@ -308,7 +326,6 @@ function SR() {
     setOpenModalManage(false);
   };
   ////////////////////////////////
-  const [form] = Form.useForm();
   const onSearch = (value) => {
     console.log("search:", value);
   };
@@ -343,51 +360,77 @@ function SR() {
       >
         <Form form={formManage} layout="vertical" autoComplete="off">
           <Card>
-            <Form form={form}>
-              <Row gutter={[24, 0]}>
-                <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                  <Form.Item name="businessno" label="ลักษณะรถ">
-                    <Select size="large" allowClear>
-                      <Option value="0">รถส่วนบุคคล</Option>
-                      <Option value="1">รถบริษัท</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                  <Form.Item
-                    shouldUpdate={(prevValues, currentValues) =>
-                      prevValues.businessno !== currentValues.businessno
-                    }
-                  >
-                    {({ getFieldValue }) =>
-                      getFieldValue("businessno") === "0" ? (
-                        <Form.Item name="cusno" label="รถส่วนบุคคล">
-                          <Select
-                            size="large"
-                            placeholder="รถส่วนบุคคล"
-                            showSearch
-                            onChange={onChange}
-                            onSearch={onSearch}
-                            filterOption={filterOption}
-                          />
-                        </Form.Item>
-                      ) : (
-                        <Form.Item name="business_car" label="รถบริษัท">
-                          <Select
-                            size="large"
-                            placeholder="รถบริษัท"
-                            showSearch
-                            onChange={onChange}
-                            onSearch={onSearch}
-                            filterOption={filterOption}
-                          />
-                        </Form.Item>
-                      )
-                    }
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="businessno" label="ลักษณะรถ">
+                  <Select size="large" allowClear>
+                    <Option value="0">รถส่วนบุคคล</Option>
+                    <Option value="1">รถบริษัท</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  shouldUpdate={(prevValues, currentValues) =>
+                    prevValues.businessno !== currentValues.businessno
+                  }
+                >
+                  {({ getFieldValue }) =>
+                    getFieldValue("businessno") === "0" ? (
+                      <Form.Item name="cusno" label="รถส่วนบุคคล">
+                        <Select
+                          size="large"
+                          placeholder="รถส่วนบุคคล"
+                          showSearch
+                          onChange={onChange}
+                          onSearch={onSearch}
+                          filterOption={filterOption}
+                        />
+                      </Form.Item>
+                    ) : (
+                      <Form.Item name="business_car" label="รถบริษัท">
+                        <Select
+                          size="large"
+                          placeholder="รถบริษัท"
+                          showSearch
+                          onChange={onChange}
+                          onSearch={onSearch}
+                          filterOption={filterOption}
+                        />
+                      </Form.Item>
+                    )
+                  }
+                </Form.Item>
+              </Col>
+              <Col
+                xs={24}
+                sm={24}
+                md={12}
+                lg={12}
+                xl={6}
+                style={
+                  actionManage.action === "edit"
+                    ? { display: "inline" }
+                    : { display: "none" }
+                }
+              >
+                <Form.Item label="สถานการใช้งาน" name="statusunit">
+                  <Select
+                    size="large"
+                    options={[
+                      {
+                        value: "Y",
+                        label: <Badge status="success" text="เปิดการใช้งาน" />,
+                      },
+                      {
+                        value: "N",
+                        label: <Badge status="error" text="ปิดการใช้งาน" />,
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
             <Divider />
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -890,69 +933,10 @@ function SR() {
           เพิ่มข้อมูลรถ
         </Button>
 
-        {OpenModalResetPassword && (
-          <Modal
-            open={OpenModalResetPassword}
-            title="แก้ไขรหัสผ่าน"
-            width={500}
-            okText="ยืนยัน"
-            cancelText="ยกเลิก"
-            onOk={() => {
-              UserService.resetPassword(
-                formReset.getFieldValue("Resetpassword"),
-                formReset.getFieldValue("Resetcode")
-              )
-                .then(async (res) => {
-                  let { status, data } = res;
-                  if (status === 200) {
-                    if (data.status) {
-                      await Swal.fire({
-                        title: "<strong>สำเร็จ</strong>",
-                        html: data.message,
-                        icon: "success",
-                      });
-
-                      setOpenModalResetPassword(false);
-                    } else {
-                      // alert(data.message)
-                      Swal.fire({
-                        title: "<strong>ผิดพลาด!</strong>",
-                        html: data.message,
-                        icon: "error",
-                      });
-                    }
-                  }
-                })
-                .catch((err) => {});
-            }}
-            onCancel={() => setOpenModalResetPassword(false)}
-          >
-            <Form
-              form={formReset}
-              layout="vertical"
-              name="form_in_modal"
-              initialValues={{
-                modifier: "public",
-              }}
-            >
-              <Row gutter={[24, 0]}>
-                <Col xs={24} sm={24} md={16} lg={16} xl={24}>
-                  รหัสผ่านใหม่
-                  <Form.Item name="Resetpassword">
-                    <Input.Password placeholder="ใส่รหัสผ่านใหม่" />
-                  </Form.Item>
-                  <Form.Item name="Resetcode">
-                    <Input type="hidden" />
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
-          </Modal>
-        )}
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table size="small" columns={columns} dataSource={AllUser} />
+              <Table size="small" columns={columns} dataSource={AllCar} />
             </Card>
           </Col>
         </Row>
@@ -963,4 +947,4 @@ function SR() {
   );
 }
 
-export default SR;
+export default Car;

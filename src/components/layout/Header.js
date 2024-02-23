@@ -145,7 +145,7 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/Individualcustomers" rel="noopener noreferrer">
+                <a href="/customer" rel="noopener noreferrer">
                   ลูกค้าบุคคล
                 </a>
               ),

@@ -620,7 +620,7 @@ const Items = () => {
             });
         }}
       >
-        <Card title="ข้อมูลสินค้า">
+        <Card>
           <Tabs defaultActiveKey="1" items={itemsManage} />
         </Card>
       </Modal>
