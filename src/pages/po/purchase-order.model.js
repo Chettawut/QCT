@@ -1,229 +1,226 @@
-import { Space } from "antd"; 
+import { Space, Typography } from "antd"; 
+// import { Typography } from "antd"; 
 import { Button } from "antd";
-import { Popconfirm} from "antd";
-import { EditOutlined, ExclamationCircleOutlined, QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons"; 
-
-import { EditableRow, EditableCell } from "../../components/table/TableEditAble";
-// import { columnSearchProp } from "../../components/table/Searchtable";
-import { BadgeSampleRequestStatus } from "../../components/badge-and-tag";
-import { ButtonAttachFiles } from "../../components/button";
-
-import { formatCommaNumber } from "../../utils/util";
-
-export const columns = (imputRef, columnSearchAction, { handleAction, handleView, handleDelete }) => [
-    {
-      title: "PO Code",
-      dataIndex: "pocode",
-      key: "pocode", 
-      sorter: (a, b) => a.pocode.length - b.pocode.length,
-      sortDirections: ["descend", "ascend"],
+import { Popconfirm } from "antd";
+import { EditOutlined, QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons"; 
+// import dayjs from 'dayjs';
+import { EditableCell, EditableRow } from "../../components/table/TableEditAble";
+// import { formatCommaNumber } from '../../utils/util';
+/** get sample column */
+export const accessColumn = ({handleEdit, handleDelete}) => [
+  {
+    title: "เลขที่ PO",
+    key: "pocode",
+    dataIndex: "pocode",
+    align: "left",  
+    width: 210,
+    ellipsis: {
+      showTitle: false,
     },
-    {
-      title: "PO Date",
-      dataIndex: "podate",
-      key: "podate",       
-      sorter: (a, b) => a.podate.length - b.podate.length,
-      sortDirections: ["descend", "ascend"],
+  },
+  {
+    title: "วันที่ออก PO",
+    dataIndex: "podate",
+    key: "podate",   
+    align: 'right',
+    className:'!pe-5',
+  },
+  {
+    title: "รหัสพัสดุ",
+    dataIndex: "stcode",
+    key: "stcode",   
+    align: 'right',
+    className:'!pe-5',
+  },
+  {
+    title: "รายการสินค้า",
+    dataIndex: "stname",
+    key: "stname",   
+    align: 'right',
+    className:'!pe-5',
+  },
+  {
+    title: "ผู้ขาย",
+    dataIndex: "supname",
+    key: "supname", 
+    width: 160,
+    ellipsis: {
+      showTitle: false,
     },
-    {
-      title: "รหัสผู้ขาย",
-      dataIndex: "supcode",
-      key: "supcode",
-      render: (_, record) => `${record.supcode}`,
-      sorter: (a, b) => a.supcode.length - b.supcode.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ชื่อผู้ขาย",
-      dataIndex: "supname",
-      key: "supname",
-      render: (_, record) => `${record.supname}`,
-      sorter: (a, b) => a.supname.length - b.supname.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สถานะ",
-      dataIndex: "active_status",
-      key: "active_status", 
-      sorter: (a, b) => a.active_status.length - b.active_status.length,
-      sortDirections: ["descend", "ascend"],
-      render: (data) => <BadgeSampleRequestStatus data={data} />,
-    },
-    {
-      title: "Action",
-      key: "operation",
-      width: '180px',
-      fixed: 'right',
-      render: (text, record) => (
-        <Space >
+  },
+  {
+    title: "สถานะ",
+    dataIndex: "active_status",
+    key: "active_status", 
+  },
+  {
+    title: "Action",
+    key: "operation", 
+    fixed: 'right',
+    width: 90,
+    render: (text, record) => (
+      <Space >
+        <Button
+          icon={<EditOutlined />} 
+          className='bn-primary-outline'
+          style={{ cursor: "pointer", display: 'flex', alignItems: 'center', justifyContent: 'center'}}
+          onClick={(e) => handleEdit(record) }
+          size="small"
+        />
+        {/* <Button
+          icon={<PrinterOutlined />} 
+          className='bn-warning-outline'
+          style={{ cursor: "pointer", display: 'flex', alignItems: 'center', justifyContent: 'center'}}
+          onClick={(e) => handleView(record) }
+          size="small"
+        /> */}
+        <Popconfirm 
+          placement="topRight"
+          title="Sure to delete?"  
+          description="Are you sure to delete this packaging?"
+          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+          onConfirm={() => handleDelete(record)}
+        >
           <Button
-            icon={<EditOutlined />} 
-            className='bn-primary-outline'
-            style={{ cursor: "pointer", display: 'flex', alignItems: 'center', justifyContent: 'center'}}
-            onClick={(e) => handleAction(record) }
+            icon={<DeleteOutlined />}
+            danger
+            style={{ cursor: "pointer", display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
             size="small"
           />
-          <Button
-            icon={<ExclamationCircleOutlined />} 
-            className='bn-success-outline'
-            style={{ cursor: "pointer", display: 'flex', alignItems: 'center', justifyContent: 'center'}}
-            onClick={(e) => handleView(record) }
-            size="small"
-          />
-          <Popconfirm 
-            placement="topRight"
-            title="Sure to delete?"  
-            description="Are you sure to delete this sample preparation?"
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-            onConfirm={() => handleDelete(record)}
-          >
-            <Button
-              icon={<DeleteOutlined />}
-              danger
-              style={{ cursor: "pointer", display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
-              size="small"
-            />
-          </Popconfirm>
-          <ButtonAttachFiles code={record.srcode} refs='Sample Request' showExpire={true} />
-        </Space>
-      ),
-    },
-].filter((item) => !item.hidden);
+        </Popconfirm>
+        {/* <ButtonAttachFiles code={record.srcode} refs='Sample Request' showExpire={true} /> */}
+      </Space>
+    ),
+  }, 
+]
 
-export const detailColumn = ({ handleAction }) => {
+export const pkmaster = {
+  pkcode : null,
+  pkname : null,
+  pknameTH : null,
+  pktypeid : null,
+  expscode : null,
+  expsname : null,
+  price : 0,
+  transport : 0,
+  lost : 0,
+  cost : 0,
+  unitid : null,
+  supcode : null,
+  remark : null,
+}
+
+/** export component for edit table */
+export const componentsEditable = {
+  body: { row: EditableRow, cell: EditableCell },
+};
+
+/** get column for edit table parameter */
+export const editColumns = ({ handleAction }) => {
   return [
     {
       title: "ลำดับ",
+      ellipsis: true,
+      className:'max-w-52',
       key: "index",
+      dataIndex: "index",
       align: "left",
-      width: 80,
-      render: (_, record, idx) => <span key={record?.stcode}>{idx + 1}</span>,
+      render:(item, record, index)=>(<>{index+1}</>)
     },
     {
-      title: "Code",
+      title: "รหัสสินค้า",
+      ellipsis: true,
+      className:'max-w-52',
       key: "stcode",
       dataIndex: "stcode",
-      width: 200,
+      align: "center",
+      width:100
     },
     {
-      title: "ชื่อส่วนผสม",
+      title: "ชื่อสินค้า",
       key: "stname",
       dataIndex: "stname",
+      align: "left",       
+      width:300
     },
     {
-      title: "น้ำหนัก(g)",
+      title: "จำนวน",
+      editable: true,
+      align: 'right',
       key: "amount",
       dataIndex: "amount",
+      render: (v) => v || 1 
+    },
+    {
+      title: "หน่วย",
+      align: "center",
+      editable: false,
+      required: true,
+      key: "unit",
+      dataIndex: "unit",  
+    },
+    {
+      title: "ราคาซื้อ",
+      align: "right",
       editable: true,
       required: true,
-      align: "right",
-      width: 120,
-      className:"field-edit pe-2",
-      render: (v) => formatCommaNumber(Number( v || 0 )),
+      key: "price",
+      dataIndex: "price",
     },
     {
-      title: "%",
+      title: (<>ส่วนลด (%)</>),
       align: "right",
-      width: 120,
-      className:"pe-2",
-      key: "percent",
-      dataIndex: "percent",
-      render: (v) => formatCommaNumber(Number( v || 0 ) * 100,1),
-    },
-    {
-      title: "%(total)",
-      align: "right",
-      width: 120,
-      className:"pe-2",
-      key: "totalpercent",
-      dataIndex: "totalpercent",
-      render: (v, record, idx) => v !== null ? formatCommaNumber(Number( v ) * 100,1) : "",
-    },
-    {
-      title: "Method",
-      align: "left",
-      key: "method",
-      dataIndex: "method",
+      width: 160, 
       editable: true,
-      required: false,
-      // textArea: true,
-      className:"field-edit ps-2",
-      width:180,
+      key: "discount",
+      dataIndex: "discount",
+      render: (v) => v||0
     },
     {
-        title: "ตัวเลือก",
-        align: "center",
-        key: "operation",
-        dataIndex: "operation",
-        render: (_, record, idx) => handleAction(record),
-        width: '90px',
-        fixed: 'right',
+      title: "จำนวนเงิน",
+      align: "right",
+      width: 160,
+      editable: false,
+      key: "totalprice",
+      dataIndex: "totalprice",
+      render: (v, row) => {
+      return (
+        <Typography>{(row.amount*row.price)}</Typography>||row.price
+      );
+    }
+    },
+    {
+      title: "ตัวเลือก",
+      align: "center",
+      key: "operation",
+      dataIndex: "operation",
+      render: (_, record, idx) => handleAction(record),
+      width: '90px',
+      fixed: 'right',
     },
   ]
 };
 
-/** get column for edit table working in modal manage sr */
-export const columnDetailEditable = (handleSave, handleModalSelect, {handleAction} ) =>{
-    const col = detailColumn({handleAction});
-    return col.map((col) => {
-        if (!col.editable) { return col; }
-        return {
-            ...col,
-            onCell: (record) => {
-              // console.log(record);
-              return {
-                record,
-                editable: col.editable,
-                dataIndex: col.dataIndex,
-                title: col.title,
-                handleSave,
-                fieldType: !!col?.textArea,
-                required: !!col?.required,
-                type: col?.type || 'input',
-                modalSelect: handleModalSelect
-              }
-            },
-        };
-    }); 
-}  
-
-/** export component for edit table */
-export const componentsEditable = {
-    body: { row: EditableRow, cell: EditableCell },
-};
-
-/** get sample column */
-export const samplecolumnView = [
-  {
-    title: "No",
-    key: "index",
-    align: "left",
-    width: 80,
-    render: (_, record, idx) => <span key={record?.stcode}>{idx + 1}</span>,
-  },
-  {
-    title: "Sampl Name",
-    dataIndex: "spname",
-    key: "spname",  
-  },
-  {
-    title: "Packing",
-    dataIndex: "pkname",
-    key: "pkname"
-  },
-  {
-    title: "Amount",
-    dataIndex: "amount",
-    key: "amount", 
-  } 
-]
-
-
-export const srmaster = {
-  srcode : null,
-  srdate : null,
-  duedate : null,
-  cuscode : null,
-  cusname : null,
-  description : null
+export const columnsDetailsEditable = (handleSave, {handleAction, nameOption} ) =>{
+  const col = editColumns({handleAction, nameOption});
+  return col.map((col, ind) => {
+      if (!col.editable) { return col; }
+      return {
+          ...col,
+          onCell: (record) => {
+            // console.log(record);
+            return {
+              record,
+              editable: col.editable,
+              dataIndex: col.dataIndex,
+              title: col.title,
+              handleSave,
+              fieldType: !!col?.textArea,
+              required: !!col?.required,
+              type: col?.type || 'input',
+              autocompleteOption: col.autocompleteOption
+            }
+          },
+      };
+  }); 
 }

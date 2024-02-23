@@ -112,3 +112,5 @@ export const formatCommaNumber = (number, dmax=2, dmin = 0 ) => number.toLocaleS
   minimumFractionDigits: dmin,
   maximumFractionDigits: dmax,
 });
+
+export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

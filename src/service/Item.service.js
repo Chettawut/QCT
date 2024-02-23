@@ -17,7 +17,6 @@ const ItemService = {
     return axios({
       medthod: MEDTHOD.GET,
       url: API_URL.GET_ALL_ITEMS,
-      headers: contenttype,
     });
   },
 

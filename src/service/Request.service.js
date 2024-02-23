@@ -1,39 +1,11 @@
- 
-import axios from "axios"; 
-import {  message } from 'antd';
-const contenttype = {"content-type": "application/x-www-form-urlencoded"};
+import axios from "../components/layout/AxiosInterceptor";
+// import { BACKEND_URL } from "../utils/util";
+// import {  message } from 'antd';
+// import { Authenticate } from "./Authenticate.service"; 
 // const [messageApi] = message.useMessage();
-export const requestService = () => {
-    const get = (url, parm)=>( 
-        axios({
-            method: "get",      
-            url: `${url}`,
-            params: parm,
-            headers: contenttype,
-        })
-        .catch( (error)=>{
-            message.error(error.message, 5); 
+// const auThen = Authenticate();
+export const requestService = axios;
 
-            throw new Error("เกิดปัญช้อผิดพลาด");
-        })
-    );
+export const getParmeter = (p)=> ( Object.keys(p).map( n => `${n}=${p[n]}`) ).join("&");
 
-    const post = (url, parm)=>(
-        axios({
-            method: "post",      
-            url: url,
-            data: parm,
-            headers: contenttype,
-        })
-        .catch( (error)=>{
-            message.error(error.message, 5);
-
-            throw new Error("เกิดปัญช้อผิดพลาด");
-        })
-    );
-
-    return {
-        get,
-        post,
-    }
-}
+export default requestService;

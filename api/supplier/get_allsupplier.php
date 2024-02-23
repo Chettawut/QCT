@@ -7,17 +7,9 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-include '../options/checkyear.php';
-
-$sql = "SELECT maxpocode as doccode FROM `options` ";
+$sql = "SELECT id, supcode, supname ,CONCAT(idno ,' ', road,' ', subdistrict,' ', district) as address  FROM `supplier` where active_status = 'Y' ";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
-$res = $stmt->fetch(PDO::FETCH_ASSOC);
-extract($res, EXTR_OVERWRITE, "_");
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$data = sprintf("%04s", ($doccode + 1));
-
-http_response_code(200);
 echo json_encode($data);
-
-

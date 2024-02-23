@@ -13,9 +13,8 @@
     position: relative;
 }
 
-.modal-sample-request  {
-    .ant-table-tbody > tr > td, .ant-table-thead > tr > th {
-        white-space: nowrap;
-        vertical-align: top;
-    }
+
+.modal-sample-request .ant-table-tbody > tr > td, .ant-table-thead > tr > th {
+    white-space: nowrap;
+    vertical-align: top;
 }
