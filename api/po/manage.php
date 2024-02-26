@@ -165,7 +165,7 @@ try {
         echo json_encode(array("status"=> 1));
     } else  if($_SERVER["REQUEST_METHOD"] == "GET"){
         $code = $_GET["code"]; 
-        $sql = "SELECT a.pocode,a.podate,a.supcode,c.supname,CONCAT(c.idno ,' ', c.road,' ', c.subdistrict,' ', c.district) as address ";
+        $sql = "SELECT a.pocode,a.podate,a.supcode,c.supname,CONCAT(c.idno ,' ', c.road,' ', c.subdistrict,' ', c.district) as address,a.deldate,a.payment,a.poqua,a.remark ";
         $sql .= " FROM `pomaster` as a ";
         $sql .= " inner join `supplier` as c on (a.supcode)=(c.supcode)";
         $sql .= " where a.pocode = :id";

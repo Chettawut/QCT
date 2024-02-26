@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 
-import { Modal, Card, Table, message, Form, Drawer, Typography } from "antd";
+import { Modal, Card, Table, message, Form, Drawer } from "antd";
 import { Row, Col, Space, Spin } from "antd";
 import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";

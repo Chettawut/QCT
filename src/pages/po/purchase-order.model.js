@@ -185,7 +185,7 @@ export const editColumns = ({ handleAction }) => {
       dataIndex: "totalprice",
       render: (v, row) => {
       return (
-        <Typography>{(row.amount*row.price)}</Typography>||row.price
+        <Typography>{(row.amount*row.price)}</Typography>
       );
     }
     },

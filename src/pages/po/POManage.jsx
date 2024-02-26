@@ -162,12 +162,32 @@ function POManage() {
     POServices.get( v ).then( async res => {
       const { data : { header, detail } } = res.data;
 
-      const init = {...header };
-      console.log(init)
-      setFormDetail({...init }); 
-      // form.setFieldsValue({...init});
+      const init = {...formDetail,
+        ...form.getFieldsValue(),...header};
 
-      setListDetail([...detail]);
+      console.log(init)
+
+      setFormDetail({...init }); 
+      form.setFieldsValue({...init});
+
+      setListDetail([...detail.map( r => {
+        return {
+          ...r,
+          totalprice : ( Number(r?.amount || 0) * Number(r?.price || 0) ) - (1 - (Number( r?.discount || 0 )/100) ) || 0
+        }
+      })]);
+
+      // const val = {
+      //   ...formDetail,
+      //   ...f,
+      //   supcode: v.supcode,
+      //   supname: v.supname,
+      //   address: v.address,
+      // };
+  
+      // setFormDetail(val);
+      // form.setFieldsValue(val);
+
     }).catch( err => {
       console.log(err);
       message.error("Error getting infomation Sample preparation.")
@@ -302,12 +322,9 @@ function POManage() {
                 <Row gutter={[8, 8]} className="px-4 sm:px-0 md:px-0 lg:px-0">
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
                     <Form.Item label="เลขที่ PO" name="pocode" required={false}>
-                      <Input disabled placeholder="Enter Packing Set Name" />
+                      <Input disabled />
                     </Form.Item>
                   </Col>
-                  {/* <FormCol50 readOnly label="เลขที่ PO" name="pocode">
-                    <Input placeholder="Enter Packing Set Name" />
-                  </FormCol50> */}
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
                     <Form.Item
                       label="รหัสผู้ขาย"
@@ -320,7 +337,6 @@ function POManage() {
                         <Input
                           readOnly
                           placeholder="Choose รหัสผู้ขาย"
-                          value={!!formDetail.supcode ? formDetail.supcode : ""}
                         />
                         <Button
                           type="primary"
@@ -336,7 +352,6 @@ function POManage() {
                     <Form.Item label="ชื่อผู้ขาย" name="supname">
                       <Input
                         disabled
-                        value={!!formDetail.supname ? formDetail.supname : ""}
                       />
                     </Form.Item>
                   </Col>

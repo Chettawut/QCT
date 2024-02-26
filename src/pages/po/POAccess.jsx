@@ -144,7 +144,7 @@ const POAccess = () => {
   };
 
   const handleEdit = (data) => {
-    console.log(data)
+    // console.log(data)
     navigate("manage/edit", {
       state: {
         config: {
