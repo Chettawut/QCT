@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT supcode,supname,province,status as statussup FROM `supplier` ";
+$sql = "SELECT supcode,supname,province,active_status as statussup FROM `supplier` ";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

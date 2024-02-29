@@ -247,6 +247,7 @@ function Employee() {
   };
 
   const submitAdd = (dataform) => {
+    // console.log(dataform)
     EmpService.addEmp(dataform)
       .then(async (res) => {
         let { status, data } = res;
@@ -326,7 +327,7 @@ function Employee() {
         onOk={() => {
           formManage
             .validateFields()
-            .then((values) => {
+            .then((values) => {              
               if (actionManage.action === "add") {
                 submitAdd(values);
               } else if (actionManage.action === "edit") {

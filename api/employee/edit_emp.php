@@ -9,7 +9,7 @@ include '../conn.php';
 
 $strSQL = "UPDATE user SET ";
 $strSQL .= " firstname='" . $_POST["Editfirstname"] . "',lastname='" . $_POST["Editlastname"] . "' ";
-$strSQL .= ",type='" . $_POST["Edittype"] . "',tel='" . $_POST["Edittel"] . "',status='" . $_POST["Editstatususer"] . "' ";
+$strSQL .= ",type='" . $_POST["Edittype"] . "',tel='" . $_POST["Edittel"] . "',active_status='" . $_POST["Editstatususer"] . "' ";
 $strSQL .= "WHERE code= '" . $_POST["Editcode"] . "' ";
 $stmt = $conn->prepare($strSQL);
 

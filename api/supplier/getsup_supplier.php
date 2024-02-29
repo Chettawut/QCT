@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT supcode,supname,idno,road,subdistrict,district,province,zipcode,tel,fax,taxnumber,email,status as statussup FROM `supplier` ";
+$sql = "SELECT supcode,supname,idno,road,subdistrict,district,province,zipcode,tel,fax,taxnumber,email,active_status as statussup FROM `supplier` ";
 $sql .= " where supcode = '" . $_POST['idcode'] . "'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();

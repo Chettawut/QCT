@@ -8,7 +8,7 @@ header("Access-Control-Allow-Methods: *");
 include '../conn.php';
 
 
-$sql = "INSERT INTO itemtype (`itemtype`, `status`) ";
+$sql = "INSERT INTO itemtype (`typename`, `active_status`) ";
 //  ,`s_date`,`s_time`, s_user) ";
 $sql .= " VALUES ('" . $_POST["typename"] . "','Y' ";
 $sql .= ")";

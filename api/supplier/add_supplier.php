@@ -15,12 +15,11 @@ extract($res, EXTR_OVERWRITE, "_");
 
 $code = sprintf("%05s", ($supcode + 1));
 
-$strSQL = "INSERT INTO supplier (`supcode`, `supname`, `idno`, `road`, `subdistrict`, `district`, `province`, `zipcode`, `tel`, `fax`, `taxnumber`, `email`, `status` ";
-$strSQL .= ",`s_date`,`s_time`) ";
+$strSQL = "INSERT INTO supplier (`supcode`, `supname`, `idno`, `road`, `subdistrict`, `district`, `province`, `zipcode`, `tel`, `fax`, `taxnumber`, `email`, `active_status`) ";
+
 $strSQL .= " VALUES ('" . $code . "','" . $_POST["Addsupname"] . "','" . $_POST["Addidno"] . "','" . $_POST["Addroad"] . "','" . $_POST["Addsubdistrict"] . "' ";
 $strSQL .= " ,'" . $_POST["Adddistrict"] . "','" . $_POST["Addprovince"] . "','" . $_POST["Addzipcode"] . "','" . $_POST["Addtel"] . "','" . $_POST["Addfax"] . "' ";
 $strSQL .= " ,'" . $_POST["Addtaxnumber"] . "','" . $_POST["Addemail"] . "','Y' ";
-$strSQL .= ",'".date("Y-m-d")."','".date("H:i:s")."')";
 
 $stmt2 = $conn->prepare($strSQL);
 

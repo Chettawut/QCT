@@ -232,6 +232,8 @@ function User() {
         if (status === 200) {
           setUserdataDetail(data);
           formManage.setFieldsValue(data);
+          formReset.setFieldValue("Resetcode", data.code)          
+          
           setActionManage({
             action: "edit",
             title: "แก้ไขผู้ใช้งาน",
@@ -566,7 +568,7 @@ function User() {
                   </Form.Item>
                   <Form.Item name="Resetcode">
                     <Input type="hidden" />
-                  </Form.Item>
+                  </Form.Item >
                 </Col>
               </Row>
             </Form>

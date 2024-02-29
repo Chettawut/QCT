@@ -8,7 +8,7 @@ header("Access-Control-Allow-Methods: *");
 include '../conn.php';
 
 
-$sql = "INSERT INTO unit (`unit`, `status`) ";
+$sql = "INSERT INTO unit (`unit`, `active_status`) ";
 //  ,`s_date`,`s_time`, s_user) ";
 $sql .= " VALUES ('" . $_POST["unitname"] . "','Y' ";
 $sql .= ")";

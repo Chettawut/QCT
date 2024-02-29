@@ -4,13 +4,15 @@
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Headers: *");
     header("Access-Control-Allow-Methods: *");
+    date_default_timezone_set('Asia/Bangkok');   
     
     include '../conn.php';
         
+    $action_datetime = date("Y-m-d H:i:s");
 
     $sql = "UPDATE itemtype SET ";
-    $sql .= " itemtype='".$_POST["typename"]."',status='".$_POST["statusunit"]."' ";
-    $sql .= ",e_date='".date("Y-m-d")."',e_time='".date("H:i:s")."',e_user='0' ";
+    $sql .= " typename='".$_POST["typename"]."',active_status='".$_POST["statusunit"]."' ";
+    $sql .= ",update_date='".$action_datetime."' ";
     $sql .= "WHERE typecode= '".$_POST["typecode"]."' ";
     $stmt = $conn->prepare($sql);
     
