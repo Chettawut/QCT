@@ -17,8 +17,8 @@ import {
   // DatePicker,
 } from "antd";
 import Swal from "sweetalert2";
-import CustomerService from "../service/CustomerService";
-import { customermodel } from "../model/customer.model";
+import BusinessService from "../service/BusinessService";
+import { business } from "../model/business.model";
 function Employee() {
   const [AllUser, setAllUser] = useState("");
   const [actionManage, setActionManage] = useState({
@@ -26,7 +26,7 @@ function Employee() {
     title: "เพิ่มพนักงาน",
     confirmText: "ยืนยัน",
   });
-  const [EmpDetail, setEmpDetail] = useState(customermodel);
+  const [EmpDetail, setEmpDetail] = useState(business);
   const [formAdd] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -34,7 +34,7 @@ function Employee() {
   const searchInput = useRef(null);
   const [formManage] = Form.useForm();
   useEffect(() => {
-    getCustomer();
+    getBusiness();
   }, []);
   const { TextArea } = Input;
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -154,39 +154,30 @@ function Employee() {
 
   const columns = [
     {
-      title: "รหัสลูกค้า",
-      dataIndex: "cuscode",
-      key: "cuscode",
+      title: "รหัสบริษัท",
+      dataIndex: "businessno",
+      key: "businessno",
       width: "15%",
-      ...getColumnSearchProps("cuscode"),
-      sorter: (a, b) => a.cuscode.length - b.cuscode.length,
+      ...getColumnSearchProps("businessno"),
+      sorter: (a, b) => a.businessno.length - b.businessno.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ชื่อ-นามสกุล",
-      dataIndex: "firstname",
-      key: "firstname",
+      title: "ชื่อบริษัท",
+      dataIndex: "title_name",
+      key: "title_name",
       width: "30%",
-      ...getColumnSearchProps("firstname"),
-      sorter: (a, b) => a.firstname.length - b.firstname.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "หมายเลขบัตรประชาชน",
-      dataIndex: "citizen_id",
-      key: "citizen_id",
-      width: "15%",
-      ...getColumnSearchProps("citizen_id"),
-      sorter: (a, b) => a.citizen_id.length - b.citizen_id.length,
+      ...getColumnSearchProps("title_name"),
+      sorter: (a, b) => a.title_name.length - b.title_name.length,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "เบอร์โทร",
-      dataIndex: "tel",
-      key: "tel",
+      dataIndex: "tel_phone",
+      key: "tel_phone",
       width: "15%",
-      ...getColumnSearchProps("tel"),
-      sorter: (a, b) => a.tel.length - b.tel.length,
+      ...getColumnSearchProps("tel_phone"),
+      sorter: (a, b) => a.tel_phone.length - b.tel_phone.length,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -199,7 +190,7 @@ function Employee() {
           icon={<ToolTwoTone twoToneColor="#E74C3C" />}
           style={{ cursor: "pointer" }}
           danger
-          onClick={(e) => showEditModal(text.cuscode)}
+          onClick={(e) => showEditModal(text.businessno)}
         >
           แก้ใข
         </Button>
@@ -207,8 +198,8 @@ function Employee() {
     },
   ].filter((item) => !item.hidden);
 
-  const getCustomer = () => {
-    CustomerService.getCustomer()
+  const getBusiness = () => {
+    BusinessService.getBusiness()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -219,7 +210,7 @@ function Employee() {
   };
 
   const showEditModal = (data) => {
-    CustomerService.getSupCustomer(data)
+    BusinessService.getSupBusiness(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -227,7 +218,7 @@ function Employee() {
           formManage.setFieldsValue(data);
           setActionManage({
             action: "edit",
-            title: "แก้ไขข้อมูลลูกค้า",
+            title: "แก้ไขข้อมูลลูกค้าบริษัท",
             confirmText: "แก้ใข",
           });
           setOpenModalManage(true);
@@ -237,7 +228,7 @@ function Employee() {
   };
 
   const submitAdd = (dataform) => {
-    CustomerService.addCustomer(dataform)
+    BusinessService.addBusiness(dataform)
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -248,7 +239,7 @@ function Employee() {
               icon: "success",
             });
 
-            getCustomer();
+            getBusiness();
             setOpenModalManage(false);
             formAdd.resetFields();
           } else {
@@ -265,7 +256,7 @@ function Employee() {
   };
 
   const submitEdit = (dataform) => {
-    CustomerService.editCustomer({ ...EmpDetail, ...dataform })
+    BusinessService.editBusiness({ ...EmpDetail, ...dataform })
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -275,7 +266,7 @@ function Employee() {
               html: data.message,
               icon: "success",
             });
-            getCustomer();
+            getBusiness();
             setOpenModalManage(false);
           } else {
             // alert(data.message)
@@ -324,77 +315,52 @@ function Employee() {
           <Card>
             <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="รหัสลูกค้าบุคคล" name="cuscode"  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาใส่ รหัสลูกค้าบุคคล ใหม่!",
-                    },
-                  ]}>
-                  <Input placeholder="รหัสลูกค้าบุคคล" />
+                <Form.Item label="รหัสลูกค้าบริษัท" name="businessno" 
+                 rules={[
+                  {
+                    required: true,
+                    message: "กรุณาใส่ รหัสลูกค้าบริษัท ใหม่!",
+                  },
+                ]}>
+                  <Input placeholder="รหัสลูกค้าบริษัท" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="คำนำหน้าชื่อ" name="title_name">
+                <Form.Item label="คำนำหน้าชื่อ" name="title_name"  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ คำนำหน้าชื่อ ใหม่!",
+                    },
+                  ]}>
                   <Input placeholder="คำนำหน้าชื่อ" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  label="ชื่อ"
-                  name="firstname"
+                  label="ชื่อบริษัท"
+                  name="business_name"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณาใส่ ชื่อ ใหม่!",
+                      message: "กรุณาใส่ ชื่อบริษัท ใหม่!",
                     },
                   ]}
                 >
-                  <Input placeholder="ชื่อ" />
+                  <Input placeholder="ชื่อบริษัท" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item
-                  label="นามสกุล"
-                  name="lastname"
+                  label="เลขประจำตัวผู้เสียภาษี"
+                  name="taxno"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณาใส่ นามสกุล ใหม่!",
+                      message: "กรุณาใส่ เลขประจำตัวผู้เสียภาษี ใหม่!",
                     },
                   ]}
                 >
-                  <Input placeholder="นามสกุล" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="เลขประจำตัวประชาชน" name="citizen_id">
-                  <Input placeholder="เลขประจำตัวประชาชน" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="วันเกิด" name="dateofbirth">
-                  <Input
-                    style={{
-                      width: 262,
-                    }}
-                    size="large"
-                    placeholder="วันเกิด"
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="เบอร์โทร" name="tel">
-                  <Input placeholder="เบอร์โทร" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="หมายเลขสมาชิก" name="membercode">
-                  <Input placeholder="หมายเลขสมาชิก" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="วันที่เริ่มเป็นสมาชิก" name="member_date">
-                  <Input placeholder="วันที่เริ่มเป็นสมาชิก" />
+                  <Input placeholder="เลขประจำตัวผู้เสียภาษี" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -403,8 +369,23 @@ function Employee() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="รหัสไปรษณีย์" name="member_date">
-                  <Input placeholder="รหัสไปรษณีย์" />
+                <Form.Item label="ผู้ติดต่อ" name="contact_person">
+                  <Input placeholder="ผู้ติดต่อ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item label="ติดต่อแผนก" name="contact_department">
+                  <Input placeholder="ติดต่อแผนก" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item label="โทรศัพท์" name="tel_phone">
+                  <Input placeholder="โทรศัพท์" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item label="มือถือ" name="tel_mobile">
+                  <Input placeholder="มือถือ" />
                 </Form.Item>
               </Col>
               <Col
@@ -435,9 +416,26 @@ function Employee() {
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={24}>
+            </Row>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={16}>
                 <Form.Item label="ที่อยู่" name="address">
                   <TextArea rows={3} placeholder="ที่อยู่" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                <Form.Item label="รหัสไปรษณีย์" name="zipcode">
+                  <Input placeholder="รหัสไปรษณีย์" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={16}>
+                <Form.Item label="ที่อยู่จัดส่งสินค้า" name="shipping_address">
+                  <TextArea rows={3} placeholder="ที่อยู่จัดส่งสินค้า" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                <Form.Item label="รหัสไปรษณีย์ที่อยู่จัดส่งสินค้า" name="shipping_zipcode">
+                  <Input placeholder="รหัสไปรษณีย์ที่อยู่จัดส่งสินค้า" />
                 </Form.Item>
               </Col>
             </Row>
@@ -450,19 +448,19 @@ function Employee() {
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
-        <h1>ลูกค้าบุคคล</h1>
+        <h1>รายการลูกค้าบริษัท</h1>
         <Button
           type="primary"
           onClick={() => {
             setActionManage({
               action: "add",
-              title: "เพิ่มลูกค้า",
+              title: "เพิ่มลูกค้าบริษัท",
               confirmText: "เพิ่ม",
             });
             setOpenModalManage(true);
           }}
         >
-          เพิ่มลูกค้า
+          เพิ่มลูกค้าบริษัท
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
