@@ -61,19 +61,11 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/History" rel="noopener noreferrer">
-                  ประวัติลูกค้า
-                </a>
-              ),
-              key: "menu1_4",
-            },
-            {
-              label: (
                 <a href="/Quotation" rel="noopener noreferrer">
                   ใบเสนอราคา
                 </a>
               ),
-              key: "menu1_5",
+              key: "menu1_4",
             },
           ],
         },
@@ -153,7 +145,7 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/Companycustomers" rel="noopener noreferrer">
+                <a href="/Business" rel="noopener noreferrer">
                   ลูกค้าบริษัท
                 </a>
               ),
