@@ -327,7 +327,7 @@ function Employee() {
         onOk={() => {
           formManage
             .validateFields()
-            .then((values) => {              
+            .then((values) => {
               if (actionManage.action === "add") {
                 submitAdd(values);
               } else if (actionManage.action === "edit") {
@@ -343,9 +343,9 @@ function Employee() {
           <Card>
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                ชื่อ
                 <Form.Item
                   name="firstname"
+                  label="รหัสพนักงาน"
                   rules={[
                     {
                       required: true,
@@ -357,8 +357,24 @@ function Employee() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                นามสกุล
+               
                 <Form.Item
+                  name="firstname"
+                  label="ชื่อ"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ ชื่อ ใหม่!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="ชื่อ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                
+                <Form.Item
+                label="นามสกุล"
                   name="lastname"
                   rules={[
                     {
@@ -371,20 +387,17 @@ function Employee() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                ชื่อเล่น
-                <Form.Item name="nickname">
+                <Form.Item name="nickname" label="ชื่อเล่น">
                   <Input placeholder="ชื่อเล่น" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                เลขประจำตัวประชาชน
-                <Form.Item name="citizen_id">
+                <Form.Item name="citizen_id" label="เลขประจำตัวประชาชน">
                   <Input placeholder="เลขประจำตัวประชาชน" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                วันเกิด
-                <Form.Item name="dateofbirth">
+                <Form.Item name="dateofbirth" label="วันเกิด">
                   <Input
                     style={{
                       width: 262,
@@ -395,20 +408,17 @@ function Employee() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                เบอร์โทร
-                <Form.Item name="tel">
+                <Form.Item name="tel" label="เบอร์โทร">
                   <Input placeholder="เบอร์โทร" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                เบอร์โทร (สำรอง)
-                <Form.Item name="tel2">
+                <Form.Item name="tel2" label="เบอร์โทร (สำรอง)">
                   <Input placeholder="เบอร์โทร (สำรอง)" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={3}>
-                สถานภาพ
-                <Form.Item name="marital_status">
+                <Form.Item name="marital_status" label="สถานภาพ">
                   <Select
                     size="large"
                     placeholder="สถานภาพ"
@@ -434,57 +444,13 @@ function Employee() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={3}>
-                จำนวนบุตร
-                <Form.Item name="no_of_children">
+                <Form.Item name="no_of_children" label="จำนวนบุตร">
                   <InputNumber
                     style={{
                       width: 117,
                     }}
                     size="large"
                     placeholder="จำนวนบุตร"
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={24}>
-                ที่อยู่
-                <Form.Item name="cur_address">
-                  <TextArea rows={3} placeholder="ที่อยู่" />
-                </Form.Item>
-              </Col>
-              <Divider />
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                ระดับการศึกษาสูงสุด
-                <Form.Item name="education">
-                  <Input placeholder="ระดับการศึกษาสูงสุด" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                ตำแหน่ง
-                <Form.Item name="position">
-                  <Input placeholder="ตำแหน่ง" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                วันที่เริ่มเข้างาน
-                <Form.Item name="dateofstart">
-                  <Input
-                    style={{
-                      width: 262,
-                    }}
-                    size="large"
-                    placeholder="วันที่เริ่มเข้างาน"
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                วันที่ลาออก
-                <Form.Item name="resign_date">
-                  <Input
-                    style={{
-                      width: 262,
-                    }}
-                    size="large"
-                    placeholder="วันที่ลาออก	"
                   />
                 </Form.Item>
               </Col>
@@ -500,7 +466,7 @@ function Employee() {
                     : { display: "none" }
                 }
               >
-                <Form.Item label="สถานการใช้งาน" name="status">
+                <Form.Item label="สถานการใช้งาน" name="active_status">
                   <Select
                     size="large"
                     options={[
@@ -513,6 +479,44 @@ function Employee() {
                         label: <Badge status="error" text="ปิดการใช้งาน" />,
                       },
                     ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={24}>
+                <Form.Item name="cur_address" label="ที่อยู่">
+                  <TextArea rows={3} placeholder="ที่อยู่" />
+                </Form.Item>
+              </Col>
+              <Divider />
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="education" label="ระดับการศึกษาสูงสุด">
+                  <Input placeholder="ระดับการศึกษาสูงสุด" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="position" label="ตำแหน่ง">
+                  <Input placeholder="ตำแหน่ง" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="dateofstart" label="วันที่เริ่มเข้างาน">
+                  <Input
+                    style={{
+                      width: 262,
+                    }}
+                    size="large"
+                    placeholder="วันที่เริ่มเข้างาน"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="resign_date" label="วันที่ลาออก">
+                  <Input
+                    style={{
+                      width: 262,
+                    }}
+                    size="large"
+                    placeholder="วันที่ลาออก	"
                   />
                 </Form.Item>
               </Col>

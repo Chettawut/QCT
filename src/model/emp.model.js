@@ -14,4 +14,5 @@ export const employee = {
     education: null,
     resign_date: null,
     no_of_children: null,
+    active_status: null,
 }
