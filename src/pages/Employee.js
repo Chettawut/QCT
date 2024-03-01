@@ -15,8 +15,10 @@ import {
   Divider,
   InputNumber,
   Badge,
+  DatePicker,
   // DatePicker,
 } from "antd";
+import dayjs from 'dayjs';
 import Swal from "sweetalert2";
 import EmpService from "../service/EmpService";
 import { employee } from "../model/emp.model";
@@ -235,12 +237,16 @@ function Employee() {
         if (status === 200) {
           setEmpDetail(data);
           formManage.setFieldsValue(data);
+          formManage.setFieldValue("dateofbirth", dayjs());
+          formManage.setFieldValue("resign_date", dayjs());
+          formManage.setFieldValue("dateofstart", dayjs());
           setActionManage({
             action: "edit",
             title: "แก้ไขข้อมูลพนักงาน",
             confirmText: "แก้ใข",
           });
           setOpenModalManage(true);
+          
         }
       })
       .catch((err) => {});
@@ -399,10 +405,11 @@ function Employee() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item name="dateofbirth" label="วันเกิด">
-                  <Input
+                  <DatePicker
                     style={{
                       width: 262,
                     }}
+                    format={"DD/MM/YYYY"}
                     size="large"
                     placeholder="วันเกิด"
                   />
@@ -501,7 +508,7 @@ function Employee() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item name="dateofstart" label="วันที่เริ่มเข้างาน">
-                  <Input
+                  <DatePicker
                     style={{
                       width: 262,
                     }}
@@ -512,7 +519,7 @@ function Employee() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item name="resign_date" label="วันที่ลาออก">
-                  <Input
+                  <DatePicker
                     style={{
                       width: 262,
                     }}
