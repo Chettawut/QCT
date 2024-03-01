@@ -567,6 +567,36 @@ const Items = () => {
     },
     {
       key: "2",
+      label: "ราคา",
+      children: (
+        <Form form={formManage} layout="vertical">
+          <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item name="price" label="ราคาขายปลีก">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item name="price_A" label="ราคาส่ง A">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item name="price_B" label="ราคาส่ง B">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item name="price_online" label="ราคา Online">
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      ),
+    },
+    {
+      key: "3",
       label: "สต๊อก",
       disabled: actionManage.action === "add" ? true : false,
       children: (
@@ -611,36 +641,7 @@ const Items = () => {
         </Form>
       ),
     },
-    {
-      key: "3",
-      label: "ราคา",
-      children: (
-        <Form form={formManage} layout="vertical">
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item name="price" label="ราคาขายปลีก">
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item name="price_A" label="ราคาส่ง A">
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item name="price_B" label="ราคาส่ง B">
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item name="price_online" label="ราคา Online">
-                <Input />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      ),
-    },
+    
   ];
 
   const ModalManage = () => {

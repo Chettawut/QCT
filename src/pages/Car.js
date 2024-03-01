@@ -17,23 +17,51 @@ import {
   Badge,
 } from "antd";
 import Swal from "sweetalert2";
-import Carservice from "../service/Carservice";
+import CarService from "../service/Car.service";
+import ModelService from "../service/Model.service";
 import { cardatabase } from "../model/cardata.model";
 
 function Car() {
   const [AllCar, setAllCar] = useState("");
   const [CardataDetail, setCardataDetail] = useState(cardatabase);
   const { Option } = Select;
+  const [optionModel, setOptionModel] = useState([]);
+  const [optionValueModel, setOptionValueModel] = useState();
   const [formAdd] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [openModalManage, setOpenModalManage] = useState(false);
   const searchInput = useRef(null);
   const [formManage] = Form.useForm();
+  const { TextArea } = Input;
+
   useEffect(() => {
     GetCar();
+    GetModel();
   }, []);
-  const { TextArea } = Input;
+
+  const GetCar = () => {
+    CarService.getCar()
+      .then((res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          setAllCar(data);
+        }
+      })
+      .catch((err) => {});
+  };
+
+  const GetModel = () => {
+    ModelService.getAllModel()
+    .then((res) => {
+      let { status, data } = res;
+      if (status === 200) {
+        setOptionModel(data);
+      }
+    })
+    .catch((err) => {});
+  };
+  
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -227,20 +255,9 @@ function Car() {
     },
   ].filter((item) => !item.hidden);
 
-  const GetCar = () => {
-    Carservice.getCar()
-      .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          setAllCar(data);
-        }
-      })
-      .catch((err) => {});
-  };
-
   const showEditModal = (data) => {
     document.body.style = "overflow: hidden !important;";
-    Carservice.getSupCar(data)
+    CarService.getSupCar(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -258,7 +275,7 @@ function Car() {
   };
 
   const submitAdd = (dataform) => {
-    Carservice.addCar(dataform)
+    CarService.addCar(dataform)
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -286,7 +303,7 @@ function Car() {
   };
 
   const submitEdit = (dataform) => {
-    Carservice.editCar({ ...CardataDetail, ...dataform })
+    CarService.editCar({ ...CardataDetail, ...dataform })
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -695,14 +712,17 @@ function Car() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item name="car_model" label="รุ่น/ปี">
-                  <Select
-                    size="large"
-                    placeholder="รุ่น/ปี"
-                    showSearch
-                    onChange={onChange}
-                    onSearch={onSearch}
-                    filterOption={filterOption}
-                  />
+                  <Select 
+                  size={"large"}
+                  value={optionValueModel}
+                  placeholder="รุ่น/ปี"
+                  onChange={(value) => setOptionValueModel(value)}
+                  onSearch={onSearch}
+                  options={optionModel.map((item) => ({
+                    value: item.modelcode,
+                    label: item.modelname,
+                  }))}
+                ></Select>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
