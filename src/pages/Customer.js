@@ -388,7 +388,7 @@ function Employee() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="หมายเลขสมาชิก" name="membercode">
+                <Form.Item label="หมายเลขสมาชิก" name="member_code">
                   <Input placeholder="หมายเลขสมาชิก" />
                 </Form.Item>
               </Col>
@@ -403,7 +403,7 @@ function Employee() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="รหัสไปรษณีย์" name="member_date">
+                <Form.Item label="รหัสไปรษณีย์" name="zipcode">
                   <Input placeholder="รหัสไปรษณีย์" />
                 </Form.Item>
               </Col>

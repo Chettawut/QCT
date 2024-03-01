@@ -3,6 +3,7 @@ import { MEDTHOD } from "../constant/constant";
 import { BACKEND_URL } from "../utils/util";
 
 const API_URL = {
+  GET_ALL_ITEMTYPE: `${BACKEND_URL}/itemtype/get_allitemtype.php`,
   Add_ITEMTYPE: `${BACKEND_URL}/itemtype/add_itemtype.php`,
   GET_ITEMTYPE: `${BACKEND_URL}/itemtype/get_itemtype.php`,
   GETSUP_ITEMTYPE: `${BACKEND_URL}/itemtype/getsup_itemtype.php`,
@@ -12,6 +13,14 @@ const API_URL = {
 let contenttype = {"content-type": "application/x-www-form-urlencoded"};
 
 const ItemTypeService = {
+  getAllItemsType: () => {
+    return axios({
+      medthod: MEDTHOD.GET,
+      url: API_URL.GET_ALL_ITEMTYPE,
+      headers: contenttype,
+    });
+  },
+
   addItemType: (reqData) => {
     return axios({
       method: MEDTHOD.POST,

@@ -23,6 +23,10 @@ import Swal from "sweetalert2";
 // COMPONENT
 // SERVICE
 import ItemService from "../service/Item.service";
+import ItemTypeService from "../service/ItemType.service";
+import UnitService from "../service/Unit.service";
+
+
 import { items } from "../model/items.model";
 
 const Items = () => {
@@ -41,12 +45,19 @@ const Items = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [itemsDetail, setItemsDetail] = useState(items);
+  const [optionType, setOptionType] = useState([]);
+  const [optionValueType, setOptionValueType] = useState();
+  const [optionUnit, setOptionUnit] = useState([]);
+  const [optionValueUnit, setOptionValueUnit] = useState();
 
   const [formAdd] = Form.useForm();
   const [formManage] = Form.useForm();
 
   useEffect(() => {
     GetItems();
+    GetItemType();    
+    GetUnit();
+    
   }, []);
 
   const GetItems = () => {
@@ -58,6 +69,28 @@ const Items = () => {
         }
       })
       .catch((err) => {});
+  };
+
+  const GetItemType = () => {
+    ItemTypeService.getAllItemsType()
+    .then((res) => {
+      let { status, data } = res;
+      if (status === 200) {
+        setOptionType(data);
+      }
+    })
+    .catch((err) => {});
+  };
+
+  const GetUnit = () => {
+    UnitService.getAllUnit()
+    .then((res) => {
+      let { status, data } = res;
+      if (status === 200) {
+        setOptionUnit(data);
+      }
+    })
+    .catch((err) => {});
   };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -358,12 +391,28 @@ const Items = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item name="typename" label="ประเภทสินค้า">
-                <Select size="large" />
+                <Select 
+                  size={"large"}
+                  value={optionValueType}
+                  onChange={(value) => setOptionValueType(value)}
+                  options={optionType.map((item) => ({
+                    value: item.typecode,
+                    label: item.typename,
+                  }))}
+                ></Select>
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item name="unit" label="หน่วยสั่งซื้อ">
-                <Select size="large" />
+              <Select 
+                  size={"large"}
+                  value={optionValueUnit}
+                  onChange={(value) => setOptionValueUnit(value)}
+                  options={optionUnit.map((item) => ({
+                    value: item.unitcode,
+                    label: item.unitname,
+                  }))}
+                ></Select>
               </Form.Item>
             </Col>
           </Row>

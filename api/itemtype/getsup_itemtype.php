@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT typename,typecode,active_status as statusunit FROM itemtype";
+$sql = "SELECT typecode,typename,active_status FROM itemtype ";
 $sql .= " where typecode = '".$_POST['idcode']."'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();

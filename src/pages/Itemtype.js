@@ -15,7 +15,7 @@ import {
   Badge,
 } from "antd";
 import Swal from "sweetalert2";
-import ItemtypeService from "../service/ItemTypeService";
+import ItemtypeService from "../service/ItemType.service";
 import { itemtype } from "../model/itemtype.model";
 
 function Itemtype() {

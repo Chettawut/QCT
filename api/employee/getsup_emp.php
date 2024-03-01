@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT `empcode`, `firstname`, `lastname`, `nickname`, `citizen_id`, `dateofbirth`, `cur_address`, `tel`, `dateofstart`, `tel2`, `position`, `marital_status`, `education`, `resign_date`, `no_of_children` FROM `employee` ";
+$sql = "SELECT `empcode`, `firstname`, `lastname`, `nickname`, `citizen_id`, `dateofbirth`, `cur_address`, `tel`, `dateofstart`, `tel2`, `position`, `marital_status`, `education`, `resign_date`, `no_of_children`,`active_status` FROM `employee` ";
 $sql .= " where empcode = '".$_POST['idcode']."'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();

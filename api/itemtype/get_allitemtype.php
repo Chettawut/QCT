@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT itemtype,typecode,active_status as statusunit FROM itemtype where active_status = 'Y'";
+$sql = "SELECT typecode,typename,active_status FROM itemtype where active_status = 'Y'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

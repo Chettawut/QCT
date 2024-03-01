@@ -10,7 +10,7 @@ include '../conn.php';
 $sql = "SELECT a.*,b.typename ";
 $sql .= " ,b.typename ";
 $sql .= " FROM `items` as a ";
-$sql .= " inner join `itemstype` as b on (a.typecode=b.typecode) ";
+$sql .= " inner join `itemtype` as b on (a.typecode=b.typecode) ";
 $sql .= " where a.stcode = '" . $_POST['idcode'] . "'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();

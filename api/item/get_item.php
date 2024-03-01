@@ -8,8 +8,8 @@
 	include '../conn.php';
 
 	$sql = "SELECT a.stcode, a.stname, b.typename, a.unit, a.price ,a.active_status as statusitem  FROM `items` as a";
-	$sql .= " inner join `itemstype` as b on (a.typecode=b.typecode)";
-	$sql .= " order by a.create_date desc";
+	$sql .= " inner join `itemtype` as b on (a.typecode=b.typecode)";
+	$sql .= " order by a.created_date desc";
 	
 
 	$stmt = $conn->prepare($sql);

@@ -8,14 +8,14 @@ header("Access-Control-Allow-Methods: *");
 include '../conn.php';
 
 
-$sql = "INSERT INTO customer (`cuscode`, `status`) ";
+$sql = "INSERT INTO customer (`cuscode`, `title_name`, `firstname`, `lastname`, `citizen_id`, `member_code`, `member_date`, `dateofbirth`, `address`, `zipcode`, `tel`, `email`, `active_status`) ";
 //  ,`s_date`,`s_time`, s_user) ";
-$sql .= " VALUES ('" . $_POST["cuscode"] . "','Y' ";
+$sql .= " VALUES ('".$_POST["cuscode"]."','".$_POST["title_name"]."','".$_POST["firstname"]."','".$_POST["lastname"]."','".$_POST["citizen_id"]."','".$_POST["member_code"]."','".$_POST["member_date"]."','".$_POST["dateofbirth"]."','".$_POST["address"]."','".$_POST["zipcode"]."','".$_POST["tel"]."','".$_POST["email"]."','Y' ";
 $sql .= ")";
 $stmt = $conn->prepare($sql);
 
 if ($stmt->execute()) {
-    $response = ['status' => 1, 'message' => 'เพิ่ม Itemtype สำเร็จ'];
+    $response = ['status' => 1, 'message' => 'เพิ่มลูกค้าสำเร็จ'];
 } else {
     $response = ['status' => 0, 'message' => 'Error! ติดต่อโปรแกรมเมอร์'];
 }

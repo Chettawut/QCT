@@ -344,7 +344,7 @@ function Employee() {
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item
-                  name="firstname"
+                  name="empcode"
                   label="รหัสพนักงาน"
                   rules={[
                     {

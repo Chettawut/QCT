@@ -12,7 +12,7 @@
 
     $sql = "UPDATE unit SET ";
     $sql .= " unit='".$_POST["unitname"]."',active_status='".$_POST["statusunit"]."' ";
-    $sql .= ",update_date='".$action_datetime."' ";
+    $sql .= ",updated_date='".$action_datetime."' ";
     $sql .= "WHERE unitcode= '".$_POST["unitcode"]."' ";
     $stmt = $conn->prepare($sql);
     

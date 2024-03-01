@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT businessno,CONCAT(title_name, ' ', business_name)as`title_name`, `business_name`,`tel_phone`, `tel_mobile`,1 as status FROM `business` ";
+$sql = "SELECT businessno,CONCAT(title_name, ' ', business_name)as`title_name`, `business_name`,`tel_phone`, `tel_mobile`,active_status FROM `business` ";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
