@@ -19,6 +19,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ModalItem } from "../../components/modal/item/modal-packaging";
 
 import { SaveFilled, SearchOutlined } from "@ant-design/icons";
+import dayjs from 'dayjs';
 
 import POService from "../../service/PO.service";
 import { delay } from "../../utils/util";
@@ -107,7 +108,7 @@ function POManage() {
     });
   };
 
-  const handleSave = (row) => {
+  const handleSave = (row) => {    
     const newData = (r) => {
       const itemDetail = [...listDetail];
       const newData = [...itemDetail];
@@ -162,35 +163,25 @@ function POManage() {
     POServices.get( v ).then( async res => {
       const { data : { header, detail } } = res.data;
 
-      const init = {...formDetail,
-        ...form.getFieldsValue(),...header};
+      const init = {...header,podate: dayjs(header.podate),
+        deldate: dayjs(header.deldate)};
 
-      console.log(init)
+      
 
-      setFormDetail({...init }); 
+      setFormDetail(init);
       form.setFieldsValue({...init});
 
       setListDetail([...detail.map( r => {
+        console.log(r)
         return {
           ...r,
           totalprice : ( Number(r?.amount || 0) * Number(r?.price || 0) ) - (1 - (Number( r?.discount || 0 )/100) ) || 0
         }
       })]);
 
-      // const val = {
-      //   ...formDetail,
-      //   ...f,
-      //   supcode: v.supcode,
-      //   supname: v.supname,
-      //   address: v.address,
-      // };
-  
-      // setFormDetail(val);
-      // form.setFieldsValue(val);
-
     }).catch( err => {
       console.log(err);
-      message.error("Error getting infomation Sample preparation.")
+      message.error("Error getting infomation Purchase Order.")
     }).finally(() => {
       setTimeout(() => {
         setLoading(false);
@@ -337,6 +328,7 @@ function POManage() {
                         <Input
                           readOnly
                           placeholder="Choose รหัสผู้ขาย"
+                          value={ !!formDetail.supcode ? formDetail.supcode : ""}  
                         />
                         <Button
                           type="primary"

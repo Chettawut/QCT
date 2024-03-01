@@ -7,8 +7,8 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT carno,id,active_status as statusunit FROM car";
-$sql .= " where id = '".$_POST['idcode']."'";
+$sql = "SELECT carno,active_status as statusunit FROM car";
+$sql .= " where carno = '".$_POST['idcode']."'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $data = $stmt->fetch(PDO::FETCH_ASSOC);

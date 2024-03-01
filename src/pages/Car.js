@@ -20,11 +20,12 @@ import Swal from "sweetalert2";
 import CarService from "../service/Car.service";
 import ModelService from "../service/Model.service";
 import { cardatabase } from "../model/cardata.model";
+import { PROVINCE_OPTIONS } from "../utils/util";
 
 function Car() {
   const [AllCar, setAllCar] = useState("");
   const [CardataDetail, setCardataDetail] = useState(cardatabase);
-  const { Option } = Select;
+  // const { Option } = Select;
   const [optionModel, setOptionModel] = useState([]);
   const [optionValueModel, setOptionValueModel] = useState();
   const [formAdd] = Form.useForm();
@@ -247,7 +248,7 @@ function Car() {
           icon={<ToolTwoTone twoToneColor="#E74C3C" />}
           style={{ cursor: "pointer" }}
           danger
-          onClick={(e) => showEditModal(text.id)}
+          onClick={(e) => showEditModal(text.carno)}
         >
           แก้ใข
         </Button>
@@ -366,30 +367,37 @@ function Car() {
             });
         }}
       >
-        <Form form={formManage} layout="vertical" autoComplete="off">
+        <Form form={formManage} layout="vertical" >
           <Card>
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="businessno" label="ลักษณะรถ">
-                  <Select size="large" allowClear defaultValue="รถบริษัท">
-                    <Option value="0">รถส่วนบุคคล</Option>
-                    <Option value="1">รถบริษัท</Option>
+                <Form.Item name="business_car" label="ลักษณะรถ">
+                  <Select size="large" defaultValue="รถบริษัท" options={[
+                      {
+                        value: "0",
+                        label: "รถส่วนบุคคล",
+                      },
+                      {
+                        value: "1",
+                        label: "รถบริษัท",
+                      },
+                    ]}>
                   </Select>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item
                   shouldUpdate={(prevValues, currentValues) =>
-                    prevValues.businessno !== currentValues.businessno
+                    prevValues.business_car !== currentValues.business_car
                   }
                 >
                   {({ getFieldValue }) =>
-                    getFieldValue("businessno") === "0" ? (
+                    getFieldValue("business_car") === "0" ? (
                       <Form.Item name="cusno" label="รถส่วนบุคคล">
                         <Input placeholder="รถส่วนบุคคล" />
                       </Form.Item>
                     ) : (
-                      <Form.Item name="business_car" label="รถบริษัท">
+                      <Form.Item name="businessno" label="รถบริษัท">
                         <Input placeholder="รถบริษัท" />
                       </Form.Item>
                     )
@@ -754,6 +762,7 @@ function Car() {
                     onChange={onChange}
                     onSearch={onSearch}
                     filterOption={filterOption}
+                    options={PROVINCE_OPTIONS}
                   />
                 </Form.Item>
               </Col>
