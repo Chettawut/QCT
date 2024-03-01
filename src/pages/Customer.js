@@ -323,14 +323,21 @@ function Employee() {
         <Form form={formManage} layout="vertical" autoComplete="off">
           <Card>
             <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="รหัสลูกค้าบุคคล" name="cuscode"  rules={[
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  label="รหัสลูกค้าบุคคล"
+                  name="cuscode"
+                  rules={[
                     {
                       required: true,
                       message: "กรุณาใส่ รหัสลูกค้าบุคคล ใหม่!",
                     },
-                  ]}>
-                  <Input placeholder="รหัสลูกค้าบุคคล" />
+                  ]}
+                >
+                  <Input
+                    disabled={actionManage.action === "edit" ? true : false}
+                    placeholder="รหัสลูกค้าบุคคล"
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>

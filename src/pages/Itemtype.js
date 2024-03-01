@@ -344,6 +344,7 @@ function Itemtype() {
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={8}>
                 <Form.Item
+                label="ใส่ชื่อประเภทสินค้า"
                   name="typename"
                   rules={[
                     {
@@ -352,7 +353,7 @@ function Itemtype() {
                     },
                   ]}
                 >
-                  <Input placeholder="ใส่ชื่อหน่วยสินค้า" />
+                  <Input placeholder="ใส่ชื่อประเภทสินค้า" />
                 </Form.Item>
               </Col>
               <Col
@@ -367,7 +368,7 @@ function Itemtype() {
                     : { display: "none" }
                 }
               >
-                <Form.Item name="statusunit">
+                <Form.Item name="statusunit" label="สถานะการใช้งาน">
                   <Select
                     size="large"
                     options={[

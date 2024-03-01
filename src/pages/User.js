@@ -232,8 +232,8 @@ function User() {
         if (status === 200) {
           setUserdataDetail(data);
           formManage.setFieldsValue(data);
-          formReset.setFieldValue("Resetcode", data.code)          
-          
+          formReset.setFieldValue("Resetcode", data.code);
+
           setActionManage({
             action: "edit",
             title: "แก้ไขผู้ใช้งาน",
@@ -337,8 +337,8 @@ function User() {
           <Form form={formManage} layout="vertical" autoComplete="off">
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                Username
                 <Form.Item
+                  label=" Username"
                   name="username"
                   rules={[
                     {
@@ -366,8 +366,8 @@ function User() {
                     : { display: "none" }
                 }
               >
-                Password
                 <Form.Item
+                  label="Password"
                   name="password"
                   rules={[
                     actionManage.action === "add"
@@ -394,8 +394,7 @@ function User() {
                     : { display: "none" }
                 }
               >
-                Password
-                <Form.Item>
+                <Form.Item label="Password">
                   <Input.Password
                     disabled={actionManage.action === "edit" ? true : false}
                     size="small"
@@ -415,23 +414,22 @@ function User() {
                     : { display: "none" }
                 }
               >
-                <Form.Item>
-                  รีเซ็ต Password
+                <Form.Item label="แก้ไขรหัสผ่าน">
                   <Button
                     style={{ width: 100 }}
                     onClick={() => {
                       setOpenModalResetPassword(true);
                     }}
                   >
-                    Reset
+                    แก้ไข
                   </Button>
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                ชื่อจริง
                 <Form.Item
+                  label="ชื่อจริง"
                   name="firstname"
                   rules={[
                     {
@@ -444,8 +442,8 @@ function User() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                นามสกุล
                 <Form.Item
+                  label="นามสกุล"
                   name="lastname"
                   rules={[
                     {
@@ -460,16 +458,7 @@ function User() {
             </Row>
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                ตำแหน่ง
-                <Form.Item
-                  name="type"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาระบุประเภท!",
-                    },
-                  ]}
-                >
+                <Form.Item label="ตำแหน่ง" name="type">
                   <Select
                     style={{ height: 40 }}
                     options={[
@@ -485,8 +474,7 @@ function User() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                เบอร์โทรศัพท์
-                <Form.Item name="tel">
+                <Form.Item name="tel" label="เบอร์โทรศัพท์">
                   <Input placeholder="เบอร์โทรศัพท์" />
                 </Form.Item>
               </Col>
@@ -568,7 +556,7 @@ function User() {
                   </Form.Item>
                   <Form.Item name="Resetcode">
                     <Input type="hidden" />
-                  </Form.Item >
+                  </Form.Item>
                 </Col>
               </Row>
             </Form>

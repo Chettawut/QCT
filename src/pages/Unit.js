@@ -346,6 +346,7 @@ function Unit() {
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={8}>
                 <Form.Item
+                label="ใส่ชื่อหน่วยสินค้า"
                   name="unitname"
                   rules={[
                     {
@@ -369,7 +370,7 @@ function Unit() {
                     : { display: "none" }
                 }
               >
-                <Form.Item name="statusunit">
+                <Form.Item name="statusunit" label="สถานะการใช้งาน">
                   <Select
                     size="large"
                     options={[
