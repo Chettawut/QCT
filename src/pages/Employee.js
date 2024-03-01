@@ -353,11 +353,13 @@ function Employee() {
                     },
                   ]}
                 >
-                  <Input placeholder="ชื่อ" />
+                  <Input
+                    disabled={actionManage.action === "edit" ? true : false}
+                    placeholder="ชื่อ"
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-               
                 <Form.Item
                   name="firstname"
                   label="ชื่อ"
@@ -372,9 +374,8 @@ function Employee() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                
                 <Form.Item
-                label="นามสกุล"
+                  label="นามสกุล"
                   name="lastname"
                   rules={[
                     {

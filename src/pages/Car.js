@@ -156,15 +156,6 @@ function Car() {
 
   const columns = [
     {
-      title: "ID ข้อมูลรถ",
-      dataIndex: "id",
-      key: "id",
-      width: "10%",
-      ...getColumnSearchProps("id"),
-      sorter: (a, b) => a.id.length - b.id.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
       title: "ทะเบียนรถ",
       dataIndex: "carno",
       key: "carno",
@@ -363,7 +354,7 @@ function Car() {
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item name="businessno" label="ลักษณะรถ">
-                  <Select size="large" allowClear>
+                  <Select size="large" allowClear defaultValue="รถบริษัท">
                     <Option value="0">รถส่วนบุคคล</Option>
                     <Option value="1">รถบริษัท</Option>
                   </Select>
@@ -378,25 +369,11 @@ function Car() {
                   {({ getFieldValue }) =>
                     getFieldValue("businessno") === "0" ? (
                       <Form.Item name="cusno" label="รถส่วนบุคคล">
-                        <Select
-                          size="large"
-                          placeholder="รถส่วนบุคคล"
-                          showSearch
-                          onChange={onChange}
-                          onSearch={onSearch}
-                          filterOption={filterOption}
-                        />
+                        <Input placeholder="รถส่วนบุคคล" />
                       </Form.Item>
                     ) : (
                       <Form.Item name="business_car" label="รถบริษัท">
-                        <Select
-                          size="large"
-                          placeholder="รถบริษัท"
-                          showSearch
-                          onChange={onChange}
-                          onSearch={onSearch}
-                          filterOption={filterOption}
-                        />
+                        <Input placeholder="รถบริษัท" />
                       </Form.Item>
                     )
                   }
@@ -430,12 +407,12 @@ function Car() {
                   />
                 </Form.Item>
               </Col>
-            </Row>
-            <Divider />
-            <Row gutter={[24, 0]}>
+
+              <Divider />
+
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                ทะเบียนรถ
                 <Form.Item
+                  label="ทะเบียนรถ"
                   name="carno"
                   rules={[
                     {
@@ -444,12 +421,14 @@ function Car() {
                     },
                   ]}
                 >
-                  <Input placeholder="ทะเบียนรถ" />
+                  <Input
+                    disabled={actionManage.action === "edit" ? true : false}
+                    placeholder="ทะเบียนรถ"
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                ยี่ห้อ
-                <Form.Item name="brand">
+                <Form.Item name="brand" label="ยี่ห้อ">
                   <Select
                     size="large"
                     placeholder="ยี่ห้อ"
@@ -715,8 +694,7 @@ function Car() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                รุ่น/ปี
-                <Form.Item name="car_model">
+                <Form.Item name="car_model" label="รุ่น/ปี">
                   <Select
                     size="large"
                     placeholder="รุ่น/ปี"
@@ -728,32 +706,27 @@ function Car() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                สี
-                <Form.Item name="color">
+                <Form.Item name="color" label="สี">
                   <Input placeholder="สี" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                เลขตัวรถ
-                <Form.Item name="modelcode">
+                <Form.Item name="modelcode" label="เลขตัวรถ">
                   <Input placeholder="เลขตัวรถ" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                เลขตัวถัง
-                <Form.Item name="car_chassisno">
+                <Form.Item name="car_chassisno" label="เลขตัวถัง">
                   <Input placeholder="เลขตัวถัง" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                เลขเครื่อง
-                <Form.Item name="car_engineno">
+                <Form.Item name="car_engineno" label="เลขเครื่อง">
                   <Input placeholder="เลขเครื่อง" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                จังหวัด
-                <Form.Item name="province">
+                <Form.Item name="province" label="จังหวัด">
                   <Select
                     size="large"
                     placeholder="จังหวัด"
@@ -765,8 +738,7 @@ function Car() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                ลักษณะรถ
-                <Form.Item name="car_type">
+                <Form.Item name="car_type" label="ลักษณะรถ">
                   <Select
                     size="large"
                     placeholder="ประเภทรถ"
@@ -821,20 +793,17 @@ function Car() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                ความจุกระบอกสูบ
-                <Form.Item name="car_cc">
+                <Form.Item name="car_cc" label="ความจุกระบอกสูบ">
                   <Input placeholder="เลขความจุกระบอกสูบ" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                วิ่งเฉลี่ยวันละ
-                <Form.Item name="avg_daydistance">
+                <Form.Item name="avg_daydistance" label="วิ่งเฉลี่ยวันละ">
                   <Input placeholder="วิ่งเฉลี่ยวันละ" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                ความเร็วในการขับ
-                <Form.Item name="car_speed">
+                <Form.Item name="car_speed" label="ความเร็วในการขับ">
                   <Select
                     size="large"
                     placeholder="ความเร็วในการขับ"
@@ -856,8 +825,7 @@ function Car() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                การบรรทุก
-                <Form.Item name="car_loading">
+                <Form.Item name="car_loading" label="การบรรทุก">
                   <Select
                     size="large"
                     placeholder="การบรรทุก"
@@ -879,8 +847,7 @@ function Car() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={3}>
-                ลมยางล้อหน้า
-                <Form.Item name="front_tire">
+                <Form.Item name="front_tire" label="ลมยางล้อหน้า">
                   <InputNumber
                     style={{
                       width: 117,
@@ -891,8 +858,7 @@ function Car() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={3}>
-                ลมยางล้อหลัง
-                <Form.Item name="back_tire">
+                <Form.Item name="back_tire" label="ลมยางล้อหลัง">
                   <InputNumber
                     style={{
                       width: 117,
@@ -903,8 +869,7 @@ function Car() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                หมายเหตุ
-                <Form.Item name="remark">
+                <Form.Item name="remark" label="หมายเหตุ">
                   <TextArea rows={2} placeholder="หมายเหตุ" />
                 </Form.Item>
               </Col>

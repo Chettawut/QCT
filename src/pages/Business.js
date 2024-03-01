@@ -314,24 +314,34 @@ function Employee() {
         <Form form={formManage} layout="vertical" autoComplete="off">
           <Card>
             <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="รหัสลูกค้าบริษัท" name="businessno" 
-                 rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ รหัสลูกค้าบริษัท ใหม่!",
-                  },
-                ]}>
-                  <Input placeholder="รหัสลูกค้าบริษัท" />
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  label="รหัสลูกค้าบริษัท"
+                  name="businessno"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ รหัสลูกค้าบริษัท ใหม่!",
+                    },
+                  ]}
+                >
+                  <Input
+                    disabled={actionManage.action === "edit" ? true : false}
+                    placeholder="รหัสลูกค้าบริษัท"
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="คำนำหน้าชื่อ" name="title_name"  rules={[
+                <Form.Item
+                  label="คำนำหน้าชื่อ"
+                  name="title_name"
+                  rules={[
                     {
                       required: true,
                       message: "กรุณาใส่ คำนำหน้าชื่อ ใหม่!",
                     },
-                  ]}>
+                  ]}
+                >
                   <Input placeholder="คำนำหน้าชื่อ" />
                 </Form.Item>
               </Col>
@@ -388,6 +398,11 @@ function Employee() {
                   <Input placeholder="มือถือ" />
                 </Form.Item>
               </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item label="โทรสาร" name="fax">
+                  <Input placeholder="โทรสาร" />
+                </Form.Item>
+              </Col>
               <Col
                 xs={24}
                 sm={24}
@@ -434,7 +449,10 @@ function Employee() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={8}>
-                <Form.Item label="รหัสไปรษณีย์ที่อยู่จัดส่งสินค้า" name="shipping_zipcode">
+                <Form.Item
+                  label="รหัสไปรษณีย์ที่อยู่จัดส่งสินค้า"
+                  name="shipping_zipcode"
+                >
                   <Input placeholder="รหัสไปรษณีย์ที่อยู่จัดส่งสินค้า" />
                 </Form.Item>
               </Col>
