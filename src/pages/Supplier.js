@@ -12,24 +12,20 @@ import {
   Modal,
   Form,
   Select,
-  Divider,
-  InputNumber,
   Badge,
-  DatePicker,
   // DatePicker,
 } from "antd";
-import dayjs from 'dayjs';
 import Swal from "sweetalert2";
-import EmpService from "../service/EmpService";
-import { employee } from "../model/emp.model";
-function Employee() {
+import SupService from "../service/Supplier.service";
+import { supplier } from "../model/sup.model";
+function Supplier() {
   const [AllUser, setAllUser] = useState("");
   const [actionManage, setActionManage] = useState({
     action: "add",
     title: "เพิ่มพนักงาน",
     confirmText: "ยืนยัน",
   });
-  const [EmpDetail, setEmpDetail] = useState(employee);
+  const [SupDetail, setSupDetail] = useState(supplier);
   const [formAdd] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -37,9 +33,8 @@ function Employee() {
   const searchInput = useRef(null);
   const [formManage] = Form.useForm();
   useEffect(() => {
-    GetEmp();
+    GetSup();
   }, []);
-  const { TextArea } = Input;
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -157,39 +152,21 @@ function Employee() {
 
   const columns = [
     {
-      title: "รหัสพนักงาน",
-      dataIndex: "empcode",
-      key: "empcode",
+      title: "รหัสผู้ขาย",
+      dataIndex: "supcode",
+      key: "supcode",
       width: "15%",
-      ...getColumnSearchProps("empcode"),
-      sorter: (a, b) => a.empcode.length - b.empcode.length,
+      ...getColumnSearchProps("supcode"),
+      sorter: (a, b) => a.supcode.length - b.supcode.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ชื่อ-นามสกุล",
-      dataIndex: "firstname",
-      key: "firstname",
+      title: "ชื่อผู้ขาย",
+      dataIndex: "supname",
+      key: "supname",
       width: "30%",
-      ...getColumnSearchProps("firstname"),
-      sorter: (a, b) => a.firstname.length - b.firstname.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ชื่อเล่น",
-      dataIndex: "nickname",
-      key: "nickname",
-      width: "15%",
-      ...getColumnSearchProps("nickname"),
-      sorter: (a, b) => a.nickname.length - b.nickname.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ตำแหน่ง",
-      dataIndex: "position",
-      key: "position",
-      width: "15%",
-      ...getColumnSearchProps("position"),
-      sorter: (a, b) => a.position.length - b.position.length,
+      ...getColumnSearchProps("supname"),
+      sorter: (a, b) => a.supname.length - b.supname.length,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -211,7 +188,7 @@ function Employee() {
           icon={<ToolTwoTone twoToneColor="#E74C3C" />}
           style={{ cursor: "pointer" }}
           danger
-          onClick={(e) => showEditModal(text.empcode)}
+          onClick={(e) => showEditModal(text.supcode)}
         >
           แก้ใข
         </Button>
@@ -219,8 +196,8 @@ function Employee() {
     },
   ].filter((item) => !item.hidden);
 
-  const GetEmp = () => {
-    EmpService.getEmp()
+  const GetSup = () => {
+    SupService.getSupplier()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -231,22 +208,18 @@ function Employee() {
   };
 
   const showEditModal = (data) => {
-    EmpService.getSupEmp(data)
+    SupService.getSupSupplier(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          setEmpDetail(data);
+          setSupDetail(data);
           formManage.setFieldsValue(data);
-          formManage.setFieldValue("dateofbirth", dayjs());
-          formManage.setFieldValue("resign_date", dayjs());
-          formManage.setFieldValue("dateofstart", dayjs());
           setActionManage({
             action: "edit",
-            title: "แก้ไขข้อมูลพนักงาน",
+            title: "แก้ไขข้อมูลผู้ขาย",
             confirmText: "แก้ใข",
           });
           setOpenModalManage(true);
-          
         }
       })
       .catch((err) => {});
@@ -254,7 +227,7 @@ function Employee() {
 
   const submitAdd = (dataform) => {
     // console.log(dataform)
-    EmpService.addEmp(dataform)
+    SupService.addSupplier(dataform)
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -265,7 +238,7 @@ function Employee() {
               icon: "success",
             });
 
-            GetEmp();
+            GetSup();
             setOpenModalManage(false);
             formAdd.resetFields();
           } else {
@@ -282,7 +255,7 @@ function Employee() {
   };
 
   const submitEdit = (dataform) => {
-    EmpService.editEmp({ ...EmpDetail, ...dataform })
+    SupService.editSupplier({ ...SupDetail, ...dataform })
       .then(async (res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -292,7 +265,7 @@ function Employee() {
               html: data.message,
               icon: "success",
             });
-            GetEmp();
+            GetSup();
             setOpenModalManage(false);
           } else {
             // alert(data.message)
@@ -313,14 +286,6 @@ function Employee() {
     setOpenModalManage(false);
   };
   ////////////////////////////////
-  const onSearch = (value) => {
-    console.log("search:", value);
-  };
-  const onChange = (value) => {
-    console.log(`selected ${value}`);
-  };
-  const filterOption = (input, option) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const ModalManage = () => {
     return (
       <Modal
@@ -350,116 +315,83 @@ function Employee() {
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item
-                  name="empcode"
-                  label="รหัสพนักงาน"
+                  name="supcode"
+                  label="รหัสผู้ขาย"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณาใส่ รหัสพนักงาน ใหม่!",
+                      message: "กรุณาใส่ รหัสผู้ขาย ใหม่!",
                     },
                   ]}
                 >
                   <Input
                     disabled={actionManage.action === "edit" ? true : false}
-                    placeholder="รหัสพนักงาน"
+                    placeholder="รหัสผู้ขาย"
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item
-                  name="firstname"
-                  label="ชื่อ"
+                  name="supname"
+                  label="ชื่อผู้ขาย"
                   rules={[
                     {
                       required: true,
-                      message: "กรุณาใส่ ชื่อ ใหม่!",
+                      message: "กรุณาใส่ ชื่อผู้ขาย ใหม่!",
                     },
                   ]}
                 >
-                  <Input placeholder="ชื่อ" />
+                  <Input placeholder="ชื่อผู้ขาย" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item
-                  label="นามสกุล"
-                  name="lastname"
-                  rules={[
-                    {
-                      required: true,
-                      message: "กรุณาใส่ นามสกุล ใหม่!",
-                    },
-                  ]}
-                >
-                  <Input placeholder="นามสกุล" />
+                <Form.Item name="taxnumber" label="เลขที่ภาษี">
+                  <Input placeholder="เลขที่ภาษี" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="nickname" label="ชื่อเล่น">
-                  <Input placeholder="ชื่อเล่น" />
+                <Form.Item label="เลขที่อยู่" name="idno">
+                  <Input placeholder="เลขที่อยู่" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="citizen_id" label="เลขประจำตัวประชาชน">
-                  <Input placeholder="เลขประจำตัวประชาชน" />
+                <Form.Item label="ถนน" name="road">
+                  <Input placeholder="ถนน" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="dateofbirth" label="วันเกิด">
-                  <DatePicker
-                    style={{
-                      width: 262,
-                    }}
-                    format={"DD/MM/YYYY"}
-                    size="large"
-                    placeholder="วันเกิด"
-                  />
+                <Form.Item name="subdistrict" label="ตำบล">
+                  <Input placeholder="ตำบล" />
                 </Form.Item>
               </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="district" label="อำเภอ">
+                  <Input placeholder="อำเภอ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="province" label="จังหวัด">
+                  <Input placeholder="จังหวัด" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="zipcode" label="รหัสไปไปรษณีย์">
+                  <Input placeholder="รหัสไปรษณีย์" />
+                </Form.Item>
+              </Col>{" "}
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item name="tel" label="เบอร์โทร">
                   <Input placeholder="เบอร์โทร" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="tel2" label="เบอร์โทร (สำรอง)">
-                  <Input placeholder="เบอร์โทร (สำรอง)" />
+                <Form.Item name="fax" label="โทรสาร">
+                  <Input placeholder="โทรสาร" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={3}>
-                <Form.Item name="marital_status" label="สถานภาพ">
-                  <Select
-                    size="large"
-                    placeholder="สถานภาพ"
-                    showSearch
-                    onChange={onChange}
-                    onSearch={onSearch}
-                    filterOption={filterOption}
-                    options={[
-                      {
-                        value: "โสด",
-                        label: "โสด",
-                      },
-                      {
-                        value: "แต่งงาน",
-                        label: "แต่งงาน",
-                      },
-                      {
-                        value: "หย่า",
-                        label: "หย่า",
-                      },
-                    ]}
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={3}>
-                <Form.Item name="no_of_children" label="จำนวนบุตร">
-                  <InputNumber
-                    style={{
-                      width: 117,
-                    }}
-                    size="large"
-                    placeholder="จำนวนบุตร"
-                  />
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="email" label="อีเมล">
+                  <Input placeholder="อีเมล" />
                 </Form.Item>
               </Col>
               <Col
@@ -474,7 +406,7 @@ function Employee() {
                     : { display: "none" }
                 }
               >
-                <Form.Item label="สถานการใช้งาน" name="active_status">
+                <Form.Item label="สถานการใช้งาน" name="statussup">
                   <Select
                     size="large"
                     options={[
@@ -490,44 +422,6 @@ function Employee() {
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={24}>
-                <Form.Item name="cur_address" label="ที่อยู่">
-                  <TextArea rows={3} placeholder="ที่อยู่" />
-                </Form.Item>
-              </Col>
-              <Divider />
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="education" label="ระดับการศึกษาสูงสุด">
-                  <Input placeholder="ระดับการศึกษาสูงสุด" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="position" label="ตำแหน่ง">
-                  <Input placeholder="ตำแหน่ง" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="dateofstart" label="วันที่เริ่มเข้างาน">
-                  <DatePicker
-                    style={{
-                      width: 262,
-                    }}
-                    size="large"
-                    placeholder="วันที่เริ่มเข้างาน"
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="resign_date" label="วันที่ลาออก">
-                  <DatePicker
-                    style={{
-                      width: 262,
-                    }}
-                    size="large"
-                    placeholder="วันที่ลาออก	"
-                  />
-                </Form.Item>
-              </Col>
             </Row>
           </Card>
         </Form>
@@ -538,19 +432,19 @@ function Employee() {
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
-        <h1>พนักงาน</h1>
+        <h1>ผู้ขาย</h1>
         <Button
           type="primary"
           onClick={() => {
             setActionManage({
               action: "add",
-              title: "เพิ่มพนักงาน",
+              title: "เพิ่มผู้ขาย",
               confirmText: "เพิ่ม",
             });
             setOpenModalManage(true);
           }}
         >
-          เพิ่มพนักงาน
+          เพิ่มผู้ขาย
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
@@ -567,4 +461,4 @@ function Employee() {
   );
 }
 
-export default Employee;
+export default Supplier;

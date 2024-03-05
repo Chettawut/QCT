@@ -82,11 +82,11 @@ const Header = () => {
             {
               label: (
                 <a href="/purchase-order/" rel="noopener noreferrer">
-                  ใบสั่งซื้อ 
+                  ใบสั่งซื้อ
                 </a>
               ),
               key: "menu2_1",
-            },        
+            },
             {
               label: (
                 <a href="/Receivinggoods" rel="noopener noreferrer">
@@ -150,6 +150,14 @@ const Header = () => {
                 </a>
               ),
               key: "menu4_3",
+            },
+            {
+              label: (
+                <a href="/Supplier" rel="noopener noreferrer">
+                  ผู้ขาย
+                </a>
+              ),
+              key: "menu4_8",
             },
             {
               label: (

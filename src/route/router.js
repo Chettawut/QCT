@@ -8,6 +8,7 @@ import Car from "../pages/Car";
 import Business from "../pages/Business";
 import Items from "../pages/Items";
 import Employee from "../pages/Employee";
+import Supplier from "../pages/Supplier";
 import History from "../pages/History";
 import { PO, POAccess, POManage } from "../pages/po/index";
 import Unit from "../pages/Unit";
@@ -36,6 +37,7 @@ const Router = () => {
           <Route path="/History" element={<History />} />
           <Route path="/Items" element={<Items />} />
           <Route path="/Employee" element={<Employee />} />
+          <Route path="/Supplier" element={<Supplier />} />
           <Route path="/Car" element={<Car />} />
           <Route path="/Business" element={<Business />} />
           <Route path="/Receivinggoods" element={<Receivinggoods />} />

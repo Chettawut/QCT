@@ -210,7 +210,7 @@ const POAccess = () => {
       <Col span={12} style={{ paddingInline: 0 }}>
         <Flex gap={4} justify="end">
           <Button
-            size="small"
+            size="large"
             className="bn-action bn-center bn-primary-outline justify-center"
             icon={<LuPackagePlus style={{ fontSize: ".9rem" }} />}
             onClick={() => {
@@ -224,7 +224,7 @@ const POAccess = () => {
     </Flex>
   );
   return (
-    <div className="pilot-scale-access" id="area">
+    <div className="pilot-scale-access" id="area" style={{padding: 20}} >
       <Space
         direction="vertical"
         size="middle"

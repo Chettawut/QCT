@@ -349,14 +349,14 @@ function POManage() {
 
   return (
     <Spin spinning={loading}>
-      <div id="packing-set-manage" className="px-0 sm:px-0 md:px-8 lg:px-8">
+      <div id="packing-set-manage" className="px-0 sm:px-0 md:px-8 lg:px-8" style={{paddingLeft: 100, paddingTop: 20}}>
         <Space direction="vertical" className="flex gap-4">
           {SectionTop}
           <Flex className="width-100" vertical gap={4}>
             <Divider orientation="left" className="!my-0">
               Purchase Order
             </Divider>
-            <Card style={{ backgroundColor: "#f0f0f0" }}>
+            <Card>
               <Form form={form} layout="vertical" autoComplete="off">
                 <Row gutter={[8, 8]} className="px-4 sm:px-0 md:px-0 lg:px-0">
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
