@@ -54,15 +54,15 @@ function Car() {
 
   const GetModel = () => {
     ModelService.getAllModel()
-    .then((res) => {
-      let { status, data } = res;
-      if (status === 200) {
-        setOptionModel(data);
-      }
-    })
-    .catch((err) => {});
+      .then((res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          setOptionModel(data);
+        }
+      })
+      .catch((err) => {});
   };
-  
+
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -335,12 +335,6 @@ function Car() {
     setOpenModalManage(false);
   };
   ////////////////////////////////
-  const onSearch = (value) => {
-    console.log("search:", value);
-  };
-  const onChange = (value) => {
-    console.log(`selected ${value}`);
-  };
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const ModalManage = () => {
@@ -367,12 +361,17 @@ function Car() {
             });
         }}
       >
-        <Form form={formManage} layout="vertical" >
+        <Form form={formManage} layout="vertical">
           <Card>
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item name="business_car" label="ลักษณะรถ">
-                  <Select size="large" defaultValue="รถบริษัท" options={[
+                  <Select
+                    size="large"
+                    defaultValue="รถบริษัท"
+                    showSearch
+                    filterOption={filterOption}
+                    options={[
                       {
                         value: "0",
                         label: "รถส่วนบุคคล",
@@ -381,8 +380,8 @@ function Car() {
                         value: "1",
                         label: "รถบริษัท",
                       },
-                    ]}>
-                  </Select>
+                    ]}
+                  ></Select>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -458,8 +457,6 @@ function Car() {
                     size="large"
                     placeholder="ยี่ห้อ"
                     showSearch
-                    onChange={onChange}
-                    onSearch={onSearch}
                     filterOption={filterOption}
                     options={[
                       {
@@ -720,17 +717,18 @@ function Car() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item name="car_model" label="รุ่น/ปี">
-                  <Select 
-                  size={"large"}
-                  value={optionValueModel}
-                  placeholder="รุ่น/ปี"
-                  onChange={(value) => setOptionValueModel(value)}
-                  onSearch={onSearch}
-                  options={optionModel.map((item) => ({
-                    value: item.modelcode,
-                    label: item.modelname,
-                  }))}
-                ></Select>
+                  <Select
+                    size={"large"}
+                    value={optionValueModel}
+                    placeholder="รุ่น/ปี"
+                    showSearch
+                    filterOption={filterOption}
+                    onChange={(value) => setOptionValueModel(value)}
+                    options={optionModel.map((item) => ({
+                      value: item.modelcode,
+                      label: item.modelname,
+                    }))}
+                  ></Select>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -759,8 +757,6 @@ function Car() {
                     size="large"
                     placeholder="จังหวัด"
                     showSearch
-                    onChange={onChange}
-                    onSearch={onSearch}
                     filterOption={filterOption}
                     options={PROVINCE_OPTIONS}
                   />
@@ -772,8 +768,6 @@ function Car() {
                     size="large"
                     placeholder="ประเภทรถ"
                     showSearch
-                    onChange={onChange}
-                    onSearch={onSearch}
                     filterOption={filterOption}
                     options={[
                       {
@@ -836,6 +830,8 @@ function Car() {
                   <Select
                     size="large"
                     placeholder="ความเร็วในการขับ"
+                    showSearch
+                    filterOption={filterOption}
                     options={[
                       {
                         value: "ไม่เกิน 100 กม./ชม.",
@@ -858,6 +854,8 @@ function Car() {
                   <Select
                     size="large"
                     placeholder="การบรรทุก"
+                    showSearch
+                    filterOption={filterOption}
                     options={[
                       {
                         value: "ไม่บรรทุก,โดยสารเท่านั้น",

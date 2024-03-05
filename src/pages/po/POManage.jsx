@@ -12,6 +12,7 @@ import {
   Table,
   message,
   Spin,
+  Select,
 } from "antd";
 import { Form, DatePicker } from "antd";
 import { ButtonBack } from "../../components/button";
@@ -19,9 +20,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ModalItem } from "../../components/modal/item/modal-packaging";
 
 import { SaveFilled, SearchOutlined } from "@ant-design/icons";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 import POService from "../../service/PO.service";
+import UnitService from "../../service/Unit.service";
 import { delay } from "../../utils/util";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { LuPackageSearch } from "react-icons/lu";
@@ -43,6 +45,7 @@ function POManage() {
 
   const [formDetail, setFormDetail] = useState({});
   const [listDetail, setListDetail] = useState([]);
+  const [listOption, setListOption] = useState([]);
 
   const [openModalPackaging, setOpenModalPackaging] = useState(false);
   const [openModalPackingSetGroup, setOpenModalPackingSetGroup] =
@@ -57,13 +60,14 @@ function POManage() {
       ...m,
       stcode: m?.stcode || null,
       stname: m?.stname || null,
-      amount: m?.amount || null,
+      amount: 1,
       unit: m?.unit || null,
       price: m?.price || null,
-      discount: m?.discount || null,
+      discount: 0,
+      totalprice: 1 * m?.price,
     }));
 
-    console.log(item);
+    // console.log(item);
     setListDetail(item);
   };
 
@@ -108,7 +112,7 @@ function POManage() {
     });
   };
 
-  const handleSave = (row) => {    
+  const handleSave = (row) => {
     const newData = (r) => {
       const itemDetail = [...listDetail];
       const newData = [...itemDetail];
@@ -153,43 +157,82 @@ function POManage() {
     ) : null;
   };
 
+  const getlistOption = () => {
+    return UnitService.getAllUnit().then((res) => {
+      let { status, data } = res;
+      if (status === 200) {
+        setListOption(
+          data.map((item) => ({
+            value: item.unitname,
+            label: item.unitname,
+          }))
+        );
+      } else return [];
+    });
+  };
+
+  const handleSelectChange = (value, record) => {
+    // console.log(value,' ',record)
+    const updatedDataSource = listDetail.map((item) => {
+      console.log(item  ,' /X ',record)
+      if (item.stcode === record.stcode) {
+        return { ...item, unit: value };
+      }
+      return item;
+    });
+    setListDetail(updatedDataSource);
+  };
+
   const handleClose = async () => {
     navigate("/purchase-order", { replace: true });
     await delay(300);
     console.clear();
   };
 
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+
   const getsupData = (v) => {
-    POServices.get( v ).then( async res => {
-      const { data : { header, detail } } = res.data;
+    POServices.get(v)
+      .then(async (res) => {
+        const {
+          data: { header, detail },
+        } = res.data;
 
-      const init = {...header,podate: dayjs(header.podate),
-        deldate: dayjs(header.deldate)};
+        const init = {
+          ...header,
+          podate: dayjs(header.podate),
+          deldate: dayjs(header.deldate),
+        };
 
-      
+        setFormDetail(init);
+        form.setFieldsValue({ ...init });
 
-      setFormDetail(init);
-      form.setFieldsValue({...init});
-
-      setListDetail([...detail.map( r => {
-        console.log(r)
-        return {
-          ...r,
-          totalprice : ( Number(r?.amount || 0) * Number(r?.price || 0) ) - (1 - (Number( r?.discount || 0 )/100) ) || 0
-        }
-      })]);
-
-    }).catch( err => {
-      console.log(err);
-      message.error("Error getting infomation Purchase Order.")
-    }).finally(() => {
-      setTimeout(() => {
-        setLoading(false);
-      }, 300);
-    });
+        setListDetail([
+          ...detail.map((r) => {
+            // console.log(r);
+            return {
+              ...r,
+              totalprice:
+                Number(r?.amount || 0) * Number(r?.price || 0) -
+                  (1 - Number(r?.discount || 0) / 100) || 0,
+            };
+          }),
+        ]);
+      })
+      .catch((err) => {
+        console.log(err);
+        message.error("Error getting infomation Purchase Order.");
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setLoading(false);
+        }, 300);
+      });
   };
 
   useEffect(() => {
+    getlistOption();
     if (!config) {
       handleClose();
       return;
@@ -221,7 +264,12 @@ function POManage() {
     };
   }, []);
 
-  const column = columnsDetailsEditable(handleSave, { handleAction });
+  const column = columnsDetailsEditable(handleSave, {
+    handleAction,
+    filterOption,
+    listOption,
+    handleSelectChange,
+  });
 
   const SectionTop = (
     <Row
@@ -284,7 +332,7 @@ function POManage() {
             className="bn-center justify-center bn-primary-outline"
             onClick={() => setOpenModalPackaging(true)}
           >
-            Select Packaging
+            Select Product
           </Button>
         </Flex>
       </Col>
@@ -328,7 +376,7 @@ function POManage() {
                         <Input
                           readOnly
                           placeholder="Choose รหัสผู้ขาย"
-                          value={ !!formDetail.supcode ? formDetail.supcode : ""}  
+                          value={!!formDetail.supcode ? formDetail.supcode : ""}
                         />
                         <Button
                           type="primary"
@@ -342,9 +390,7 @@ function POManage() {
                   </Col>
                   <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                     <Form.Item label="ชื่อผู้ขาย" name="supname">
-                      <Input
-                        disabled
-                      />
+                      <Input disabled />
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
@@ -368,7 +414,11 @@ function POManage() {
                         { required: true, message: "Please input your data!" },
                       ]}
                     >
-                      <DatePicker size="large" style={{ width: "100%" }} />
+                      <DatePicker
+                        size="large"
+                        defaultValue={dayjs()}
+                        style={{ width: "100%" }}
+                      />
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
@@ -379,14 +429,51 @@ function POManage() {
                         { required: true, message: "Please input your data!" },
                       ]}
                     >
-                      <DatePicker size="large" style={{ width: "100%" }} />
+                      <DatePicker
+                        size="large"
+                        defaultValue={dayjs()}
+                        style={{ width: "100%" }}
+                      />
                     </Form.Item>
                   </Col>
-                  <FormCol50 label="การชำระเงิน" name="payment">
-                    <Input placeholder="Enter Packing Set Name" />
-                  </FormCol50>
+                  <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
+                    <Form.Item label="การชำระเงิน" name="payment">
+                      <Select
+                        size="large"
+                        showSearch
+                        defaultValue={"เงินสด"}
+                        filterOption={filterOption}
+                        options={[
+                          {
+                            value: "เงินสด",
+                            label: "เงินสด",
+                          },
+                          {
+                            value: "30 วัน",
+                            label: "30 วัน",
+                          },
+                          {
+                            value: "45 วัน",
+                            label: "45 วัน",
+                          },
+                          {
+                            value: "60 วัน",
+                            label: "60 วัน",
+                          },
+                          {
+                            value: "90 วัน",
+                            label: "90 วัน",
+                          },
+                          {
+                            value: "120 วัน",
+                            label: "120 วัน",
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                  </Col>
                   <FormCol50 label="ใบเสนอราคา" name="poqua">
-                    <Input placeholder="Enter Packing Set Name" />
+                    <Input />
                   </FormCol50>
                   <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
                     <Form.Item label="Remark" name="remark">

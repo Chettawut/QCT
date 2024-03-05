@@ -1,18 +1,26 @@
-import { Space, Typography } from "antd"; 
-// import { Typography } from "antd"; 
-import { Button } from "antd";
+import { Space, Typography } from "antd";
+// import { Typography } from "antd";
+import { Button, Select } from "antd";
 import { Popconfirm } from "antd";
-import { EditOutlined, QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons"; 
+import {
+  EditOutlined,
+  QuestionCircleOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 // import dayjs from 'dayjs';
-import { EditableCell, EditableRow } from "../../components/table/TableEditAble";
+import {
+  EditableCell,
+  EditableRow,
+} from "../../components/table/TableEditAble";
 // import { formatCommaNumber } from '../../utils/util';
+
 /** get sample column */
-export const accessColumn = ({handleEdit, handleDelete}) => [
+export const accessColumn = ({ handleEdit, handleDelete }) => [
   {
     title: "เลขที่ PO",
     key: "pocode",
     dataIndex: "pocode",
-    align: "left",  
+    align: "left",
     width: 210,
     ellipsis: {
       showTitle: false,
@@ -21,28 +29,28 @@ export const accessColumn = ({handleEdit, handleDelete}) => [
   {
     title: "วันที่ออก PO",
     dataIndex: "podate",
-    key: "podate",   
-    align: 'right',
-    className:'!pe-5',
+    key: "podate",
+    align: "right",
+    className: "!pe-5",
   },
   {
     title: "รหัสพัสดุ",
     dataIndex: "stcode",
-    key: "stcode",   
-    align: 'right',
-    className:'!pe-5',
+    key: "stcode",
+    align: "right",
+    className: "!pe-5",
   },
   {
     title: "รายการสินค้า",
     dataIndex: "stname",
-    key: "stname",   
-    align: 'right',
-    className:'!pe-5',
+    key: "stname",
+    align: "right",
+    className: "!pe-5",
   },
   {
     title: "ผู้ขาย",
     dataIndex: "supname",
-    key: "supname", 
+    key: "supname",
     width: 160,
     ellipsis: {
       showTitle: false,
@@ -51,64 +59,67 @@ export const accessColumn = ({handleEdit, handleDelete}) => [
   {
     title: "สถานะ",
     dataIndex: "active_status",
-    key: "active_status", 
+    key: "active_status",
   },
   {
     title: "Action",
-    key: "operation", 
-    fixed: 'right',
+    key: "operation",
+    fixed: "right",
     width: 90,
     render: (text, record) => (
-      <Space >
+      <Space>
         <Button
-          icon={<EditOutlined />} 
-          className='bn-primary-outline'
-          style={{ cursor: "pointer", display: 'flex', alignItems: 'center', justifyContent: 'center'}}
-          onClick={(e) => handleEdit(record) }
+          icon={<EditOutlined />}
+          className="bn-primary-outline"
+          style={{
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onClick={(e) => handleEdit(record)}
           size="small"
         />
-        {/* <Button
-          icon={<PrinterOutlined />} 
-          className='bn-warning-outline'
-          style={{ cursor: "pointer", display: 'flex', alignItems: 'center', justifyContent: 'center'}}
-          onClick={(e) => handleView(record) }
-          size="small"
-        /> */}
-        <Popconfirm 
+        <Popconfirm
           placement="topRight"
-          title="Sure to delete?"  
+          title="Sure to delete?"
           description="Are you sure to delete this packaging?"
-          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+          icon={<QuestionCircleOutlined style={{ color: "red" }} />}
           onConfirm={() => handleDelete(record)}
         >
           <Button
             icon={<DeleteOutlined />}
             danger
-            style={{ cursor: "pointer", display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
+            style={{
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
             size="small"
           />
         </Popconfirm>
         {/* <ButtonAttachFiles code={record.srcode} refs='Sample Request' showExpire={true} /> */}
       </Space>
     ),
-  }, 
-]
+  },
+];
 
 export const pkmaster = {
-  pkcode : null,
-  pkname : null,
-  pknameTH : null,
-  pktypeid : null,
-  expscode : null,
-  expsname : null,
-  price : 0,
-  transport : 0,
-  lost : 0,
-  cost : 0,
-  unitid : null,
-  supcode : null,
-  remark : null,
-}
+  pkcode: null,
+  pkname: null,
+  pknameTH: null,
+  pktypeid: null,
+  expscode: null,
+  expsname: null,
+  price: 0,
+  transport: 0,
+  lost: 0,
+  cost: 0,
+  unitid: null,
+  supcode: null,
+  remark: null,
+};
 
 /** export component for edit table */
 export const componentsEditable = {
@@ -116,49 +127,82 @@ export const componentsEditable = {
 };
 
 /** get column for edit table parameter */
-export const editColumns = ({ handleAction }) => {
+export const editColumns = ({ handleAction, filterOption, listOption,handleSelectChange }) => {
   return [
     {
       title: "ลำดับ",
       ellipsis: true,
-      className:'max-w-52',
+      className: "max-w-52",
       key: "index",
       dataIndex: "index",
       align: "left",
-      render:(item, record, index)=>(<>{index+1}</>)
+      render: (item, record, index) => <>{index + 1}</>,
     },
     {
       title: "รหัสสินค้า",
       ellipsis: true,
-      className:'max-w-52',
+      className: "max-w-52",
       key: "stcode",
       dataIndex: "stcode",
       align: "center",
-      width:100
+      width: 100,
     },
     {
       title: "ชื่อสินค้า",
       key: "stname",
       dataIndex: "stname",
-      align: "left",       
-      width:300
+      align: "left",
+      width: 300,
     },
     {
       title: "จำนวน",
       editable: true,
-      align: 'right',
+      align: "right",
       key: "amount",
       dataIndex: "amount",
-      render: (v) => v || 1 
     },
+    
     {
-      title: "หน่วย",
-      align: "center",
-      editable: false,
-      required: true,
-      key: "unit",
-      dataIndex: "unit",  
+      title: 'หน่วย',
+      dataIndex: 'unit',
+      key: 'unit',
+      render: (text, record) => (
+          <Select
+            showSearch
+            style={{ height: 40,width: 130 }}
+            placeholder="เลือกขนาดสินค้า"
+            filterOption={filterOption}
+            options={listOption}
+            value={record.unit} 
+            onChange={(value) => handleSelectChange(value, record)}
+          >
+          </Select>
+      ),
     },
+    // {
+    //   title: "หน่วย",
+    //   align: "center",
+    //   required: true,
+    //   key: "unit",
+    //   dataIndex: "unit",
+    //   width: 200,
+    //   render: (_, record) => (
+        
+    //       <Select
+    //       name="unit"
+    //         size="large"
+    //         placeholder="หน่วย"
+    //         showSearch
+    //         filterOption={filterOption}
+    //         options={listOption}
+    //         onChange={(...record) => record.unitcode}
+    //         // options={
+
+    //         // })}
+    //       />
+        
+    //   ),
+    // },
     {
       title: "ราคาซื้อ",
       align: "right",
@@ -168,13 +212,13 @@ export const editColumns = ({ handleAction }) => {
       dataIndex: "price",
     },
     {
-      title: (<>ส่วนลด (%)</>),
+      title: <>ส่วนลด (%)</>,
       align: "right",
-      width: 160, 
+      width: 160,
       editable: true,
       key: "discount",
       dataIndex: "discount",
-      render: (v) => v||0
+      render: (v) => v || 0,
     },
     {
       title: "จำนวนเงิน",
@@ -184,10 +228,8 @@ export const editColumns = ({ handleAction }) => {
       key: "totalprice",
       dataIndex: "totalprice",
       render: (v, row) => {
-      return (
-        <Typography>{(row.amount*row.price)}</Typography>
-      );
-    }
+        return <Typography>{row.amount * row.price}</Typography>;
+      },
     },
     {
       title: "ตัวเลือก",
@@ -195,32 +237,37 @@ export const editColumns = ({ handleAction }) => {
       key: "operation",
       dataIndex: "operation",
       render: (_, record, idx) => handleAction(record),
-      width: '90px',
-      fixed: 'right',
+      width: "90px",
+      fixed: "right",
     },
-  ]
+  ];
 };
 
-export const columnsDetailsEditable = (handleSave, {handleAction, nameOption} ) =>{
-  const col = editColumns({handleAction, nameOption});
+export const columnsDetailsEditable = (
+  handleSave,
+  { handleAction, nameOption, listOption,handleSelectChange }
+) => {
+  const col = editColumns({ handleAction, nameOption, listOption,handleSelectChange });
   return col.map((col, ind) => {
-      if (!col.editable) { return col; }
-      return {
-          ...col,
-          onCell: (record) => {
-            // console.log(record);
-            return {
-              record,
-              editable: col.editable,
-              dataIndex: col.dataIndex,
-              title: col.title,
-              handleSave,
-              fieldType: !!col?.textArea,
-              required: !!col?.required,
-              type: col?.type || 'input',
-              autocompleteOption: col.autocompleteOption
-            }
-          },
-      };
-  }); 
-}
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record) => {
+        // console.log(record);
+        return {
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave,
+          fieldType: !!col?.textArea,
+          required: !!col?.required,
+          type: col?.type || "input",
+          autocompleteOption: col.autocompleteOption,
+        };
+      },
+    };
+  });
+};
