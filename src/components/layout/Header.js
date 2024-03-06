@@ -30,7 +30,6 @@ const Header = () => {
     {
       label: "ระบบงานขาย",
       key: "menu1",
-      disabled: true,
       icon: <AuditOutlined />,
       children: [
         {
@@ -76,7 +75,6 @@ const Header = () => {
       label: "คลังสินค้า",
       key: "menu2",
       icon: <ShopOutlined />,
-      disabled: true,
       children: [
         {
           type: "group",

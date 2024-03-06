@@ -174,7 +174,7 @@ function POManage() {
   const handleSelectChange = (value, record) => {
     // console.log(value,' ',record)
     const updatedDataSource = listDetail.map((item) => {
-      console.log(item  ,' /X ',record)
+      console.log(item, " /X ", record);
       if (item.stcode === record.stcode) {
         return { ...item, unit: value };
       }
@@ -278,7 +278,7 @@ function POManage() {
     >
       <Col span={12} className="p-0">
         <Flex gap={4} justify="start">
-          <ButtonBack target="/purchase-order" />
+          <ButtonBack target="/good-receive" />
         </Flex>
       </Col>
       {/* <Col span={12} style={{paddingInline:0}}>  
@@ -297,7 +297,7 @@ function POManage() {
     >
       <Col span={12} className="p-0">
         <Flex gap={4} justify="start">
-          <ButtonBack target="/purchase-order" />
+          <ButtonBack target="/good-receive" />
         </Flex>
       </Col>
       <Col span={12} style={{ paddingInline: 0 }}>
@@ -332,7 +332,7 @@ function POManage() {
             className="bn-center justify-center bn-primary-outline"
             onClick={() => setOpenModalPackaging(true)}
           >
-            Select Product
+            Select PO
           </Button>
         </Flex>
       </Col>
@@ -349,12 +349,16 @@ function POManage() {
 
   return (
     <Spin spinning={loading}>
-      <div id="packing-set-manage" className="px-0 sm:px-0 md:px-8 lg:px-8" style={{paddingLeft: 100, paddingTop: 20}}>
+      <div
+        id="packing-set-manage"
+        className="px-0 sm:px-0 md:px-8 lg:px-8"
+        style={{ paddingLeft: 100, paddingTop: 20 }}
+      >
         <Space direction="vertical" className="flex gap-4">
           {SectionTop}
           <Flex className="width-100" vertical gap={4}>
             <Divider orientation="left" className="!my-0">
-              Purchase Order
+              Good Receive
             </Divider>
             <Card>
               <Form form={form} layout="vertical" autoComplete="off">
@@ -408,7 +412,7 @@ function POManage() {
                   </Col>
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
                     <Form.Item
-                      label="วันที่สั่งซื้อ :"
+                      label="วันที่รับสินค้า :"
                       name="podate"
                       rules={[
                         { required: true, message: "Please input your data!" },
@@ -421,9 +425,12 @@ function POManage() {
                       />
                     </Form.Item>
                   </Col>
+                  <FormCol50 label="เลขที่ Invoice" name="poqua">
+                    <Input />
+                  </FormCol50>
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
                     <Form.Item
-                      label="วันที่นัดส่งของ :"
+                      label="วันที่ออก Invoice :"
                       name="deldate"
                       rules={[
                         { required: true, message: "Please input your data!" },
@@ -472,9 +479,6 @@ function POManage() {
                       />
                     </Form.Item>
                   </Col>
-                  <FormCol50 label="ใบเสนอราคา" name="poqua">
-                    <Input />
-                  </FormCol50>
                   <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
                     <Form.Item label="Remark" name="remark">
                       <Input.TextArea rows={3} />
@@ -486,7 +490,7 @@ function POManage() {
           </Flex>
           <Flex className="width-100" vertical gap={4}>
             <Divider orientation="left" className="!my-0">
-              Purchase Order Detail
+              Good Receive Detail
             </Divider>
             <Card style={{ backgroundColor: "#f0f0f0" }}>
               <Table
