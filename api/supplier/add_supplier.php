@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
-
+date_default_timezone_set("Asia/Bangkok");
 include '../conn.php';
 
 $sql = "SELECT number as supcode FROM `supcode` ";
@@ -15,11 +15,12 @@ extract($res, EXTR_OVERWRITE, "_");
 
 $code = sprintf("%05s", ($supcode + 1));
 
-$strSQL = "INSERT INTO supplier (`supcode`, `supname`, `idno`, `road`, `subdistrict`, `district`, `province`, `zipcode`, `tel`, `fax`, `taxnumber`, `email`, `active_status`) ";
-
-$strSQL .= " VALUES ('" . $code . "','" . $_POST["Addsupname"] . "','" . $_POST["Addidno"] . "','" . $_POST["Addroad"] . "','" . $_POST["Addsubdistrict"] . "' ";
-$strSQL .= " ,'" . $_POST["Adddistrict"] . "','" . $_POST["Addprovince"] . "','" . $_POST["Addzipcode"] . "','" . $_POST["Addtel"] . "','" . $_POST["Addfax"] . "' ";
-$strSQL .= " ,'" . $_POST["Addtaxnumber"] . "','" . $_POST["Addemail"] . "','Y' ";
+$strSQL = "INSERT INTO supplier (`supcode`, `supname`, `idno`, `road`, `subdistrict`, `district`, `province`, `zipcode`, `tel`, `fax`, `taxnumber`, `email`, `active_status` ";
+$strSQL .= ",`created_date`) ";
+$strSQL .= " VALUES ('" . $code . "','" . $_POST["supname"] . "','" . $_POST["idno"] . "','" . $_POST["road"] . "','" . $_POST["subdistrict"] . "' ";
+$strSQL .= " ,'" . $_POST["district"] . "','" . $_POST["province"] . "','" . $_POST["zipcode"] . "','" . $_POST["tel"] . "','" . $_POST["fax"] . "' ";
+$strSQL .= " ,'" . $_POST["taxnumber"] . "','" . $_POST["email"] . "','Y' ";
+$strSQL .= ",'" . date("Y-m-d H:i:s")."')";
 
 $stmt2 = $conn->prepare($strSQL);
 
@@ -33,7 +34,7 @@ if ($stmt2->execute()) {
 
 
 if ($stmt3->execute()) 
-    $response = ['status' => 1, 'message' => 'เพิ่มผู้ขาย '.$_POST["Addsupcode"].' สำเร็จ'];
+    $response = ['status' => 1, 'message' => 'เพิ่มผู้ขาย '.$_POST["supcode"].' สำเร็จ'];
 else 
     $response = ['status' => 0, 'message' => 'Error! ติดต่อโปรแกรมเมอร์'];
 

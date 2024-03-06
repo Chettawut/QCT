@@ -7,10 +7,9 @@ header("Access-Control-Allow-Methods: *");
 
 include '../conn.php';
 
-$sql = "SELECT a.*,b.typename ";
-$sql .= " ,b.typename ";
+$sql = " SELECT a.*,b.typename ";
 $sql .= " FROM `items` as a ";
-$sql .= " inner join `itemtype` as b on (a.typecode=b.typecode) ";
+$sql .= " left outer join `itemtype` as b on (a.typecode=b.typecode) ";
 $sql .= " where a.stcode = '" . $_POST['idcode'] . "'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();

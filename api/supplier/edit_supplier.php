@@ -10,19 +10,18 @@
         
     $action_datetime = date("Y-m-d H:i:s");
 
-include '../conn.php';
 
 $strSQL = "UPDATE supplier SET ";
-$strSQL .= " supname='" . $_POST["Editsupname"] . "',idno='" . $_POST["Editidno"] . "',road='" . $_POST["Editroad"] . "' ";
-$strSQL .= ",subdistrict='" . $_POST["Editsubdistrict"] . "',district='" . $_POST["Editdistrict"] . "',province='" . $_POST["Editprovince"] . "' ";
-$strSQL .= ",zipcode='" . $_POST["Editzipcode"] . "',tel='" . $_POST["Edittel"] . "',fax='" . $_POST["Editfax"] . "' ";
-$strSQL .= ",taxnumber='" . $_POST["Edittaxnumber"] . "',email='" . $_POST["Editemail"] . "',active_status='" . $_POST["Editstatussup"] . "' ";
-$strSQL .= ",update_date='".$action_datetime."' ";
-$strSQL .= "WHERE supcode= '" . $_POST["Editsupcode"] . "' ";
+$strSQL .= " supname='" . $_POST["supname"] . "',idno='" . $_POST["idno"] . "',road='" . $_POST["road"] . "' ";
+$strSQL .= ",subdistrict='" . $_POST["subdistrict"] . "',district='" . $_POST["district"] . "',province='" . $_POST["province"] . "' ";
+$strSQL .= ",zipcode='" . $_POST["zipcode"] . "',tel='" . $_POST["tel"] . "',fax='" . $_POST["fax"] . "' ";
+$strSQL .= ",taxnumber='" . $_POST["taxnumber"] . "',email='" . $_POST["email"] . "',active_status='" . $_POST["statussup"] . "' ";
+$strSQL .= ",updated_date='".$action_datetime."' ";
+$strSQL .= "WHERE supcode= '" . $_POST["supcode"] . "' ";
 $stmt = $conn->prepare($strSQL);
 
 if ($stmt->execute())
-    $response = ['status' => 1, 'message' => 'แก้ไขผู้ขาย ' . $_POST["Editsupname"] . ' สำเร็จ'];
+    $response = ['status' => 1, 'message' => 'แก้ไขผู้ขาย ' . $_POST["supname"] . ' สำเร็จ'];
 else
     $response = ['status' => 0, 'message' => 'Error! ติดต่อโปรแกรมเมอร์'];
 

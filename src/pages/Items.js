@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
-import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { SearchOutlined, ToolTwoTone,ClearOutlined } from "@ant-design/icons";
 import {
   Button,
   Input,
@@ -12,13 +12,13 @@ import {
   Collapse,
   Checkbox,
   Tabs,
-  DatePicker,
+  message,
   Divider,
   Form,
   Badge,
   Select,
+  Flex,
 } from "antd";
-import Highlighter from "react-highlight-words";
 import Swal from "sweetalert2";
 // COMPONENT
 // SERVICE
@@ -26,13 +26,11 @@ import ItemService from "../service/Item.service";
 import ItemTypeService from "../service/ItemType.service";
 import UnitService from "../service/Unit.service";
 
-
 import { items } from "../model/items.model";
 
 const Items = () => {
   const { TextArea } = Input;
   const [AllItems, setAllItems] = useState("");
-  const searchInput = useRef(null);
 
   // MODAL CONTROLLER
   const [openModalManage, setOpenModalManage] = useState(false);
@@ -42,172 +40,72 @@ const Items = () => {
     confirmText: "Create",
   });
 
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
   const [itemsDetail, setItemsDetail] = useState(items);
   const [optionType, setOptionType] = useState([]);
   const [optionValueType, setOptionValueType] = useState();
   const [optionUnit, setOptionUnit] = useState([]);
   const [optionValueUnit, setOptionValueUnit] = useState();
+  const [form] = Form.useForm();
+  const [activeSearch, setActiveSearch] = useState([]);
 
   const [formAdd] = Form.useForm();
   const [formManage] = Form.useForm();
 
   useEffect(() => {
     GetItems();
-    GetItemType();    
+    GetItemType();
     GetUnit();
-    
   }, []);
 
-  const GetItems = () => {
-    ItemService.getItem()
+  const GetItems = (data) => {
+    console.log(data)
+      ItemService.getItem(data).then( res => {
+        const {data} = res.data;
+
+        setAllItems(data);
+    }).catch( err => {
+        console.log(err);
+        message.error("Request error!");
+    });
+  };
+
+  const GetItemType = () => {
+    ItemTypeService.getAllItemsType()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          setAllItems(data);
+          setOptionType(data);
         }
       })
       .catch((err) => {});
   };
 
-  const GetItemType = () => {
-    ItemTypeService.getAllItemsType()
-    .then((res) => {
-      let { status, data } = res;
-      if (status === 200) {
-        setOptionType(data);
-      }
-    })
-    .catch((err) => {});
-  };
-
   const GetUnit = () => {
     UnitService.getAllUnit()
-    .then((res) => {
-      let { status, data } = res;
-      if (status === 200) {
-        setOptionUnit(data);
-      }
+      .then((res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          setOptionUnit(data);
+        }
+      })
+      .catch((err) => {});
+  };
+
+  const handleSearch = () => {
+    form.validateFields().then( v => {
+        const data = {...v}; 
+
+        GetItems(data);
+    }).catch( err => {
+        console.warn(err);
     })
-    .catch((err) => {});
-  };
+}
 
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
+  const handleClear = () => {
+    form.resetFields();
 
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText("");
+    handleSearch();
   };
-
-  const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-      close,
-    }) => (
-      <div
-        style={{
-          padding: 8,
-        }}
-        onKeyDown={(e) => e.stopPropagation()}
-      >
-        <Input
-          ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{
-            marginBottom: 8,
-            display: "block",
-          }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{
-              width: 90,
-              height: 40,
-            }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
-            size="small"
-            style={{
-              width: 90,
-              height: 40,
-            }}
-          >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              close();
-            }}
-          >
-            close
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined
-        style={{
-          color: filtered ? "#1677ff" : undefined,
-        }}
-      />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
-      }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{
-            backgroundColor: "#ffc069",
-            padding: 0,
-          }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
-  });
 
   const columns = [
     {
@@ -215,45 +113,30 @@ const Items = () => {
       dataIndex: "stcode",
       key: "stcode",
       width: "20%",
-      ...getColumnSearchProps("stname"),
-      sorter: (a, b) => a.stname.length - b.stname.length,
-      sortDirections: ["descend", "ascend"],
     },
     {
       title: "Item Name",
       dataIndex: "stname",
       key: "stname",
       width: "20%",
-      ...getColumnSearchProps("stname"),
-      sorter: (a, b) => a.stname.length - b.stname.length,
-      sortDirections: ["descend", "ascend"],
     },
     {
       title: "Item Type",
       dataIndex: "typename",
       key: "typename",
       width: "20%",
-      ...getColumnSearchProps("typename"),
-      sorter: (a, b) => a.typename.length - b.typename.length,
-      sortDirections: ["descend", "ascend"],
     },
     {
       title: "Unit",
       dataIndex: "unit",
       key: "unit",
       width: "20%",
-      ...getColumnSearchProps("unit"),
-      sorter: (a, b) => a.unit.length - b.unit.length,
-      sortDirections: ["descend", "ascend"],
     },
     {
       title: "สถานะการใช้งาน",
       dataIndex: "statusitem",
       key: "statusitem",
       width: "20%",
-      ...getColumnSearchProps("statusitem"),
-      sorter: (a, b) => a.statusitem.length - b.statusitem.length,
-      sortDirections: ["descend", "ascend"],
       render: (data) => (
         <div>
           {data === "Y" ? (
@@ -377,6 +260,54 @@ const Items = () => {
     document.body.style = "overflow: visible !important;";
   };
 
+  const CollapseItemSearch = () => {
+    return (
+      <>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="Item Code" name="stcode" onChange={handleSearch}>
+              <Input placeholder="Enter Item Code." />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="Item Name" name="stname" onChange={handleSearch}>
+              <Input placeholder="Enter Item Name." />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            {/* Ignore */}
+          </Col>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            <Flex justify="flex-end" gap={8}>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                htmlType="submit"
+                icon={<SearchOutlined />}
+                onClick={() => handleSearch()}
+              >
+                Search
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                danger
+                icon={<ClearOutlined />}
+                onClick={() => handleClear()}
+              >
+                Clear
+              </Button>
+            </Flex>
+          </Col>
+        </Row>
+      </>
+    );
+  };
+
   const itemsManage = [
     {
       key: "1",
@@ -391,7 +322,7 @@ const Items = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item name="typename" label="ประเภทสินค้า">
-                <Select 
+                <Select
                   size={"large"}
                   value={optionValueType}
                   onChange={(value) => setOptionValueType(value)}
@@ -404,7 +335,7 @@ const Items = () => {
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item name="unit" label="หน่วยสั่งซื้อ">
-              <Select 
+                <Select
                   size={"large"}
                   value={optionValueUnit}
                   onChange={(value) => setOptionValueUnit(value)}
@@ -431,9 +362,7 @@ const Items = () => {
               xl={6}
             >
               <Form.Item name="count_stock" valuePropName="checked">
-                <Checkbox  size="large">
-                  ติดตามสต๊อก
-                </Checkbox>
+                <Checkbox size="large">ติดตามสต๊อก</Checkbox>
               </Form.Item>
             </Col>
             <Col
@@ -450,7 +379,7 @@ const Items = () => {
             >
               <Form.Item label="สถานการใช้งาน" name="status">
                 <Select
-                size="large"
+                  size="large"
                   options={[
                     {
                       value: "Y",
@@ -627,7 +556,9 @@ const Items = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={16}>
               <Form.Item name="check-1" valuePropName="checked">
-                <Checkbox>ใช้กำหนดสต๊อกขั้นต่ำ แบบกำหนดเป็นเดือนตามปริมาณการใช้จริง</Checkbox>
+                <Checkbox>
+                  ใช้กำหนดสต๊อกขั้นต่ำ แบบกำหนดเป็นเดือนตามปริมาณการใช้จริง
+                </Checkbox>
               </Form.Item>
             </Col>
           </Row>
@@ -641,8 +572,31 @@ const Items = () => {
         </Form>
       ),
     },
-    
   ];
+
+  const FormSearch = (
+    <Collapse
+      size="small"
+      onChange={(e) => {
+        setActiveSearch(e);
+      }}
+      activeKey={activeSearch}
+      items={[
+        {
+          key: "1",
+          label: (
+            <>
+              <SearchOutlined />
+              <span> Search</span>
+            </>
+          ),
+          children: CollapseItemSearch(),
+          showArrow: false,
+        },
+      ]}
+      // bordered={false}
+    />
+  );
 
   const ModalManage = () => {
     return (
@@ -676,61 +630,24 @@ const Items = () => {
       </Modal>
     );
   };
+
   return (
     <>
-      <div className="layout-content" style={{ padding: 20 }}>
-        <h1>ระบบงานขาย</h1>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-            <Collapse
-              items={[
-                {
-                  key: "1",
-                  label: "ตัวกรอง",
-                  children: (
-                    <Checkbox.Group
-                      style={{
-                        width: "100%",
-                      }}
-                    >
-                      <Row>
-                        <Col
-                          style={{ paddingTop: 9 }}
-                          xs={24}
-                          sm={24}
-                          md={24}
-                          lg={24}
-                          xl={9}
-                        >
-                          <Checkbox value="A">
-                            มีของ (สต๊อกตั้งแต่ 1 ขึ้นไป)
-                          </Checkbox>
-                        </Col>
-                        <Col
-                          style={{ paddingTop: 9 }}
-                          xs={24}
-                          sm={24}
-                          md={24}
-                          lg={24}
-                          xl={6}
-                        >
-                          <Checkbox value="B">มีของในปีที่ระบุ</Checkbox>
-                        </Col>
-                        <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-                          <DatePicker
-                            style={{ height: 40, width: 140 }}
-                            picker="year"
-                          />
-                        </Col>
-                      </Row>
-                    </Checkbox.Group>
-                  ),
-                },
-              ]}
-            />
-          </Col>
-        </Row>
-
+      <div className="pilot-scale-access" style={{ padding: 20 }}>
+        <h1>ระบบสินค้า</h1>
+        <Space
+          direction="vertical"
+          size="middle"
+          style={{ display: "flex", position: "relative" }}
+        >
+          <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+              <Form form={form} layout="vertical" autoComplete="off">
+                {FormSearch}
+              </Form>
+            </Col>
+          </Row>
+        </Space>
         <br></br>
         <Button
           type="primary"

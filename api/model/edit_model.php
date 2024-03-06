@@ -11,7 +11,7 @@
     $action_datetime = date("Y-m-d H:i:s");
 
     $sql = "UPDATE model SET ";
-    $sql .= " modelname='".$_POST["modelname"]."',active_status='".$_POST["statusunit"]."' ";
+    $sql .= " modelname='".$_POST["modelname"]."',active_status='".$_POST["active_status"]."' ";
     $sql .= ",updated_date='".$action_datetime."' ";
     $sql .= "WHERE modelcode= '".$_POST["modelcode"]."' ";
     $stmt = $conn->prepare($sql);

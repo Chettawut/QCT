@@ -15,7 +15,7 @@ let contenttype = { "content-type": "application/x-www-form-urlencoded" };
 const ItemService = {
   getAllItems: () => {
     return axios({
-      medthod: MEDTHOD.GET,
+      method: MEDTHOD.GET,
       url: API_URL.GET_ALL_ITEMS,
     });
   },
@@ -29,11 +29,12 @@ const ItemService = {
     });
   },
 
-  getItem: () => {
+  getItem: (parm = {}) => {
     return axios({
-      medthod: MEDTHOD.GET,
+      method: MEDTHOD.POST,
       url: API_URL.GET_ITEM,
       headers: contenttype,
+      data: parm,
     });
   },
   

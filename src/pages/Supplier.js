@@ -207,6 +207,19 @@ function Supplier() {
       .catch((err) => {});
   };
 
+  const showAddModal = () => {
+    SupService.getSupcode()
+      .then((res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          // console.log(data)
+          formManage.setFieldValue("supcode", data);
+        }
+      })
+      .catch((err) => {});
+    setOpenModalManage(true);
+  };
+
   const showEditModal = (data) => {
     SupService.getSupSupplier(data)
       .then((res) => {
@@ -325,7 +338,7 @@ function Supplier() {
                   ]}
                 >
                   <Input
-                    disabled={actionManage.action === "edit" ? true : false}
+                    disabled
                     placeholder="รหัสผู้ขาย"
                   />
                 </Form.Item>
@@ -441,7 +454,8 @@ function Supplier() {
               title: "เพิ่มผู้ขาย",
               confirmText: "เพิ่ม",
             });
-            setOpenModalManage(true);
+            showAddModal()
+            
           }}
         >
           เพิ่มผู้ขาย
