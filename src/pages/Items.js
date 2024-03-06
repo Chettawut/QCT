@@ -533,17 +533,17 @@ const Items = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
               <Form.Item name="สต๊อกจริง" label="สต๊อกจริง">
-                <Input />
+                <Input disabled/>
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
               <Form.Item name="สต๊อก VAT" label="สต๊อก VAT">
-                <Input />
+                <Input disabled/>
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
               <Form.Item name="จำนวนขายต่อชุด" label="จำนวนขายต่อชุด">
-                <Input />
+                <Input disabled/>
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
@@ -556,9 +556,7 @@ const Items = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={16}>
               <Form.Item name="check-1" valuePropName="checked">
-                <Checkbox>
-                  ใช้กำหนดสต๊อกขั้นต่ำ แบบกำหนดเป็นเดือนตามปริมาณการใช้จริง
-                </Checkbox>
+                <Checkbox>ใช้กำหนดสต๊อกขั้นต่ำ แบบกำหนดเป็นเดือนตามปริมาณการใช้จริง</Checkbox>
               </Form.Item>
             </Col>
           </Row>

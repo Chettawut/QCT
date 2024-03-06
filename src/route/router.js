@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import RB from "../pages/RB";
 import Billing from "../pages/Billing";
-import Receivinggoods from "../pages/Receiving_goods";
 import Car from "../pages/Car";
 import Business from "../pages/Business";
 import Items from "../pages/Items";
@@ -11,6 +10,7 @@ import Employee from "../pages/Employee";
 import Supplier from "../pages/Supplier";
 import History from "../pages/History";
 import { PO, POAccess, POManage } from "../pages/po/index";
+import { GR, GRAccess, GRManage } from "../pages/gr/index";
 import Unit from "../pages/Unit";
 import Profile from "../pages/Profile";
 import Login from "../pages/Login";
@@ -30,8 +30,10 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<Navigate replace to="Login" />} />
         <Route path="/Login" element={<Login />} />
-        <Route element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER]} />} >
-          <Route path="/dashboard" element={<Dashboard />} />          
+        <Route
+          element={<PrivateRoute allowdRole={[ROLES.ADMIN, ROLES.USER]} />}
+        >
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/RB" element={<RB />} />
           <Route path="/Billing" element={<Billing />} />
           <Route path="/History" element={<History />} />
@@ -40,7 +42,6 @@ const Router = () => {
           <Route path="/Supplier" element={<Supplier />} />
           <Route path="/Car" element={<Car />} />
           <Route path="/Business" element={<Business />} />
-          <Route path="/Receivinggoods" element={<Receivinggoods />} />
           <Route path="/Billinginformation" element={<Billinginformation />} />
           <Route path="/Quotation" element={<Quotation />} />
           <Route path="/unit" element={<Unit />} />
@@ -54,11 +55,15 @@ const Router = () => {
             <Route path="manage/:action" element={<POForm />} />
             <Route path="view" element={<POView />} />
           </Route> */}
-          <Route path="/purchase-order/"  exact element={<PO />} >
-                <Route index element={<POAccess />} />
-                <Route path="manage/:action" element={<POManage />} />
-                {/* <Route path="view" element={<PilotScaleView />} /> */}
-              </Route>
+          <Route path="/purchase-order/" exact element={<PO />}>
+            <Route index element={<POAccess />} />
+            <Route path="manage/:action" element={<POManage />} />
+            {/* <Route path="view" element={<PilotScaleView />} /> */}
+          </Route>
+          <Route path="/good-receive/" exact element={<GR />}>
+            <Route index element={<GRAccess />} />
+            <Route path="manage/:action" element={<GRManage />} />
+          </Route>
         </Route>
 
         <Route path="/*" element={<PageNotFound />} />
