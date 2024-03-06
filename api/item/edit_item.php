@@ -11,15 +11,16 @@ date_default_timezone_set("Asia/Bangkok");
 include '../conn.php';
 extract($_POST, EXTR_OVERWRITE, "_");
 
-
+$action_username = $token->userid;
 $date = date("Y-m-d H:i:s");
+
 $sql = "
 UPDATE items 
 SET 
 stname = :stname, typecode = :typecode, unit = :unit, material_code = :material_code,
 count_stock = :count_stock, stname_vat = :stname_vat, brand = :brand, stname_per = :stname_per, stfront = :stfront, stseries = :stseries,
 stborder = :stborder, stload = :stload, stspeed = :stspeed, sttw = :sttw, stweight = :stweight, stwidth = :stwidth
-, price = :price,
+, price = :price,active_status = :active_status,updated_by = :updated_by,updated_date = :updated_date
 WHERE stcode = :stcode"; 
 
 $stmt = $conn->prepare($sql); 
@@ -27,24 +28,23 @@ $stmt = $conn->prepare($sql);
 $stmt->bindParam(":stcode", $stcode);
 $stmt->bindParam(":stname", $stname);
 $stmt->bindParam(":typecode", $typecode);
-$supcode = $supcode ?? 0;
-$stmt->bindParam(":stnameEN", $stnameEN);
 $stmt->bindParam(":unit", $unit);
+$stmt->bindParam(":material_code", $material_code);
+$stmt->bindParam(":count_stock", $count_stock);
+$stmt->bindParam(":stname_vat", $stname_vat);
+$stmt->bindParam(":brand", $brand);
+$stmt->bindParam(":stname_per", $stname_per);
+$stmt->bindParam(":stfront", $stfront);
+$stmt->bindParam(":stseries", $stseries);
+$stmt->bindParam(":stborder", $stborder);
+$stmt->bindParam(":stload", $stload);
+$stmt->bindParam(":stspeed", $stspeed);
+$stmt->bindParam(":sttw", $sttw);
+$stmt->bindParam(":stweight", $stweight);
+$stmt->bindParam(":stwidth", $stwidth);
 $stmt->bindParam(":price", $price);
-$stmt->bindParam(":feature", $feature);
-$stmt->bindParam(":typecode", $typecode);
-$supcode = $supcode ?? 0;
-$stmt->bindParam(":supcode", $supcode, PDO::PARAM_INT);
-$procode = $procode ?? 0;
-$stmt->bindParam(":procode", $procode, PDO::PARAM_INT);
-$stmt->bindParam(":yield", $yield);
-$stmt->bindParam(":multiply", $multiply);
-$stmt->bindParam(":allergen", $allergen);
-$stmt->bindParam(":remarks", $remarks);
-$stmt->bindParam(":purpose", $purpose);
-$stmt->bindParam(":enumber", $enumber);
-$stmt->bindParam(":country", $country);
-$stmt->bindParam(":status", $status);
+$stmt->bindParam(":active_status", $active_status);
+$stmt->bindParam(":updated_by", $action_username);
 $stmt->bindParam(":updated_date", $date);
 
 if ($stmt->execute())

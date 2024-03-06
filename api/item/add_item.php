@@ -16,21 +16,25 @@ extract($res, EXTR_OVERWRITE, "_");
 
 if ($chkdata) {
 
-    $strSQL = "INSERT INTO items (`stcode`, `stname`, `stnameEN`, `stnamedisplay` ";
-    $strSQL .= ", `unit`, `typecode`,feature, yield, `multiply`,`supcode`,`procode` ";
-    $strSQL .= ",allergen,purpose,enumber,country, remarks, price, `status`,`created_date`) ";
+    $strSQL = "INSERT INTO items (`stcode`, `stname`, `unit`, `material_code` ";
+    $strSQL .= ", `count_stock`, `typecode`,stname_vat, brand, `stname_per`,`stfront`,`stseries` ";
+    $strSQL .= ",stborder,stload,stspeed,sttw, stweight, stwidth, price, `stlong`,`sthigh` ";
+    $strSQL .= ",stchange_round,stchange_time,stcar_model,remark,price_A,price_B,price_online ";
+    $strSQL .= ", `active_status`,`created_date`) ";
     $strSQL .= "VALUES (";
-    $strSQL .= "'" . $_POST["stcode"] . "','" . $_POST["stname"] . "','" . $_POST["stnameEN"] . "','" . $_POST["stnamedisplay"] . "' ";
-    $strSQL .= ",'" . $_POST["unit"] . "','" . $_POST["typecode"] . "','" . $_POST["feature"] . "' ";
-    $strSQL .= ",'" . $_POST["yield"] . "','" . $_POST["multiply"] . "','" . $_POST["supcode"] . "','" . $_POST["procode"] . "' ";
-    $strSQL .= ",'" . $_POST["allergen"] . "','" . $_POST["purpose"] . "','" . $_POST["enumber"] . "','" . $_POST["country"] . "','" . $_POST["remarks"] . "' ";
-    $strSQL .= ",'" . $_POST["price"] . "','Y','" . date("Y-m-d H:i:s")."' ";
-    $strSQL .= ")";
+    $strSQL .= "'" . $_POST["stcode"] . "','" . $_POST["stname"] . "','" . $_POST["unit"] . "','" . $_POST["material_code"] . "' ";
+    $strSQL .= ",'" . $_POST["count_stock"] . "','" . $_POST["typecode"] . "','" . $_POST["stname_vat"] . "' ";
+    $strSQL .= ",'" . $_POST["brand"] . "','" . $_POST["stname_per"] . "','" . $_POST["stfront"] . "','" . $_POST["stseries"] . "' ";
+    $strSQL .= ",'" . $_POST["stborder"] . "','" . $_POST["stload"] . "','" . $_POST["stspeed"] . "','" . $_POST["sttw"] . "','" . $_POST["stweight"] . "' ";
+    $strSQL .= ",'" . $_POST["stwidth"] . "','" . $_POST["price"] . "','" . $_POST["stlong"] . "','" . $_POST["sthigh"] . "' ";
+    $strSQL .= ",'" . $_POST["stchange_round"] . "','" . $_POST["stchange_time"] . "','" . $_POST["stcar_model"] . "','" . $_POST["remark"] . "' ";
+    $strSQL .= ",'" . $_POST["price_A"] . "','" . $_POST["price_B"] . "','" . $_POST["price_online"] . "' ";
+    $strSQL .= ",'Y','" . date("Y-m-d H:i:s")."')";
 
     $stmt2 = $conn->prepare($strSQL);
 
     if ($stmt2->execute()) 
-        $response = ['status' => 1, 'message' => 'เพิ่มรหัสสินค้า ' . $_POST["Add_stcode"] . ' สำเร็จ'];
+        $response = ['status' => 1, 'message' => 'เพิ่มรหัสสินค้า ' . $_POST["stcode"] . ' สำเร็จ'];
     else
         $response = ['status' => 0, 'message' => 'Error! ติดต่อโปรแกรมเมอร์'];
 

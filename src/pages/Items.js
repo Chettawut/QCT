@@ -315,13 +315,18 @@ const Items = () => {
       children: (
         <Form form={formManage} layout="vertical">
           <Row gutter={[24, 0]}>
+          <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item name="stcode" label="รหัสสินค้า">
+                <Input />
+              </Form.Item>
+            </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
               <Form.Item name="stname" label="ชื่อสินค้า">
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item name="typename" label="ประเภทสินค้า">
+              <Form.Item name="typecode" label="ประเภทสินค้า">
                 <Select
                   size={"large"}
                   value={optionValueType}
@@ -340,14 +345,12 @@ const Items = () => {
                   value={optionValueUnit}
                   onChange={(value) => setOptionValueUnit(value)}
                   options={optionUnit.map((item) => ({
-                    value: item.unitcode,
+                    value: item.unitname,
                     label: item.unitname,
                   }))}
                 ></Select>
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item name="material_code" label="Material code">
                 <Input />
@@ -361,7 +364,7 @@ const Items = () => {
               lg={24}
               xl={6}
             >
-              <Form.Item name="count_stock" valuePropName="checked">
+              <Form.Item name="count_stock" >
                 <Checkbox size="large">ติดตามสต๊อก</Checkbox>
               </Form.Item>
             </Col>
@@ -377,7 +380,7 @@ const Items = () => {
                   : { display: "none" }
               }
             >
-              <Form.Item label="สถานการใช้งาน" name="status">
+              <Form.Item label="สถานการใช้งาน" name="active_status">
                 <Select
                   size="large"
                   options={[
