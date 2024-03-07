@@ -1,4 +1,4 @@
-import { Space, Typography } from "antd";
+import { Space } from "antd";
 // import { Typography } from "antd";
 import { Button, Select } from "antd";
 import { Popconfirm } from "antd";
@@ -137,35 +137,35 @@ export const editColumns = ({ handleAction, filterOption, listOption,handleSelec
       dataIndex: "index",
       align: "left",
       render: (item, record, index) => <>{index + 1}</>,
+      width: 100,
     },
     {
-      title: "รหัสสินค้า",
+      title: "ใบสั่งซื้อ",
       ellipsis: true,
       className: "max-w-52",
       key: "stcode",
       dataIndex: "stcode",
       align: "center",
-      width: 100,
+      width: 150,
     },
     {
-      title: "ชื่อสินค้า",
+      title: "รหัสสินค้า",
       key: "stname",
       dataIndex: "stname",
       align: "left",
-      width: 300,
+      width: 150,
+    },  {
+      title: "รายการสินค้า",
+      key: "stname",
+      dataIndex: "stname",
+      align: "left",
+      width: 400,
     },
-    {
-      title: "จำนวน",
-      editable: true,
-      align: "right",
-      key: "amount",
-      dataIndex: "amount",
-    },
-    
     {
       title: 'หน่วย',
       dataIndex: 'unit',
       key: 'unit',
+      width: 200,
       render: (text, record) => (
           <Select
             showSearch
@@ -204,35 +204,25 @@ export const editColumns = ({ handleAction, filterOption, listOption,handleSelec
     //   ),
     // },
     {
-      title: "ราคาซื้อ",
+      title: "จำนวนรับแล้ว",
+      editable: true,
+      align: "right",
+      key: "amount",
+      dataIndex: "amount",
+      width: 200,
+    },
+    
+    {
+      title: "จำนวนนับ",
       align: "right",
       editable: true,
       required: true,
       key: "price",
       dataIndex: "price",
+      width: 200,
     },
     {
-      title: <>ส่วนลด (%)</>,
-      align: "right",
-      width: 160,
-      editable: true,
-      key: "discount",
-      dataIndex: "discount",
-      render: (v) => v || 0,
-    },
-    {
-      title: "จำนวนเงิน",
-      align: "right",
-      width: 160,
-      editable: false,
-      key: "totalprice",
-      dataIndex: "totalprice",
-      render: (v, row) => {
-        return <Typography>{row.amount * row.price}</Typography>;
-      },
-    },
-    {
-      title: "ตัวเลือก",
+      title: "สถานะ",
       align: "center",
       key: "operation",
       dataIndex: "operation",

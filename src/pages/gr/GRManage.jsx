@@ -19,14 +19,13 @@ import { ButtonBack } from "../../components/button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ModalItem } from "../../components/modal/item/modal-packaging";
 
-import { SaveFilled, SearchOutlined } from "@ant-design/icons";
+import { SaveFilled, SearchOutlined, FileTextOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
 import POService from "../../service/PO.service";
 import UnitService from "../../service/Unit.service";
 import { delay } from "../../utils/util";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { LuPackageSearch } from "react-icons/lu";
 
 import {
   columnsDetailsEditable,
@@ -328,7 +327,7 @@ function POManage() {
       <Col span={12} style={{ paddingInline: 0 }}>
         <Flex gap={4} justify="end">
           <Button
-            icon={<LuPackageSearch style={{ fontSize: "1.2rem" }} />}
+            icon={<FileTextOutlined style={{ fontSize: "1.2rem" }} />}
             className="bn-center justify-center bn-primary-outline"
             onClick={() => setOpenModalPackaging(true)}
           >
