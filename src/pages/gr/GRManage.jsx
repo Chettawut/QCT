@@ -363,7 +363,7 @@ function POManage() {
               <Form form={form} layout="vertical" autoComplete="off">
                 <Row gutter={[8, 8]} className="px-4 sm:px-0 md:px-0 lg:px-0">
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
-                    <Form.Item label="เลขที่ GR" name="pocode" required={false}>
+                    <Form.Item label="เลขที่ GR" name="grcode" required={false}>
                       <Input disabled />
                     </Form.Item>
                   </Col>
@@ -412,7 +412,7 @@ function POManage() {
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
                     <Form.Item
                       label="วันที่รับสินค้า :"
-                      name="podate"
+                      name="grdate"
                       rules={[
                         { required: true, message: "Please input your data!" },
                       ]}
@@ -424,13 +424,13 @@ function POManage() {
                       />
                     </Form.Item>
                   </Col>
-                  <FormCol50 label="เลขที่ Invoice" name="poqua">
+                  <FormCol50 label="เลขที่ Invoice" name="invcode">
                     <Input />
                   </FormCol50>
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
                     <Form.Item
                       label="วันที่ออก Invoice :"
-                      name="deldate"
+                      name="invdate"
                       rules={[
                         { required: true, message: "Please input your data!" },
                       ]}
@@ -476,11 +476,6 @@ function POManage() {
                           },
                         ]}
                       />
-                    </Form.Item>
-                  </Col>
-                  <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-                    <Form.Item label="Remark" name="remark">
-                      <Input.TextArea rows={3} />
                     </Form.Item>
                   </Col>
                 </Row>
