@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     // } 
 
     try {   
-        $sql = $sql = "SELECT a.pocode,a.podate,b.stcode,d.stname,a.supcode,c.supname,a.active_status ";
+        $sql = "SELECT a.pocode,a.podate,b.stcode,d.stname,a.supcode,c.supname,a.active_status ";
         $sql .= " FROM `pomaster` as a inner join `podetail` as b on (a.pocode)=(b.pocode)";
         $sql .= " inner join `supplier` as c on (a.supcode)=(c.supcode)";
         $sql .= " inner join `items` as d on (b.stcode)=(d.stcode)";

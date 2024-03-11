@@ -17,7 +17,7 @@ import {
 import { Form, DatePicker } from "antd";
 import { ButtonBack } from "../../components/button";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ModalItem } from "../../components/modal/item/modal-packaging";
+// import { ModalItem } from "../../components/modal/item/modal-packaging";
 
 import { SaveFilled, SearchOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -32,7 +32,7 @@ import {
   columnsDetailsEditable,
   componentsEditable,
 } from "./purchase-order.model";
-import ModalPackingSetGroup from "../../components/modal/packing-set/ModalPackingSetGroup";
+// import ModalPackingSetGroup from "../../components/modal/packing-set/ModalPackingSetGroup";
 const POServices = POService();
 
 function POManage() {
@@ -510,7 +510,7 @@ function POManage() {
 
           {SectionBottom}
         </Space>
-        {openModalPackaging && (
+        {/* {openModalPackaging && (
           <ModalItem
             show={openModalPackaging}
             close={() => {
@@ -532,7 +532,7 @@ function POManage() {
               handleChooseSupplier(v);
             }}
           />
-        )}
+        )} */}
       </div>
     </Spin>
   );
