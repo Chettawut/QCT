@@ -1,9 +1,6 @@
+import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
-import {
-  DeleteOutlined,
-  SearchOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
 import {
   Button,
   Input,
@@ -15,51 +12,34 @@ import {
   Modal,
   Form,
   Select,
+  Divider,
+  InputNumber,
+  Badge,
+  DatePicker,
+  // DatePicker,
 } from "antd";
-import Highlighter from "react-highlight-words";
-// COMPONENT
-import { EditableRow, EditableCell } from "../components/table/TableEditAble";
-
-// SERVICE
-import ItemService from "../service/Item.service";
-import SRService from "../service/SRService";
-
-const SR = () => {
-  const [AllSR, setAllSR] = useState("");
-  const [itemList, setItemList] = useState([]);
-  const [selectedList, setSelectedList] = useState([]);
-  // const [formAdd] = Form.useForm();
-  const [formEdit] = Form.useForm();
-  // const [OpenModalAdd, setOpenModalAdd] = useState(false);
-  const [OpenModalEdit, setOpenModalEdit] = useState(false);
-
+import dayjs from 'dayjs';
+import Swal from "sweetalert2";
+import EmpService from "../service/EmpService";
+import { employee } from "../model/emp.model";
+function Employee() {
+  const [AllUser, setAllUser] = useState("");
+  const [actionManage, setActionManage] = useState({
+    action: "add",
+    title: "เพิ่มพนักงาน",
+    confirmText: "ยืนยัน",
+  });
+  const [EmpDetail, setEmpDetail] = useState(employee);
+  const [formAdd] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-
-  // MODAL CONTROLLER
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isShowModalItem, setIsShowModalItem] = useState(false);
+  const [openModalManage, setOpenModalManage] = useState(false);
   const searchInput = useRef(null);
-
+  const [formManage] = Form.useForm();
   useEffect(() => {
-    if (isShowModalItem) fetchItem();
-  }, [isShowModalItem]);
-
-  useEffect(() => {
-    GetSR();
+    GetEmp();
   }, []);
-
-  const fetchItem = () => {
-    ItemService.getAllItems()
-      .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          setItemList(data);
-        }
-      })
-      .catch((err) => {});
-  };
-
+  const { TextArea } = Input;
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -70,7 +50,6 @@ const SR = () => {
     clearFilters();
     setSearchText("");
   };
-
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -178,616 +157,414 @@ const SR = () => {
 
   const columns = [
     {
-      title: "หมายเลข",
-      dataIndex: "srcode",
-      key: "srcode",
-      width: "20%",
-      ...getColumnSearchProps("srcode"),
-      sorter: (a, b) => a.srcode.length - b.srcode.length,
+      title: "รหัสพนักงาน",
+      dataIndex: "empcode",
+      key: "empcode",
+      width: "15%",
+      ...getColumnSearchProps("empcode"),
+      sorter: (a, b) => a.empcode.length - b.empcode.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ลูกค้า",
-      dataIndex: "srdate",
-      key: "srdate",
-      width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      title: "ชื่อ-นามสกุล",
+      dataIndex: "firstname",
+      key: "firstname",
+      width: "30%",
+      ...getColumnSearchProps("firstname"),
+      sorter: (a, b) => a.firstname.length - b.firstname.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ทะเบียนรถ",
-      dataIndex: "srdate",
-      key: "srdate",
-      width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      title: "ชื่อเล่น",
+      dataIndex: "nickname",
+      key: "nickname",
+      width: "15%",
+      ...getColumnSearchProps("nickname"),
+      sorter: (a, b) => a.nickname.length - b.nickname.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "จังหวัด",
-      dataIndex: "srdate",
-      key: "srdate",
-      width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
+      title: "ตำแหน่ง",
+      dataIndex: "position",
+      key: "position",
+      width: "15%",
+      ...getColumnSearchProps("position"),
+      sorter: (a, b) => a.position.length - b.position.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "วันที่",
+      title: "เบอร์โทร",
+      dataIndex: "tel",
+      key: "tel",
+      width: "15%",
+      ...getColumnSearchProps("tel"),
+      sorter: (a, b) => a.tel.length - b.tel.length,
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "Action",
       key: "operation",
-      width: "20%",
+      width: "10%",
       fixed: "right",
       render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.srcode)}
+        <Button
+          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
+          style={{ cursor: "pointer" }}
+          danger
+          onClick={(e) => showEditModal(text.empcode)}
         >
-          Edit
-        </span>
+          แก้ใข
+        </Button>
       ),
-    },
-    {
-      title: "ตัดสต๊อก",
-      dataIndex: "srdate",
-      key: "srdate",
-      width: "20%",
-      ...getColumnSearchProps("srdate"),
-      sorter: (a, b) => a.srdate.length - b.srdate.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "พิมพ์ VAT",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ตัดสต๊อก VAT",
-      key: "operation",
-      width: "20%",
-      fixed: "right",
-      render: (text) => (
-        <span
-          style={{ color: "#29f", cursor: "pointer" }}
-          onClick={(e) => showEditModal(text.srcode)}
-        >
-          Edit
-        </span>
-      ),
-    },
-    {
-      title: "บิลออนไลน์",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ส่งด่วน",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สถานะการส่ง",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "จอง",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สถานะ",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "พนักงานขาย",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "สาขา",
-      dataIndex: "srstatus",
-      key: "srstatus",
-      width: "20%",
-      ...getColumnSearchProps("srstatus"),
-      sorter: (a, b) => a.srstatus.length - b.srstatus.length,
-      sortDirections: ["descend", "ascend"],
     },
   ].filter((item) => !item.hidden);
 
-  const defaultColumns = [
-    {
-      title: "ลำดับ",
-      key: "index",
-      align: "center",
-      render: (_, record, idx) => <span key={record?.stcode}>{idx + 1}</span>,
-    },
-    {
-      title: "รหัสสินค้า",
-      key: "productCode",
-      dataIndex: "productCode",
-    },
-    {
-      title: "ชื่อสินค้า",
-      key: "productName",
-      dataIndex: "productName",
-    },
-    {
-      title: "จำนวน",
-      key: "productQty",
-      dataIndex: "productQty",
-      align: "center",
-      editable: true,
-      width: "10%",
-    },
-    {
-      title: "หน่วย",
-      align: "center",
-      key: "productUnit",
-      dataIndex: "productUnit",
-    },
-    {
-      title: "ราคาซื้อ",
-      key: "productPrice",
-      dataIndex: "productPrice",
-      align: "right",
-      width: "10%",
-    },
-    {
-      title: "ส่วนลด",
-      key: "productDiscount",
-      dataIndex: "productDiscount",
-      align: "right",
-      editable: true,
-      width: "10%",
-    },
-    {
-      title: "ราคาทั้งหมด",
-      key: "productTotalPrice",
-      dataIndex: "productTotalPrice",
-      align: "right",
-      render: (productTotalPrice) => productTotalPrice?.toLocaleString(),
-    },
-    {
-      align: "center",
-      key: "operation",
-      dataIndex: "operation",
-      render: (_, record) =>
-        selectedList.length >= 1 ? (
-          <Button
-            className="bt-icon"
-            type="primary"
-            danger
-            icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record?.productCode)}
-          />
-        ) : null,
-    },
-  ];
-
-  const components = {
-    body: { row: EditableRow, cell: EditableCell },
-  };
-
-  const columnsOrder = defaultColumns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        editable: col.editable,
-        dataIndex: col.dataIndex,
-        title: col.title,
-        handleSave,
-      }),
-    };
-  });
-
-  const handleDelete = (productCode) => {
-    const newData = selectedList.filter(
-      (item) => item?.productCode !== productCode
-    );
-    setSelectedList(newData);
-  };
-
-  const handleSave = (row) => {
-    if (row?.productQty > 0) {
-      const newData = [...selectedList];
-      const index = newData.findIndex(
-        (item) => row?.productCode === item?.productCode
-      );
-      const item = newData[index];
-      row["productTotalPrice"] =
-        row?.productQty * row?.productPrice - row?.productDiscount;
-      newData.splice(index, 1, {
-        ...item,
-        ...row,
-      });
-      setSelectedList(newData);
-    }
-  };
-
-  const handleSelectedItem = (record) => {
-    const newData = {
-      productCode: record?.stcode,
-      productName: record?.stname,
-      productQty: 1,
-      productUnit: record?.unit,
-      productPrice: +record?.price,
-      productDiscount: 0,
-      productTotalPrice: +record?.price,
-    };
-
-    setIsShowModalItem(false);
-    setSelectedList([...selectedList, newData]);
-  };
-
-  const checkDupItem = (itemCode) => {
-    let isDup = false;
-    selectedList.map((item) => {
-      if (item?.productCode === itemCode) isDup = true;
-      return item;
-    });
-    return isDup;
-  };
-
-  const resetData = () => {
-    setItemList([]);
-    setSelectedList([]);
-  };
-
-  const handleCloseModal = () => {
-    resetData();
-    setIsOpenModal(false);
-  };
-
-  const handleCreate = () => {
-    // ==== CALL API TO CREATE SR HERE ==== //
-    console.log("selectedList ==> ", selectedList);
-    resetData();
-    setIsOpenModal(false);
-  };
-
-  const selectItemColumn = [
-    {
-      title: "",
-      key: "tools",
-      align: "center",
-      render: (record) => (
-        <Button
-          type="primary"
-          className="bt-icon"
-          icon={<PlusOutlined />}
-          disabled={checkDupItem(record?.stcode)}
-          onClick={() => handleSelectedItem(record)}
-        />
-      ),
-    },
-    {
-      title: "รหัสสินค้า",
-      key: "stcode",
-      dataIndex: "stcode",
-      width: "100px",
-    },
-    {
-      title: "ชื่อสินค้า",
-      dataIndex: "stname",
-      key: "stname",
-      width: "50%",
-    },
-    {
-      title: "ราคาต่อหน่วย",
-      key: "price",
-      dataIndex: "price",
-      align: "right",
-      render: (price) => {
-        let nextPrice = parseFloat(price).toFixed(2);
-        return nextPrice?.toLocaleString();
-      },
-    },
-  ];
-
-  const GetSR = () => {
-    SRService.getSR()
+  const GetEmp = () => {
+    EmpService.getEmp()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          setAllSR(data);
+          setAllUser(data);
         }
       })
       .catch((err) => {});
   };
 
   const showEditModal = (data) => {
-    SRService.getSupSR(data)
+    EmpService.getSupEmp(data)
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          formEdit.setFieldValue("Editusername", data.username);
-          formEdit.setFieldValue("Editfirstname", data.firstname);
-          formEdit.setFieldValue("Editlastname", data.lastname);
-          formEdit.setFieldValue("Edittype", data.type);
-          formEdit.setFieldValue("Edittel", data.tel);
-          formEdit.setFieldValue("Editstatususer", data.statususer);
+          setEmpDetail(data);
+          formManage.setFieldsValue(data);
+          formManage.setFieldValue("dateofbirth", dayjs());
+          formManage.setFieldValue("resign_date", dayjs());
+          formManage.setFieldValue("dateofstart", dayjs());
+          setActionManage({
+            action: "edit",
+            title: "แก้ไขข้อมูลพนักงาน",
+            confirmText: "แก้ใข",
+          });
+          setOpenModalManage(true);
+          
+        }
+      })
+      .catch((err) => {});
+  };
 
-          setOpenModalEdit(true);
+  const submitAdd = (dataform) => {
+    // console.log(dataform)
+    EmpService.addEmp(dataform)
+      .then(async (res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
+
+            GetEmp();
+            setOpenModalManage(false);
+            formAdd.resetFields();
+          } else {
+            // alert(data.message)
+            Swal.fire({
+              title: "<strong>ผิดพลาด!</strong>",
+              html: data.message,
+              icon: "error",
+            });
+          }
         }
       })
       .catch((err) => {});
   };
 
   const submitEdit = (dataform) => {
-    // UserService.editUser(dataform)
-    //   .then(async (res) => {
-    //     let { status, data } = res;
-    //     if (status === 200) {
-    //       if (data.status === '1') {
-    //         await Swal.fire({
-    //           title: "<strong>สำเร็จ</strong>",
-    //           html: data.message,
-    //           icon: "success",
-    //         });
-    //         GetUser();
-    //         setOpenModalAdd(false);
-    //       } else {
-    //         // alert(data.message)
-    //         Swal.fire({
-    //           title: "<strong>ผิดพลาด!</strong>",
-    //           html: data.message,
-    //           icon: "error",
-    //         });
-    //       }
-    //     }
-    //   })
-    //   .catch((err) => {});
+    EmpService.editEmp({ ...EmpDetail, ...dataform })
+      .then(async (res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          if (data.status) {
+            await Swal.fire({
+              title: "<strong>สำเร็จ</strong>",
+              html: data.message,
+              icon: "success",
+            });
+            GetEmp();
+            setOpenModalManage(false);
+          } else {
+            // alert(data.message)
+            Swal.fire({
+              title: "<strong>ผิดพลาด!</strong>",
+              html: data.message,
+              icon: "error",
+            });
+          }
+        }
+      })
+      .catch((err) => {});
   };
 
-  const ModalEdit = ({ open, onCancel }) => {
+  const onModalManageClose = async () => {
+    // await setCardataDetail({});
+    formManage.resetFields();
+    setOpenModalManage(false);
+  };
+  ////////////////////////////////
+  const onSearch = (value) => {
+    console.log("search:", value);
+  };
+  const onChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  const ModalManage = () => {
     return (
       <Modal
-        open={open}
-        title="แก้ไขผู้ใช้งาน"
-        okText="Create"
-        cancelText="Cancel"
-        onCancel={onCancel}
-        width={1000}
+        open={openModalManage}
+        title={actionManage.title}
+        okText={actionManage.confirmText}
+        cancelText="ยกเลิก"
+        onCancel={() => onModalManageClose()}
+        width={1200}
         onOk={() => {
-          formEdit
+          formManage
             .validateFields()
             .then((values) => {
-              // formEdit.resetFields();
-              // console.log(values)
-              submitEdit(values);
+              if (actionManage.action === "add") {
+                submitAdd(values);
+              } else if (actionManage.action === "edit") {
+                submitEdit(values);
+              }
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
             });
         }}
       >
-        <Form
-          form={formEdit}
-          layout="vertical"
-          name="form_in_modal"
-          initialValues={{
-            modifier: "public",
-          }}
-        >
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              Username
-              <Form.Item
-                name="Editusername"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อผู้ใช้!",
-                  },
-                ]}
-              >
-                <Input placeholder="Username" style={{ height: 50 }} disabled />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-              Password
-              <Form.Item name="Editpassword">
-                <Input.Password
-                  defaultValue="123456789"
-                  placeholder="Password"
-                  disabled
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={4} lg={4} xl={4}>
-              <Form.Item label="รีเซ็ต Password">
-                <Button style={{ height: 40 }}>Reset</Button>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ชื่อจริง
-              <Form.Item
-                name="Editfirstname"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อจริง!",
-                  },
-                ]}
-              >
-                <Input placeholder="ชื่อจริง" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              นามสกุล
-              <Form.Item
-                name="Editlastname"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อนามสกุล!",
-                  },
-                ]}
-              >
-                <Input placeholder="นามสกุล" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              ประเภท
-              <Form.Item
-                name="Edittype"
-                rules={[
-                  {
-                    required: true,
-                    message: "กรุณาใส่ชื่อจริง!",
-                  },
-                ]}
-              >
-                <Select
-                  style={{ height: 40 }}
-                  options={[
-                    { value: "Admin", label: "Admin" },
-                    { value: "User", label: "User" },
+        <Form form={formManage} layout="vertical" autoComplete="off">
+          <Card>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  name="empcode"
+                  label="รหัสพนักงาน"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ รหัสพนักงาน ใหม่!",
+                    },
                   ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              เบอร์โทรศัพท์
-              <Form.Item name="Edittel">
-                <Input placeholder="เบอร์โทรศัพท์" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              สถานการใช้งาน
-              <Form.Item
-                name="Editstatususer"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Select
-                  style={{ height: 40 }}
-                  options={[
-                    { value: "Y", label: "เปิดใช้งาน" },
-                    { value: "N", label: "ปิดใช้งาน" },
+                >
+                  <Input
+                    disabled={actionManage.action === "edit" ? true : false}
+                    placeholder="รหัสพนักงาน"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  name="firstname"
+                  label="ชื่อ"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ ชื่อ ใหม่!",
+                    },
                   ]}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+                >
+                  <Input placeholder="ชื่อ" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  label="นามสกุล"
+                  name="lastname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาใส่ นามสกุล ใหม่!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="นามสกุล" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="nickname" label="ชื่อเล่น">
+                  <Input placeholder="ชื่อเล่น" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="citizen_id" label="เลขประจำตัวประชาชน">
+                  <Input placeholder="เลขประจำตัวประชาชน" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="dateofbirth" label="วันเกิด">
+                  <DatePicker
+                    style={{
+                      width: 262,
+                    }}
+                    format={"DD/MM/YYYY"}
+                    size="large"
+                    placeholder="วันเกิด"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="tel" label="เบอร์โทร">
+                  <Input placeholder="เบอร์โทร" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="tel2" label="เบอร์โทร (สำรอง)">
+                  <Input placeholder="เบอร์โทร (สำรอง)" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={3}>
+                <Form.Item name="marital_status" label="สถานภาพ">
+                  <Select
+                    size="large"
+                    placeholder="สถานภาพ"
+                    showSearch
+                    onChange={onChange}
+                    onSearch={onSearch}
+                    filterOption={filterOption}
+                    options={[
+                      {
+                        value: "โสด",
+                        label: "โสด",
+                      },
+                      {
+                        value: "แต่งงาน",
+                        label: "แต่งงาน",
+                      },
+                      {
+                        value: "หย่า",
+                        label: "หย่า",
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={3}>
+                <Form.Item name="no_of_children" label="จำนวนบุตร">
+                  <InputNumber
+                    style={{
+                      width: 117,
+                    }}
+                    size="large"
+                    placeholder="จำนวนบุตร"
+                  />
+                </Form.Item>
+              </Col>
+              <Col
+                xs={24}
+                sm={24}
+                md={12}
+                lg={12}
+                xl={6}
+                style={
+                  actionManage.action === "edit"
+                    ? { display: "inline" }
+                    : { display: "none" }
+                }
+              >
+                <Form.Item label="สถานการใช้งาน" name="active_status">
+                  <Select
+                    size="large"
+                    options={[
+                      {
+                        value: "Y",
+                        label: <Badge status="success" text="เปิดการใช้งาน" />,
+                      },
+                      {
+                        value: "N",
+                        label: <Badge status="error" text="ปิดการใช้งาน" />,
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={24}>
+                <Form.Item name="cur_address" label="ที่อยู่">
+                  <TextArea rows={3} placeholder="ที่อยู่" />
+                </Form.Item>
+              </Col>
+              <Divider />
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="education" label="ระดับการศึกษาสูงสุด">
+                  <Input placeholder="ระดับการศึกษาสูงสุด" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="position" label="ตำแหน่ง">
+                  <Input placeholder="ตำแหน่ง" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="dateofstart" label="วันที่เริ่มเข้างาน">
+                  <DatePicker
+                    style={{
+                      width: 262,
+                    }}
+                    size="large"
+                    placeholder="วันที่เริ่มเข้างาน"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="resign_date" label="วันที่ลาออก">
+                  <DatePicker
+                    style={{
+                      width: 262,
+                    }}
+                    size="large"
+                    placeholder="วันที่ลาออก	"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
         </Form>
       </Modal>
     );
   };
-  
 
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>ใบเสนอราคา</h1>
-        <br></br>
-        <Button type="primary" onClick={() => setIsOpenModal(true)}>
+        <Button
+          type="primary"
+          onClick={() => {
+            setActionManage({
+              action: "add",
+              title: "เพิ่มใบเสนอราคา",
+              confirmText: "เพิ่ม",
+            });
+            setOpenModalManage(true);
+          }}
+        >
           เพิ่มใบเสนอราคา
         </Button>
 
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table columns={columns} dataSource={AllSR} />
+              <Table size="small" columns={columns} dataSource={AllUser} />
             </Card>
           </Col>
         </Row>
       </div>
 
-      <Modal
-        open={isOpenModal}
-        title="ใบสั่งซื้อสินค้า"
-        okText="Create"
-        cancelText="Cancel"
-        onCancel={handleCloseModal}
-        onOk={handleCreate}
-        width={1000}
-        maskClosable={false}
-      >
-        <Button
-          type="primary"
-          onClick={() => setIsShowModalItem(true)}
-          style={{ marginBottom: 16, float: "right" }}
-        >
-          ประวัติลูกค้า
-        </Button>
-
-        <Table
-          components={components}
-          rowClassName={() => "editable-row"}
-          bordered
-          dataSource={selectedList}
-          columns={columnsOrder}
-          pagination={false}
-          rowKey="productCode"
-        />
-      </Modal>
-
-      <Modal
-        open={isShowModalItem}
-        title="เลือกสินค้า"
-        onCancel={() => setIsShowModalItem(false)}
-        footer={<Button onClick={() => setIsShowModalItem(false)}>ปิด</Button>}
-      >
-        <Table
-          rowClassName={() => "editable-row"}
-          bordered
-          dataSource={itemList}
-          columns={selectItemColumn}
-          rowKey="stcode"
-        />
-      </Modal>
-      <ModalEdit
-        open={OpenModalEdit}
-        onCancel={() => {
-          setOpenModalEdit(false);
-        }}
-      />
+      {openModalManage && ModalManage()}
     </>
   );
-};
+}
 
-export default SR;
+export default Employee;

@@ -11,6 +11,11 @@ import Supplier from "../pages/Supplier";
 import History from "../pages/History";
 import { PO, POAccess, POManage } from "../pages/po/index";
 import { GR, GRAccess, GRManage } from "../pages/gr/index";
+import {
+  Quotation,
+  QuotationAccess,
+  QuotationManage,
+} from "../pages/quotation/index";
 import Unit from "../pages/Unit";
 import Profile from "../pages/Profile";
 import Login from "../pages/Login";
@@ -18,7 +23,6 @@ import PageNotFound from "../pages/404";
 import Itemtype from "../pages/Itemtype";
 import Billinginformation from "../pages/Billing_information";
 import User from "../pages/User";
-import Quotation from "../pages/Quotation";
 import Customer from "../pages/Customer";
 import PrivateRoute from "../components/auth/PrivateRoutes";
 import Cardata from "../pages/Cardata";
@@ -43,7 +47,6 @@ const Router = () => {
           <Route path="/Car" element={<Car />} />
           <Route path="/Business" element={<Business />} />
           <Route path="/Billinginformation" element={<Billinginformation />} />
-          <Route path="/Quotation" element={<Quotation />} />
           <Route path="/unit" element={<Unit />} />
           <Route path="/user" element={<User />} />
           <Route path="/itemtype" element={<Itemtype />} />
@@ -63,6 +66,10 @@ const Router = () => {
           <Route path="/good-receive/" exact element={<GR />}>
             <Route index element={<GRAccess />} />
             <Route path="manage/:action" element={<GRManage />} />
+          </Route>
+          <Route path="/quotation/" exact element={<Quotation />}>
+            <Route index element={<QuotationAccess />} />
+            <Route path="manage/:action" element={<QuotationManage />} />
           </Route>
         </Route>
 

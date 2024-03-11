@@ -61,7 +61,7 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/Quotation" rel="noopener noreferrer">
+                <a href="/quotation" rel="noopener noreferrer">
                   ใบเสนอราคา
                 </a>
               ),
