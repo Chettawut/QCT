@@ -57,8 +57,7 @@ const Items = () => {
     GetUnit();
   }, []);
 
-  const GetItems = (data) => {
-    console.log(data)
+  const GetItems = (data) => {    
       ItemService.getItem(data).then( res => {
         const {data} = res.data;
 
