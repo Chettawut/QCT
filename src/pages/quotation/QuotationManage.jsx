@@ -30,7 +30,7 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import {
   columnsDetailsEditable,
   componentsEditable,
-} from "./good-receive.model";
+} from "./quotation.model";
 import ModalPackingSetGroup from "../../components/modal/packing-set/ModalPackingSetGroup";
 const POServices = POService();
 
@@ -183,7 +183,7 @@ function POManage() {
   };
 
   const handleClose = async () => {
-    navigate("/purchase-order", { replace: true });
+    navigate("/quotation", { replace: true });
     await delay(300);
     console.clear();
   };
@@ -277,7 +277,7 @@ function POManage() {
     >
       <Col span={12} className="p-0">
         <Flex gap={4} justify="start">
-          <ButtonBack target="/good-receive" />
+          <ButtonBack target="/quotation" />
         </Flex>
       </Col>
       {/* <Col span={12} style={{paddingInline:0}}>  

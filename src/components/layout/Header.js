@@ -30,7 +30,6 @@ const Header = () => {
     {
       label: "ระบบงานขาย",
       key: "menu1",
-      disabled: true,
       icon: <AuditOutlined />,
       children: [
         {
@@ -62,7 +61,7 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/Quotation" rel="noopener noreferrer">
+                <a href="/quotation" rel="noopener noreferrer">
                   ใบเสนอราคา
                 </a>
               ),
@@ -76,7 +75,6 @@ const Header = () => {
       label: "คลังสินค้า",
       key: "menu2",
       icon: <ShopOutlined />,
-      disabled: true,
       children: [
         {
           type: "group",

@@ -17,44 +17,39 @@ import {
 /** get sample column */
 export const accessColumn = ({ handleEdit, handleDelete }) => [
   {
-    title: "เลขที่ GR",
+    title: "เลขที่ใบเสนอราคา",
     key: "pocode",
     dataIndex: "pocode",
     align: "left",
-    width: 210,
+    width: 250,
     ellipsis: {
       showTitle: false,
     },
   },
   {
-    title: "วันที่ออก GR",
-    dataIndex: "podate",
-    key: "podate",
-    align: "right",
-    className: "!pe-5",
-  },
-  {
-    title: "รหัสพัสดุ",
-    dataIndex: "stcode",
-    key: "stcode",
-    align: "right",
-    className: "!pe-5",
-  },
-  {
-    title: "รายการสินค้า",
+    title: "ชื่อบริษัท",
     dataIndex: "stname",
     key: "stname",
-    align: "right",
+    align: "left",
     className: "!pe-5",
+    width: 600,
   },
   {
-    title: "ผู้ขาย",
-    dataIndex: "supname",
-    key: "supname",
-    width: 160,
-    ellipsis: {
-      showTitle: false,
-    },
+    title: "วันที่",
+    dataIndex: "podate",
+    key: "podate",
+    align: "left",
+    className: "!pe-5",
+    width: 300,
+  },
+
+  {
+    title: "ยืนยันราคาถึงวันที่",
+    dataIndex: "podate",
+    key: "podate",
+    width: 300,
+    align: "left",
+    className: "!pe-5",
   },
   {
     title: "สถานะ",
@@ -127,7 +122,12 @@ export const componentsEditable = {
 };
 
 /** get column for edit table parameter */
-export const editColumns = ({ handleAction, filterOption, listOption,handleSelectChange }) => {
+export const editColumns = ({
+  handleAction,
+  filterOption,
+  listOption,
+  handleSelectChange,
+}) => {
   return [
     {
       title: "ลำดับ",
@@ -154,7 +154,8 @@ export const editColumns = ({ handleAction, filterOption, listOption,handleSelec
       dataIndex: "stname",
       align: "left",
       width: 150,
-    },  {
+    },
+    {
       title: "รายการสินค้า",
       key: "stname",
       dataIndex: "stname",
@@ -162,21 +163,20 @@ export const editColumns = ({ handleAction, filterOption, listOption,handleSelec
       width: 400,
     },
     {
-      title: 'หน่วย',
-      dataIndex: 'unit',
-      key: 'unit',
+      title: "หน่วย",
+      dataIndex: "unit",
+      key: "unit",
       width: 200,
       render: (text, record) => (
-          <Select
-            showSearch
-            style={{ height: 40,width: 130 }}
-            placeholder="เลือกขนาดสินค้า"
-            filterOption={filterOption}
-            options={listOption}
-            value={record.unit} 
-            onChange={(value) => handleSelectChange(value, record)}
-          >
-          </Select>
+        <Select
+          showSearch
+          style={{ height: 40, width: 130 }}
+          placeholder="เลือกขนาดสินค้า"
+          filterOption={filterOption}
+          options={listOption}
+          value={record.unit}
+          onChange={(value) => handleSelectChange(value, record)}
+        ></Select>
       ),
     },
     // {
@@ -187,7 +187,7 @@ export const editColumns = ({ handleAction, filterOption, listOption,handleSelec
     //   dataIndex: "unit",
     //   width: 200,
     //   render: (_, record) => (
-        
+
     //       <Select
     //       name="unit"
     //         size="large"
@@ -200,7 +200,7 @@ export const editColumns = ({ handleAction, filterOption, listOption,handleSelec
 
     //         // })}
     //       />
-        
+
     //   ),
     // },
     {
@@ -211,7 +211,7 @@ export const editColumns = ({ handleAction, filterOption, listOption,handleSelec
       dataIndex: "recamount",
       width: 200,
     },
-    
+
     {
       title: "จำนวนนับ",
       align: "right",
@@ -235,9 +235,14 @@ export const editColumns = ({ handleAction, filterOption, listOption,handleSelec
 
 export const columnsDetailsEditable = (
   handleSave,
-  { handleAction, nameOption, listOption,handleSelectChange }
+  { handleAction, nameOption, listOption, handleSelectChange }
 ) => {
-  const col = editColumns({ handleAction, nameOption, listOption,handleSelectChange });
+  const col = editColumns({
+    handleAction,
+    nameOption,
+    listOption,
+    handleSelectChange,
+  });
   return col.map((col, ind) => {
     if (!col.editable) {
       return col;
