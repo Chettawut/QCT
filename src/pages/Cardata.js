@@ -13,6 +13,7 @@ import {
   Form,
   Select,
   Badge,
+  Radio,
 } from "antd";
 import Swal from "sweetalert2";
 import ModelService from "../service/Model.service";
@@ -29,7 +30,7 @@ function Cardata() {
   const searchInput = useRef(null);
   const [actionManage, setActionManage] = useState({
     action: "add",
-    title: "เพิ่มประเภทสินค้า",
+    title: "เพิ่มรุ่นรถ",
     confirmText: "Create",
   });
 
@@ -155,10 +156,11 @@ function Cardata() {
 
   const columns = [
     {
-      title: "Model Code",
+      title: "รหัสรุ่น",
       dataIndex: "modelcode",
       key: "modelcode",
       width: "5%",
+      hidden: true,
       ...getColumnSearchProps("modelcode"),
       sorter: (a, b) => a.modelcode.length - b.modelcode.length,
       sortDirections: ["descend", "ascend"],
@@ -167,7 +169,8 @@ function Cardata() {
       title: "ชื่อ รุ่น/ปี",
       dataIndex: "modelname",
       key: "modelname",
-      width: "40%",
+      width: "50%",
+      paddingleft: 50,
       ...getColumnSearchProps("modelname"),
       sorter: (a, b) => a.modelname.length - b.modelname.length,
       sortDirections: ["descend", "ascend"],
@@ -176,7 +179,7 @@ function Cardata() {
       title: "สถานะการใช้งาน",
       dataIndex: "active_status",
       key: "active_status",
-      width: "20%",
+      width: "30%",
       ...getColumnSearchProps("active_status"),
       sorter: (a, b) => a.active_status.length - b.active_status.length,
       sortDirections: ["descend", "ascend"],
@@ -197,12 +200,14 @@ function Cardata() {
       fixed: "right",
       render: (text) => (
         <Button
-          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
-          style={{ cursor: "pointer" }}
+          size="small"
+          icon={
+            <ToolTwoTone twoToneColor="#E74C3C" style={{ fontSize: ".9rem" }} />
+          }
           danger
           onClick={(e) => showEditModal(text.modelcode)}
         >
-          Edit
+          แก้ใข
         </Button>
       ),
     },
@@ -346,7 +351,7 @@ function Cardata() {
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={8}>
                 <Form.Item
-                label="ใส่ชื่อรุ่นรถ"
+                  label="ใส่ชื่อรุ่นรถ"
                   name="modelname"
                   rules={[
                     {
@@ -397,11 +402,21 @@ function Cardata() {
       </Modal>
     );
   };
-
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    },
+    getCheckboxProps: (record) => ({
+      disabled: record.name === 'Disabled User',
+      // Column configuration not to be checked
+      name: record.name,
+    }),
+  };
+  const [selectionType, setSelectionType] = useState('radio');
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
-        <h1>รุ่น / ปี</h1>
+        <h1>รุ่นรถ</h1>
         <Button
           type="primary"
           onClick={() => {
@@ -419,11 +434,25 @@ function Cardata() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
+            <Radio.Group
+        onChange={({ target: { value } }) => {
+          setSelectionType(value);
+        }}
+        value={selectionType}
+      >
+        <Radio value="checkbox">Checkbox</Radio>
+        <Radio value="radio">radio</Radio>
+      </Radio.Group>
               <Table
+               rowSelection={{
+                type: selectionType,
+                ...rowSelection,
+              }}
                 size="small"
                 columns={columns}
                 dataSource={AllUnit}
-                rowKey="unitcode"
+                rowKey="modelcode"
+                setSelectionType="radio"
               />
             </Card>
           </Col>
