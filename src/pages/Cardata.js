@@ -13,7 +13,7 @@ import {
   Form,
   Select,
   Badge,
-  Radio,
+  Checkbox,
 } from "antd";
 import Swal from "sweetalert2";
 import ModelService from "../service/Model.service";
@@ -402,17 +402,16 @@ function Cardata() {
       </Modal>
     );
   };
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
-    getCheckboxProps: (record) => ({
-      disabled: record.name === 'Disabled User',
-      // Column configuration not to be checked
-      name: record.name,
-    }),
-  };
-  const [selectionType, setSelectionType] = useState('radio');
+  const defaultCheckedList = columns.map((item) => item.key);
+  const [checkedList, setCheckedList] = useState(defaultCheckedList);
+  const options = columns.map(({ key, title }) => ({
+    label: title,
+    value: key,
+  }));
+  const newColumns = columns.map((item) => ({
+    ...item,
+    hidden: !checkedList.includes(item.key),
+  }));
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
@@ -434,25 +433,22 @@ function Cardata() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-            <Radio.Group
-        onChange={({ target: { value } }) => {
-          setSelectionType(value);
-        }}
-        value={selectionType}
-      >
-        <Radio value="checkbox">Checkbox</Radio>
-        <Radio value="radio">radio</Radio>
-      </Radio.Group>
+              <Checkbox.Group
+              style={{padding: 15}}
+                value={checkedList}
+                options={options}
+                onChange={(value) => {
+                  setCheckedList(value);
+                }}
+              />
               <Table
-               rowSelection={{
-                type: selectionType,
-                ...rowSelection,
-              }}
+                rowSelection={{
+                  type: "radio",
+                }}
                 size="small"
-                columns={columns}
+                columns={newColumns}
                 dataSource={AllUnit}
                 rowKey="modelcode"
-                setSelectionType="radio"
               />
             </Card>
           </Col>
