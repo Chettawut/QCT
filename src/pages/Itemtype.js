@@ -13,6 +13,7 @@ import {
   Form,
   Select,
   Badge,
+  Checkbox,
 } from "antd";
 import Swal from "sweetalert2";
 import ItemtypeService from "../service/ItemType.service";
@@ -163,20 +164,20 @@ function Itemtype() {
       .catch((err) => {});
   };
   const columns = [
+    // {
+    //   title: "typecode",
+    //   dataIndex: "typecode",
+    //   key: "typecode",
+    //   width: "20%",
+    //   ...getColumnSearchProps("typecode"),
+    //   sorter: (a, b) => a.typecode.length - b.typecode.length,
+    //   sortDirections: ["descend", "ascend"],
+    // },
     {
-      title: "typecode",
-      dataIndex: "typecode",
-      key: "typecode",
-      width: "20%",
-      ...getColumnSearchProps("typecode"),
-      sorter: (a, b) => a.typecode.length - b.typecode.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "ชื่อประเภท",
+      title: "ชื่อประเภทสินค้า",
       dataIndex: "typename",
       key: "typename",
-      width: "40%",
+      width: "50%",
       ...getColumnSearchProps("typename"),
       sorter: (a, b) => a.typename.length - b.typename.length,
       sortDirections: ["descend", "ascend"],
@@ -185,7 +186,7 @@ function Itemtype() {
       title: "สถานะการใช้งาน",
       dataIndex: "statusunit",
       key: "statusunit",
-      width: "20%",
+      width: "25%",
       ...getColumnSearchProps("statusunit"),
       sorter: (a, b) => a.statusunit.length - b.statusunit.length,
       sortDirections: ["descend", "ascend"],
@@ -202,16 +203,18 @@ function Itemtype() {
     {
       title: "Action",
       key: "operation",
-      width: "20%",
+      width: "25%",
       fixed: "right",
       render: (text) => (
         <Button
-          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
-          style={{ cursor: "pointer" }}
-          danger
+        size="small"
+        icon={
+          <ToolTwoTone twoToneColor="#E74C3C" style={{ fontSize: ".9rem" }} />
+        }
+        danger
           onClick={(e) => showEditModal(text.typecode)}
         >
-          Edit
+          แก้ไข
         </Button>
       ),
     },
@@ -395,7 +398,16 @@ function Itemtype() {
       </Modal>
     );
   };
-
+  const defaultCheckedList = columns.map((item) => item.key);
+  const [checkedList, setCheckedList] = useState(defaultCheckedList);
+  const options = columns.map(({ key, title }) => ({
+    label: title,
+    value: key,
+  }));
+  const newColumns = columns.map((item) => ({
+    ...item,
+    hidden: !checkedList.includes(item.key),
+  }));
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
@@ -417,9 +429,20 @@ function Itemtype() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
+            <Checkbox.Group
+              style={{padding: 15}}
+                value={checkedList}
+                options={options}
+                onChange={(value) => {
+                  setCheckedList(value);
+                }}
+              />
               <Table
+               rowSelection={{
+                type: "radio",
+              }}
                 size="small"
-                columns={columns}
+                columns={newColumns}
                 dataSource={AllItemtype}
                 rowKey="typecode"
               />

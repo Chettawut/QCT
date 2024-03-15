@@ -15,6 +15,7 @@ import {
   InputNumber,
   Divider,
   Badge,
+  Checkbox,
 } from "antd";
 import Swal from "sweetalert2";
 import CarService from "../service/Car.service";
@@ -188,7 +189,7 @@ function Car() {
       title: "ทะเบียนรถ",
       dataIndex: "carno",
       key: "carno",
-      width: "20%",
+      width: "10%",
       ...getColumnSearchProps("carno"),
       sorter: (a, b) => a.carno.length - b.carno.length,
       sortDirections: ["descend", "ascend"],
@@ -197,7 +198,7 @@ function Car() {
       title: "จังหวัด",
       dataIndex: "province",
       key: "province",
-      width: "15%",
+      width: "20%",
       ...getColumnSearchProps("province"),
       sorter: (a, b) => a.province.length - b.province.length,
       sortDirections: ["descend", "ascend"],
@@ -206,7 +207,7 @@ function Car() {
       title: "เจ้าของ",
       dataIndex: "cusno",
       key: "cusno",
-      width: "20%",
+      width: "40%",
       ...getColumnSearchProps("cusno"),
       sorter: (a, b) => a.cusno.length - b.cusno.length,
       sortDirections: ["descend", "ascend"],
@@ -241,12 +242,14 @@ function Car() {
     {
       title: "Action",
       key: "operation",
-      width: "5%",
+      width: "10%",
       fixed: "right",
       render: (text) => (
         <Button
-          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
-          style={{ cursor: "pointer" }}
+          size="small"
+          icon={
+            <ToolTwoTone twoToneColor="#E74C3C" style={{ fontSize: ".9rem" }} />
+          }
           danger
           onClick={(e) => showEditModal(text.carno)}
         >
@@ -906,7 +909,16 @@ function Car() {
       </Modal>
     );
   };
-
+  const defaultCheckedList = columns.map((item) => item.key);
+  const [checkedList, setCheckedList] = useState(defaultCheckedList);
+  const options = columns.map(({ key, title }) => ({
+    label: title,
+    value: key,
+  }));
+  const newColumns = columns.map((item) => ({
+    ...item,
+    hidden: !checkedList.includes(item.key),
+  }));
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
@@ -928,7 +940,22 @@ function Car() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table size="small" columns={columns} dataSource={AllCar} />
+              <Checkbox.Group
+                style={{ padding: 15 }}
+                value={checkedList}
+                options={options}
+                onChange={(value) => {
+                  setCheckedList(value);
+                }}
+              />
+              <Table
+                rowSelection={{
+                  type: "radio",
+                }}
+                size="small"
+                columns={newColumns}
+                dataSource={AllCar}
+              />
             </Card>
           </Col>
         </Row>

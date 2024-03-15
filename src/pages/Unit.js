@@ -13,6 +13,7 @@ import {
   Form,
   Select,
   Badge,
+  Checkbox,
 } from "antd";
 import Swal from "sweetalert2";
 import UnitService from "../service/Unit.service";
@@ -154,20 +155,20 @@ function Unit() {
   });
 
   const columns = [
+    // {
+    //   title: "Unit Code",
+    //   dataIndex: "unitcode",
+    //   key: "unitcode",
+    //   width: "20%",
+    //   ...getColumnSearchProps("unitcode"),
+    //   sorter: (a, b) => a.unitcode.length - b.unitcode.length,
+    //   sortDirections: ["descend", "ascend"],
+    // },
     {
-      title: "Unit Code",
-      dataIndex: "unitcode",
-      key: "unitcode",
-      width: "20%",
-      ...getColumnSearchProps("unitcode"),
-      sorter: (a, b) => a.unitcode.length - b.unitcode.length,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Unit Name",
+      title: "ชื่อหน่วยสินค้า",
       dataIndex: "unit",
       key: "unit",
-      width: "40%",
+      width: "50%",
       ...getColumnSearchProps("unit"),
       sorter: (a, b) => a.unit.length - b.unit.length,
       sortDirections: ["descend", "ascend"],
@@ -176,7 +177,7 @@ function Unit() {
       title: "สถานะการใช้งาน",
       dataIndex: "statusunit",
       key: "statusunit",
-      width: "20%",
+      width: "25%",
       ...getColumnSearchProps("statusunit"),
       sorter: (a, b) => a.statusunit.length - b.statusunit.length,
       sortDirections: ["descend", "ascend"],
@@ -193,16 +194,18 @@ function Unit() {
     {
       title: "Action",
       key: "operation",
-      width: "20%",
+      width: "25%",
       fixed: "right",
       render: (text) => (
         <Button
-          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
-          style={{ cursor: "pointer" }}
+          size="small"
+          icon={
+            <ToolTwoTone twoToneColor="#E74C3C" style={{ fontSize: ".9rem" }} />
+          }
           danger
           onClick={(e) => showEditModal(text.unitcode)}
         >
-          Edit
+          แก้ไข
         </Button>
       ),
     },
@@ -346,7 +349,7 @@ function Unit() {
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={8}>
                 <Form.Item
-                label="ใส่ชื่อหน่วยสินค้า"
+                  label="ใส่ชื่อหน่วยสินค้า"
                   name="unitname"
                   rules={[
                     {
@@ -397,7 +400,16 @@ function Unit() {
       </Modal>
     );
   };
-
+  const defaultCheckedList = columns.map((item) => item.key);
+  const [checkedList, setCheckedList] = useState(defaultCheckedList);
+  const options = columns.map(({ key, title }) => ({
+    label: title,
+    value: key,
+  }));
+  const newColumns = columns.map((item) => ({
+    ...item,
+    hidden: !checkedList.includes(item.key),
+  }));
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
@@ -419,9 +431,20 @@ function Unit() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
+              <Checkbox.Group
+                style={{ padding: 15 }}
+                value={checkedList}
+                options={options}
+                onChange={(value) => {
+                  setCheckedList(value);
+                }}
+              />
               <Table
+                rowSelection={{
+                  type: "radio",
+                }}
                 size="small"
-                columns={columns}
+                columns={newColumns}
                 dataSource={AllUnit}
                 rowKey="unitcode"
               />

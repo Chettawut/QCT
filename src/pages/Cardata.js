@@ -166,7 +166,7 @@ function Cardata() {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "ชื่อ รุ่น/ปี",
+      title: "ชื่อรุ่นรถ",
       dataIndex: "modelname",
       key: "modelname",
       width: "50%",
@@ -207,7 +207,7 @@ function Cardata() {
           danger
           onClick={(e) => showEditModal(text.modelcode)}
         >
-          แก้ใข
+          แก้ไข
         </Button>
       ),
     },

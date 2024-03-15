@@ -13,6 +13,7 @@ import {
   Form,
   Select,
   Badge,
+  Checkbox,
   // DatePicker,
 } from "antd";
 import Swal from "sweetalert2";
@@ -155,7 +156,7 @@ function Supplier() {
       title: "รหัสผู้ขาย",
       dataIndex: "supcode",
       key: "supcode",
-      width: "15%",
+      width: "20%",
       ...getColumnSearchProps("supcode"),
       sorter: (a, b) => a.supcode.length - b.supcode.length,
       sortDirections: ["descend", "ascend"],
@@ -164,7 +165,7 @@ function Supplier() {
       title: "ชื่อผู้ขาย",
       dataIndex: "supname",
       key: "supname",
-      width: "30%",
+      width: "45%",
       ...getColumnSearchProps("supname"),
       sorter: (a, b) => a.supname.length - b.supname.length,
       sortDirections: ["descend", "ascend"],
@@ -173,7 +174,7 @@ function Supplier() {
       title: "เบอร์โทร",
       dataIndex: "tel",
       key: "tel",
-      width: "15%",
+      width: "20%",
       ...getColumnSearchProps("tel"),
       sorter: (a, b) => a.tel.length - b.tel.length,
       sortDirections: ["descend", "ascend"],
@@ -181,12 +182,14 @@ function Supplier() {
     {
       title: "Action",
       key: "operation",
-      width: "10%",
+      width: "15%",
       fixed: "right",
       render: (text) => (
         <Button
-          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
-          style={{ cursor: "pointer" }}
+          size="small"
+          icon={
+            <ToolTwoTone twoToneColor="#E74C3C" style={{ fontSize: ".9rem" }} />
+          }
           danger
           onClick={(e) => showEditModal(text.supcode)}
         >
@@ -337,10 +340,7 @@ function Supplier() {
                     },
                   ]}
                 >
-                  <Input
-                    disabled
-                    placeholder="รหัสผู้ขาย"
-                  />
+                  <Input disabled placeholder="รหัสผู้ขาย" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
@@ -441,7 +441,16 @@ function Supplier() {
       </Modal>
     );
   };
-
+  const defaultCheckedList = columns.map((item) => item.key);
+  const [checkedList, setCheckedList] = useState(defaultCheckedList);
+  const options = columns.map(({ key, title }) => ({
+    label: title,
+    value: key,
+  }));
+  const newColumns = columns.map((item) => ({
+    ...item,
+    hidden: !checkedList.includes(item.key),
+  }));
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
@@ -454,8 +463,7 @@ function Supplier() {
               title: "เพิ่มผู้ขาย",
               confirmText: "เพิ่ม",
             });
-            showAddModal()
-            
+            showAddModal();
           }}
         >
           เพิ่มผู้ขาย
@@ -464,7 +472,22 @@ function Supplier() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table size="small" columns={columns} dataSource={AllUser} />
+            <Checkbox.Group
+              style={{padding: 15}}
+                value={checkedList}
+                options={options}
+                onChange={(value) => {
+                  setCheckedList(value);
+                }}
+              />
+              <Table
+                rowSelection={{
+                  type: "radio",
+                }}
+                size="small"
+                columns={newColumns}
+                dataSource={AllUser}
+              />
             </Card>
           </Col>
         </Row>

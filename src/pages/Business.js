@@ -13,6 +13,7 @@ import {
   Form,
   Select,
   Badge,
+  Checkbox,
   // Divider,
   // DatePicker,
 } from "antd";
@@ -157,7 +158,7 @@ function Employee() {
       title: "รหัสบริษัท",
       dataIndex: "businessno",
       key: "businessno",
-      width: "15%",
+      width: "20%",
       ...getColumnSearchProps("businessno"),
       sorter: (a, b) => a.businessno.length - b.businessno.length,
       sortDirections: ["descend", "ascend"],
@@ -166,7 +167,7 @@ function Employee() {
       title: "ชื่อบริษัท",
       dataIndex: "title_name",
       key: "title_name",
-      width: "30%",
+      width: "40%",
       ...getColumnSearchProps("title_name"),
       sorter: (a, b) => a.title_name.length - b.title_name.length,
       sortDirections: ["descend", "ascend"],
@@ -175,7 +176,7 @@ function Employee() {
       title: "เบอร์โทร",
       dataIndex: "tel_phone",
       key: "tel_phone",
-      width: "15%",
+      width: "20%",
       ...getColumnSearchProps("tel_phone"),
       sorter: (a, b) => a.tel_phone.length - b.tel_phone.length,
       sortDirections: ["descend", "ascend"],
@@ -183,13 +184,15 @@ function Employee() {
     {
       title: "Action",
       key: "operation",
-      width: "10%",
+      width: "20%",
       fixed: "right",
       render: (text) => (
         <Button
-          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
-          style={{ cursor: "pointer" }}
-          danger
+        size="small"
+        icon={
+          <ToolTwoTone twoToneColor="#E74C3C" style={{ fontSize: ".9rem" }} />
+        }
+        danger
           onClick={(e) => showEditModal(text.businessno)}
         >
           แก้ใข
@@ -462,7 +465,16 @@ function Employee() {
       </Modal>
     );
   };
-
+  const defaultCheckedList = columns.map((item) => item.key);
+  const [checkedList, setCheckedList] = useState(defaultCheckedList);
+  const options = columns.map(({ key, title }) => ({
+    label: title,
+    value: key,
+  }));
+  const newColumns = columns.map((item) => ({
+    ...item,
+    hidden: !checkedList.includes(item.key),
+  }));
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
@@ -484,7 +496,22 @@ function Employee() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table size="small" columns={columns} dataSource={AllUser} />
+              <Checkbox.Group
+                style={{ padding: 15 }}
+                value={checkedList}
+                options={options}
+                onChange={(value) => {
+                  setCheckedList(value);
+                }}
+              />
+              <Table
+                rowSelection={{
+                  type: "radio",
+                }}
+                size="small"
+                columns={newColumns}
+                dataSource={AllUser}
+              />
             </Card>
           </Col>
         </Row>
