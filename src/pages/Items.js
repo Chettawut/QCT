@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SearchOutlined, ToolTwoTone,ClearOutlined } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone, ClearOutlined } from "@ant-design/icons";
 import {
   Button,
   Input,
@@ -57,15 +57,17 @@ const Items = () => {
     GetUnit();
   }, []);
 
-  const GetItems = (data) => {    
-      ItemService.getItem(data).then( res => {
-        const {data} = res.data;
+  const GetItems = (data) => {
+    ItemService.getItem(data)
+      .then((res) => {
+        const { data } = res.data;
 
         setAllItems(data);
-    }).catch( err => {
+      })
+      .catch((err) => {
         console.log(err);
         message.error("Request error!");
-    });
+      });
   };
 
   const GetItemType = () => {
@@ -91,14 +93,17 @@ const Items = () => {
   };
 
   const handleSearch = () => {
-    form.validateFields().then( v => {
-        const data = {...v}; 
+    form
+      .validateFields()
+      .then((v) => {
+        const data = { ...v };
 
         GetItems(data);
-    }).catch( err => {
+      })
+      .catch((err) => {
         console.warn(err);
-    })
-}
+      });
+  };
 
   const handleClear = () => {
     form.resetFields();
@@ -108,25 +113,25 @@ const Items = () => {
 
   const columns = [
     {
-      title: "Item Code",
+      title: "รหัสสินค้า",
       dataIndex: "stcode",
       key: "stcode",
       width: "20%",
     },
     {
-      title: "Item Name",
+      title: "ชื่อสินค้า",
       dataIndex: "stname",
       key: "stname",
       width: "20%",
     },
     {
-      title: "Item Type",
+      title: "ประเภทสินค้า",
       dataIndex: "typename",
       key: "typename",
       width: "20%",
     },
     {
-      title: "Unit",
+      title: "หน่วย",
       dataIndex: "unit",
       key: "unit",
       width: "20%",
@@ -147,15 +152,17 @@ const Items = () => {
       ),
     },
     {
-      title: "แก้ใข",
+      title: "Action",
       key: "operation",
       width: "20%",
       fixed: "right",
       render: (text) => (
         <Button
-          icon={<ToolTwoTone twoToneColor="#E74C3C" />}
+          size="small"
+          icon={
+            <ToolTwoTone twoToneColor="#E74C3C" style={{ fontSize: ".9rem" }} />
+          }
           danger
-          style={{ cursor: "pointer" }}
           onClick={(e) => showEditModal(text.stcode)}
         >
           แก้ใข
@@ -314,7 +321,7 @@ const Items = () => {
       children: (
         <Form form={formManage} layout="vertical">
           <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item name="stcode" label="รหัสสินค้า">
                 <Input />
               </Form.Item>
@@ -363,7 +370,7 @@ const Items = () => {
               lg={24}
               xl={6}
             >
-              <Form.Item name="count_stock" >
+              <Form.Item name="count_stock">
                 <Checkbox size="large">ติดตามสต๊อก</Checkbox>
               </Form.Item>
             </Col>
@@ -535,17 +542,17 @@ const Items = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
               <Form.Item name="สต๊อกจริง" label="สต๊อกจริง">
-                <Input disabled/>
+                <Input disabled />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
               <Form.Item name="สต๊อก VAT" label="สต๊อก VAT">
-                <Input disabled/>
+                <Input disabled />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={8}>
               <Form.Item name="จำนวนขายต่อชุด" label="จำนวนขายต่อชุด">
-                <Input disabled/>
+                <Input disabled />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
@@ -558,7 +565,9 @@ const Items = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={16}>
               <Form.Item name="check-1" valuePropName="checked">
-                <Checkbox>ใช้กำหนดสต๊อกขั้นต่ำ แบบกำหนดเป็นเดือนตามปริมาณการใช้จริง</Checkbox>
+                <Checkbox>
+                  ใช้กำหนดสต๊อกขั้นต่ำ แบบกำหนดเป็นเดือนตามปริมาณการใช้จริง
+                </Checkbox>
               </Form.Item>
             </Col>
           </Row>
@@ -630,7 +639,16 @@ const Items = () => {
       </Modal>
     );
   };
-
+  const defaultCheckedList = columns.map((item) => item.key);
+  const [checkedList, setCheckedList] = useState(defaultCheckedList);
+  const options = columns.map(({ key, title }) => ({
+    label: title,
+    value: key,
+  }));
+  const newColumns = columns.map((item) => ({
+    ...item,
+    hidden: !checkedList.includes(item.key),
+  }));
   return (
     <>
       <div className="pilot-scale-access" style={{ padding: 20 }}>
@@ -666,7 +684,23 @@ const Items = () => {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-              <Table columns={columns} dataSource={AllItems} />
+            <Checkbox.Group
+              style={{padding: 15}}
+                value={checkedList}
+                options={options}
+                onChange={(value) => {
+                  setCheckedList(value);
+                }}
+              />
+              <Table
+                rowSelection={{
+                  type: "radio",
+                }}
+                size="small"
+                columns={newColumns}
+                dataSource={AllItems}
+                rowKey="stcode"
+              />
             </Card>
           </Col>
         </Row>
