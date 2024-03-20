@@ -86,16 +86,58 @@ const ellipsis = () => {
 export const columns = ()=>{
   return [
     {
-      title: "รหัสสินค้า",
+      title: "ลำดับ",
       key: "stcode",
       dataIndex: "stcode",
-      width:200,
+      width:50,
+      ...ellipsis()
+    },
+    {
+      title: "เลขที่ใบสั่งซื้อ",
+      key: "stcode",
+      dataIndex: "stcode",
+      width:150,
+      ...ellipsis()
+    },
+    {
+      title: "รหัสพัสดุ",
+      key: "stcode",
+      dataIndex: "stcode",
+      width:150,
       ...ellipsis()
     },
     {
       title: "ชื่อสินค้า",
       dataIndex: "stname",
       key: "stname", 
+      width:300,
+      ...ellipsis()
+    },
+    {
+      title: "หน่วย",
+      dataIndex: "stname",
+      key: "stname", 
+      width:150,
+      ...ellipsis()
+    },
+    {
+      title: "จำนวนสั่งซื้อ",
+      dataIndex: "2",
+      key: "2", 
+      width:100,
+      ...ellipsis()
+    },
+    {
+      title: "จำนวนที่รับแล้ว",
+      dataIndex: "0",
+      key: "0", 
+      width:100,
+      ...ellipsis()
+    },
+    {
+      title: "สถานะ",
+      dataIndex: "1",
+      key: "1", 
       width:200,
       ...ellipsis()
     },

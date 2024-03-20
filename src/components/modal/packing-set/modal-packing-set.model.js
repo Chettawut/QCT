@@ -68,6 +68,12 @@ export const columnPackingsetGroup = ({handleChoose, handleEdit, handleDeleted})
         key: "supcode",
         dataIndex: "supcode", 
         render: (v, record) => <LChoose record={record}>{v}</LChoose>
+      },
+       {
+        title: "ลำดับ",
+        key: "",
+        dataIndex: "", 
+        render: (v, record) => <LChoose record={record}>{v}</LChoose>
       }, 
       {
         title: "ชื่อผู้ขาย",

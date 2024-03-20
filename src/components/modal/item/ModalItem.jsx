@@ -142,7 +142,7 @@ export default function ModalItem({ show, close, values, selected = [] }) {
         onCancel={() => setOpenModel(false)}
         maskClosable={false}
         style={{ top: 20 }}
-        width={800}
+        width={1500}
         className="modal-packaging"
         footer={
           <Row>

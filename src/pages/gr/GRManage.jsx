@@ -183,7 +183,7 @@ function POManage() {
   };
 
   const handleClose = async () => {
-    navigate("/purchase-order", { replace: true });
+    navigate("/good-recevive", { replace: true });
     await delay(300);
     console.clear();
   };
