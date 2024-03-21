@@ -318,7 +318,7 @@ function POManage() {
   );
 
   const TitleTable = (
-    <Flex className="width-100" align="center">
+    <Flex className="width-100" align="center" >
       <Col span={12} className="p-0">
         <Flex gap={4} justify="start" align="center">
           {/* <Typography.Title className='m-0 !text-zinc-800' level={3}></Typography.Title> */}
@@ -331,7 +331,7 @@ function POManage() {
             className="bn-center justify-center bn-primary-outline"
             onClick={() => setOpenModalPackaging(true)}
           >
-            Select PO
+            เลือก PO
           </Button>
         </Flex>
       </Col>

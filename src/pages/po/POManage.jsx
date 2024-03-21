@@ -17,7 +17,7 @@ import {
 import { Form, DatePicker } from "antd";
 import { ButtonBack } from "../../components/button";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ModalItem } from "../../components/modal/item/modal-packaging";
+import { ModalItem } from "../../components/modal/itemPO/modal-packaging";
 
 import { SaveFilled, SearchOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -332,7 +332,7 @@ function POManage() {
             className="bn-center justify-center bn-primary-outline"
             onClick={() => setOpenModalPackaging(true)}
           >
-            Select Product
+            เพิ่มสินค้า
           </Button>
         </Flex>
       </Col>
