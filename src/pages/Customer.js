@@ -382,29 +382,8 @@ function Employee() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="วันเกิด" name="dateofbirth">
-                  <Input
-                    style={{
-                      width: 262,
-                    }}
-                    size="large"
-                    placeholder="วันเกิด"
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item label="เบอร์โทร" name="tel">
                   <Input placeholder="เบอร์โทร" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="หมายเลขสมาชิก" name="member_code">
-                  <Input placeholder="หมายเลขสมาชิก" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="วันที่เริ่มเป็นสมาชิก" name="member_date">
-                  <Input placeholder="วันที่เริ่มเป็นสมาชิก" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -415,6 +394,17 @@ function Employee() {
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item label="รหัสไปรษณีย์" name="zipcode">
                   <Input placeholder="รหัสไปรษณีย์" />
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Form.Item label="ที่อยู่" name="address">
+                  <TextArea rows={3} placeholder="ที่อยู่" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Form.Item label="หมายเหตุ" name="หมายเหตุ">
+                  <TextArea rows={3} placeholder="หมายเหตุ" />
                 </Form.Item>
               </Col>
               <Col
@@ -443,11 +433,6 @@ function Employee() {
                       },
                     ]}
                   />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={24}>
-                <Form.Item label="ที่อยู่" name="address">
-                  <TextArea rows={3} placeholder="ที่อยู่" />
                 </Form.Item>
               </Col>
             </Row>

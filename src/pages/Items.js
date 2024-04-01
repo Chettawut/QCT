@@ -271,13 +271,13 @@ const Items = () => {
       <>
         <Row gutter={[8, 8]}>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="Item Code" name="stcode" onChange={handleSearch}>
-              <Input placeholder="Enter Item Code." />
+            <Form.Item label="รหัสสินค้า" name="stcode" onChange={handleSearch}>
+              <Input placeholder="ใส่รหัสสินค้า" />
             </Form.Item>
           </Col>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="Item Name" name="stname" onChange={handleSearch}>
-              <Input placeholder="Enter Item Name." />
+            <Form.Item label="ชื่อสินค้า" name="stname" onChange={handleSearch}>
+              <Input placeholder="ใส่ชื่อสินค้า" />
             </Form.Item>
           </Col>
         </Row>
@@ -295,7 +295,7 @@ const Items = () => {
                 icon={<SearchOutlined />}
                 onClick={() => handleSearch()}
               >
-                Search
+               ค้นหา
               </Button>
               <Button
                 type="primary"
@@ -305,7 +305,7 @@ const Items = () => {
                 icon={<ClearOutlined />}
                 onClick={() => handleClear()}
               >
-                Clear
+               ล้าง
               </Button>
             </Flex>
           </Col>
@@ -323,7 +323,9 @@ const Items = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item name="stcode" label="รหัสสินค้า">
-                <Input />
+                <Input
+                  disabled={actionManage.action === "edit" ? true : false}
+                />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24} lg={24} xl={12}>
@@ -529,6 +531,20 @@ const Items = () => {
                 <Input />
               </Form.Item>
             </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+              <Form.Item name="สต๊อกขั้นต่ำ (ชิ้น)" label="สต๊อกขั้นต่ำ (ชิ้น)">
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={16}>
+              <Form.Item name="check-1" valuePropName="checked">
+                <Checkbox>
+                  ใช้กำหนดสต๊อกขั้นต่ำ แบบกำหนดเป็นเดือนตามปริมาณการใช้จริง
+                </Checkbox>
+              </Form.Item>
+            </Col>
           </Row>
         </Form>
       ),
@@ -555,28 +571,6 @@ const Items = () => {
                 <Input disabled />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={24} lg={24} xl={6}>
-              <Form.Item name="check-1" valuePropName="checked">
-                <Checkbox>แยกสต๊อกตามล็อตการผลิต</Checkbox>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Divider />
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={24} lg={24} xl={16}>
-              <Form.Item name="check-1" valuePropName="checked">
-                <Checkbox>
-                  ใช้กำหนดสต๊อกขั้นต่ำ แบบกำหนดเป็นเดือนตามปริมาณการใช้จริง
-                </Checkbox>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={24} lg={24} xl={8}>
-              <Form.Item name="สต๊อกขั้นต่ำ (ชิ้น)" label="สต๊อกขั้นต่ำ (ชิ้น)">
-                <Input />
-              </Form.Item>
-            </Col>
           </Row>
         </Form>
       ),
@@ -596,7 +590,7 @@ const Items = () => {
           label: (
             <>
               <SearchOutlined />
-              <span> Search</span>
+              <span> ค้นหา</span>
             </>
           ),
           children: CollapseItemSearch(),
@@ -684,8 +678,8 @@ const Items = () => {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-            <Checkbox.Group
-              style={{padding: 15}}
+              <Checkbox.Group
+                style={{ padding: 15 }}
                 value={checkedList}
                 options={options}
                 onChange={(value) => {

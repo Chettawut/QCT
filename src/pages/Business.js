@@ -438,7 +438,7 @@ function Employee() {
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={16}>
                 <Form.Item label="ที่อยู่" name="address">
-                  <TextArea rows={3} placeholder="ที่อยู่" />
+                  <TextArea rows={2} placeholder="ที่อยู่" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={8}>
@@ -448,7 +448,7 @@ function Employee() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={16}>
                 <Form.Item label="ที่อยู่จัดส่งสินค้า" name="shipping_address">
-                  <TextArea rows={3} placeholder="ที่อยู่จัดส่งสินค้า" />
+                  <TextArea rows={2} placeholder="ที่อยู่จัดส่งสินค้า" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={8}>
@@ -457,6 +457,11 @@ function Employee() {
                   name="shipping_zipcode"
                 >
                   <Input placeholder="รหัสไปรษณีย์ที่อยู่จัดส่งสินค้า" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={24}>
+                <Form.Item label="หมายเหตุ" name="หมายเหตุ">
+                  <TextArea rows={2} placeholder="หมายเหตุ" />
                 </Form.Item>
               </Col>
             </Row>
