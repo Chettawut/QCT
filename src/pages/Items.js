@@ -170,7 +170,26 @@ const Items = () => {
       ),
     },
   ].filter((item) => !item.hidden);
-
+  const columnsdetail = [
+    {
+      title: "ปีผลิต",
+      dataIndex: "stcode",
+      key: "stcode",
+      width: "20%",
+    },
+    {
+      title: "หนึ่งในสี่ส่วน",
+      dataIndex: "stname",
+      key: "stname",
+      width: "40%",
+    },
+    {
+      title: "สถานที่เก็บ",
+      dataIndex: "typename",
+      key: "typename",
+      width: "40%",
+    },
+  ].filter((item) => !item.hidden);
   const showEditModal = (data) => {
     document.body.style = "overflow: hidden !important;";
     ItemService.getSupItem(data)
@@ -295,7 +314,7 @@ const Items = () => {
                 icon={<SearchOutlined />}
                 onClick={() => handleSearch()}
               >
-               ค้นหา
+                ค้นหา
               </Button>
               <Button
                 type="primary"
@@ -305,7 +324,7 @@ const Items = () => {
                 icon={<ClearOutlined />}
                 onClick={() => handleClear()}
               >
-               ล้าง
+                ล้าง
               </Button>
             </Flex>
           </Col>
@@ -373,7 +392,7 @@ const Items = () => {
               xl={6}
             >
               <Form.Item name="count_stock">
-                <Checkbox size="large">ติดตามสต๊อก</Checkbox>
+                <Checkbox size="large">ตัดสต๊อก</Checkbox>
               </Form.Item>
             </Col>
             <Col
@@ -540,9 +559,7 @@ const Items = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} sm={24} md={24} lg={24} xl={16}>
               <Form.Item name="check-1" valuePropName="checked">
-                <Checkbox>
-                  ใช้กำหนดสต๊อกขั้นต่ำ แบบกำหนดเป็นเดือนตามปริมาณการใช้จริง
-                </Checkbox>
+                <Checkbox>แยกตามล๊อตการผลิต</Checkbox>
               </Form.Item>
             </Col>
           </Row>
@@ -572,6 +589,12 @@ const Items = () => {
               </Form.Item>
             </Col>
           </Row>
+          <Table
+            size="small"
+            columns={columnsdetail}
+            dataSource={AllItems}
+            rowKey="stcode"
+          />
         </Form>
       ),
     },
@@ -661,6 +684,7 @@ const Items = () => {
           </Row>
         </Space>
         <br></br>
+
         <Button
           type="primary"
           onClick={() => {

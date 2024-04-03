@@ -34,7 +34,7 @@ import {
 import ModalPackingSetGroup from "../../components/modal/packing-set/ModalPackingSetGroup";
 const POServices = POService();
 
-function POManage() {
+function GRManage() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -331,7 +331,7 @@ function POManage() {
             className="bn-center justify-center bn-primary-outline"
             onClick={() => setOpenModalPackaging(true)}
           >
-            เลือก PO
+            เลือกใบสั่งสินค้า
           </Button>
         </Flex>
       </Col>
@@ -357,13 +357,13 @@ function POManage() {
           {SectionTop}
           <Flex className="width-100" vertical gap={4}>
             <Divider orientation="left" className="!my-0">
-              Good Receive
+             ใบรับสินค้า
             </Divider>
             <Card>
               <Form form={form} layout="vertical" autoComplete="off">
                 <Row gutter={[8, 8]} className="px-4 sm:px-0 md:px-0 lg:px-0">
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
-                    <Form.Item label="เลขที่ GR" name="grcode" required={false}>
+                    <Form.Item label="เลขที่ใบรับสินค้า" name="grcode" required={false}>
                       <Input disabled />
                     </Form.Item>
                   </Col>
@@ -378,7 +378,7 @@ function POManage() {
                       <Space.Compact style={{ width: "100%" }}>
                         <Input
                           readOnly
-                          placeholder="Choose รหัสผู้ขาย"
+                          placeholder="เลือกรหัสผู้ขาย"
                           value={!!formDetail.supcode ? formDetail.supcode : ""}
                         />
                         <Button
@@ -424,12 +424,12 @@ function POManage() {
                       />
                     </Form.Item>
                   </Col>
-                  <FormCol50 label="เลขที่ Invoice" name="invcode">
+                  <FormCol50 label="เลขที่ใบแจ้งหนี้" name="invcode">
                     <Input />
                   </FormCol50>
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
                     <Form.Item
-                      label="วันที่ออก Invoice :"
+                      label="วันที่ออกใบแจ้งหนี้:"
                       name="invdate"
                       rules={[
                         { required: true, message: "Please input your data!" },
@@ -484,7 +484,7 @@ function POManage() {
           </Flex>
           <Flex className="width-100" vertical gap={4}>
             <Divider orientation="left" className="!my-0">
-              Good Receive Detail
+        รายละเอียดใบรับสินค้า
             </Divider>
             <Card style={{ backgroundColor: "#f0f0f0" }}>
               <Table
@@ -536,4 +536,4 @@ function POManage() {
   );
 }
 
-export default POManage;
+export default GRManage;

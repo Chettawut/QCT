@@ -354,13 +354,13 @@ function POManage() {
           {SectionTop}
           <Flex className="width-100" vertical gap={4}>
             <Divider orientation="left" className="!my-0">
-              Purchase Order
+              ใบสั่งซื้อ
             </Divider>
             <Card>
               <Form form={form} layout="vertical" autoComplete="off">
                 <Row gutter={[8, 8]} className="px-4 sm:px-0 md:px-0 lg:px-0">
                   <Col xs={24} sm={12} md={12} lg={6} xl={6} xxl={6}>
-                    <Form.Item label="เลขที่ PO" name="pocode" required={false}>
+                    <Form.Item label="เลขที่ใบสั่งซื้อ" name="pocode" required={false}>
                       <Input disabled />
                     </Form.Item>
                   </Col>
@@ -375,7 +375,7 @@ function POManage() {
                       <Space.Compact style={{ width: "100%" }}>
                         <Input
                           readOnly
-                          placeholder="Choose รหัสผู้ขาย"
+                          placeholder="เลือกรหัสผู้ขาย"
                           value={!!formDetail.supcode ? formDetail.supcode : ""}
                         />
                         <Button
@@ -486,7 +486,7 @@ function POManage() {
           </Flex>
           <Flex className="width-100" vertical gap={4}>
             <Divider orientation="left" className="!my-0">
-              Purchase Order Detail
+            รายละเอียดใบสั่งซื้อ
             </Divider>
             <Card style={{ backgroundColor: "#f0f0f0" }}>
               <Table
@@ -501,7 +501,7 @@ function POManage() {
                 scroll={{ x: "max-content" }}
                 locale={{
                   emptyText: (
-                    <span>No data available, please add some data.</span>
+                    <span>ไม่มีข้อมูลสินค้า</span>
                   ),
                 }}
               />
