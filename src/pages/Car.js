@@ -1,4 +1,4 @@
-import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone, ClearOutlined } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -16,6 +16,9 @@ import {
   Divider,
   Badge,
   Checkbox,
+  Collapse,
+  Flex,
+  DatePicker,
 } from "antd";
 import Swal from "sweetalert2";
 import CarService from "../service/Car.service";
@@ -36,7 +39,9 @@ function Car() {
   const searchInput = useRef(null);
   const [formManage] = Form.useForm();
   const { TextArea } = Input;
-
+  const [form] = Form.useForm();
+  const [activeSearch, setActiveSearch] = useState([]);
+  const RangePicker = DatePicker.RangePicker;
   useEffect(() => {
     GetCar();
     GetModel();
@@ -52,7 +57,86 @@ function Car() {
       })
       .catch((err) => {});
   };
+  const handleClear = () => {
+    form.resetFields();
 
+    handleSearch();
+  };
+
+  const CollapseItemSearch = () => {
+    return (
+      <>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="ทะเบียนรถ" name="packingset_name">
+              <Input placeholder="ใส่ทะเบียนรถ" />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="ชื่อ-นามสกุลเจ้าของ" name="created_by">
+              <Input placeholder="ใส่ชื่อ หรือ นามสกุล เจ้าของ" />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="จังหวัด" name="created_date">
+              <Input placeholder="ใส่จังหวัด" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            {/* Ignore */}
+          </Col>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            <Flex justify="flex-end" gap={8}>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                icon={<SearchOutlined />}
+                onClick={() => handleSearch()}
+              >
+                ค้นหา
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                danger
+                icon={<ClearOutlined />}
+                onClick={() => handleClear()}
+              >
+                ล้าง
+              </Button>
+            </Flex>
+          </Col>
+        </Row>
+      </>
+    );
+  };
+  const FormSearch = (
+    <Collapse
+      size="small"
+      onChange={(e) => {
+        setActiveSearch(e);
+      }}
+      activeKey={activeSearch}
+      items={[
+        {
+          key: "1",
+          label: (
+            <>
+              <SearchOutlined />
+              <span> ค้นหา</span>
+            </>
+          ),
+          children: CollapseItemSearch(),
+          showArrow: false,
+        },
+      ]}
+      // bordered={false}
+    />
+  );
   const GetModel = () => {
     ModelService.getAllModel()
       .then((res) => {
@@ -923,6 +1007,10 @@ function Car() {
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>รถ</h1>
+        <Form form={form} layout="vertical" autoComplete="off">
+          {FormSearch}
+        </Form>
+        <br></br>
         <Button
           type="primary"
           onClick={() => {
@@ -936,7 +1024,6 @@ function Car() {
         >
           เพิ่มข้อมูลรถ
         </Button>
-
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">

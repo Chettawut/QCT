@@ -33,21 +33,21 @@ const POAccess = () => {
       <>
         <Row gutter={[8, 8]}>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="Packing Set" name="packingset_name">
-              <Input placeholder="Enter Packing Set Name." />
+            <Form.Item label="เลขที่ใบรับสินค้า" name="packingset_name">
+              <Input placeholder="ใส่เลขที่ใบรับสินค้า" />
             </Form.Item>
           </Col>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="Request Date." name="created_date">
+            <Form.Item label="ยื่นขอวันที่" name="created_date">
               <RangePicker
-                placeholder={["From Date", "To date"]}
+                placeholder={["จากวันที่", "ถึงวันที่"]}
                 style={{ width: "100%", height: 40 }}
               />
             </Form.Item>
           </Col>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="Request By." name="created_by">
-              <Input placeholder="Enter First Name or Last Name." />
+            <Form.Item label="ผู้ออกใบรับสินค้า" name="created_by">
+              <Input placeholder="ใส่ชื่อผู้ออกใบรับสินค้า" />
             </Form.Item>
           </Col>
         </Row>
@@ -64,7 +64,7 @@ const POAccess = () => {
                 icon={<SearchOutlined />}
                 onClick={() => handleSearch()}
               >
-                Search
+                ค้นหา
               </Button>
               <Button
                 type="primary"
@@ -74,7 +74,7 @@ const POAccess = () => {
                 icon={<ClearOutlined />}
                 onClick={() => handleClear()}
               >
-                Clear
+                ล้าง
               </Button>
             </Flex>
           </Col>
@@ -96,7 +96,7 @@ const POAccess = () => {
           label: (
             <>
               <SearchOutlined />
-              <span> Search</span>
+              <span> ค้นหา</span>
             </>
           ),
           children: CollapseItemSearch(),
@@ -216,7 +216,7 @@ const POAccess = () => {
               hangleAdd();
             }}
           >
-            เพิ่ม Good Receive
+            เพิ่มใบรับสินค้า
           </Button>
         </Flex>
       </Col>

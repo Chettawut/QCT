@@ -499,7 +499,7 @@ function GRManage() {
                 scroll={{ x: "max-content" }}
                 locale={{
                   emptyText: (
-                    <span>No data available, please add some data.</span>
+                    <span>ไม่มีข้อมูล</span>
                   ),
                 }}
               />

@@ -17,7 +17,7 @@ import {
 /** get sample column */
 export const accessColumn = ({ handleEdit, handleDelete }) => [
   {
-    title: "เลขที่ GR",
+    title: "เลขที่ใบรับสินค้า",
     key: "pocode",
     dataIndex: "pocode",
     align: "left",
@@ -27,7 +27,7 @@ export const accessColumn = ({ handleEdit, handleDelete }) => [
     },
   },
   {
-    title: "วันที่ออก GR",
+    title: "วันที่ออกใบรับสินค้า",
     dataIndex: "podate",
     key: "podate",
     align: "right",

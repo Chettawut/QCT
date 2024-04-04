@@ -311,7 +311,7 @@ function POManage() {
               handleConfirm();
             }}
           >
-            Save
+            บันทึก
           </Button>
         </Flex>
       </Col>
@@ -476,7 +476,7 @@ function POManage() {
                     <Input />
                   </FormCol50>
                   <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-                    <Form.Item label="Remark" name="remark">
+                    <Form.Item label="ข้อสังเกต" name="remark">
                       <Input.TextArea rows={3} />
                     </Form.Item>
                   </Col>

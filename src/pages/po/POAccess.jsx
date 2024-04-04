@@ -47,8 +47,8 @@ const POAccess = () => {
             </Form.Item>
           </Col>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="ผู้ยื่นขอ" name="created_by">
-              <Input placeholder="ใส่ ชื่อ หรือ นามสกุล ผู้ยื่นขอ" />
+            <Form.Item label="ผู้ออกใบสั่งซื้อสินค้า" name="created_by">
+              <Input placeholder="ใส่ชื่อ หรือ นามสกุล ผู้ออกใบสั่งซื้อสินค้า" />
             </Form.Item>
           </Col>
         </Row>
