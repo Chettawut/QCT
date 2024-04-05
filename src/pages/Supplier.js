@@ -1,4 +1,4 @@
-import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone, ClearOutlined } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -14,7 +14,8 @@ import {
   Select,
   Badge,
   Checkbox,
-  // DatePicker,
+  Collapse,
+  Flex,
 } from "antd";
 import Swal from "sweetalert2";
 import SupService from "../service/Supplier.service";
@@ -33,6 +34,8 @@ function Supplier() {
   const [openModalManage, setOpenModalManage] = useState(false);
   const searchInput = useRef(null);
   const [formManage] = Form.useForm();
+  const [form] = Form.useForm();
+  const [activeSearch, setActiveSearch] = useState([]);
   useEffect(() => {
     GetSup();
   }, []);
@@ -41,7 +44,84 @@ function Supplier() {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-
+  const handleClear = () => {
+    form.resetFields();
+    handleSearch();
+  };
+  const CollapseItemSearch = () => {
+    return (
+      <>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="รหัสผู้ขาย" name="packingset_name">
+              <Input placeholder="ใส่รหัสผู้ขาย" />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="ชื่อ-นามสกุลผู้ขาย" name="created_by">
+              <Input placeholder="ใส่ชื่อ-นามสกุลผู้ขาย" />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="เบอร์โทร" name="created_date">
+              <Input placeholder="ใส่เบอร์โทร" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            {/* Ignore */}
+          </Col>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            <Flex justify="flex-end" gap={8}>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                icon={<SearchOutlined />}
+                onClick={() => handleSearch()}
+              >
+                ค้นหา
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                danger
+                icon={<ClearOutlined />}
+                onClick={() => handleClear()}
+              >
+                ล้าง
+              </Button>
+            </Flex>
+          </Col>
+        </Row>
+      </>
+    );
+  };
+  const FormSearch = (
+    <Collapse
+      size="small"
+      onChange={(e) => {
+        setActiveSearch(e);
+      }}
+      activeKey={activeSearch}
+      items={[
+        {
+          key: "1",
+          label: (
+            <>
+              <SearchOutlined />
+              <span> ค้นหา</span>
+            </>
+          ),
+          children: CollapseItemSearch(),
+          showArrow: false,
+        },
+      ]}
+      // bordered={false}
+    />
+  );
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
@@ -455,6 +535,10 @@ function Supplier() {
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>ผู้ขาย</h1>
+        <Form form={form} layout="vertical" autoComplete="off">
+          {FormSearch}
+        </Form>
+        <br></br>
         <Button
           type="primary"
           onClick={() => {
@@ -472,8 +556,8 @@ function Supplier() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-            <Checkbox.Group
-              style={{padding: 15}}
+              <Checkbox.Group
+                style={{ padding: 15 }}
                 value={checkedList}
                 options={options}
                 onChange={(value) => {

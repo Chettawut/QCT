@@ -1,4 +1,4 @@
-import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone, ClearOutlined } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -14,8 +14,8 @@ import {
   Select,
   Badge,
   Checkbox,
-  // Divider,
-  // DatePicker,
+  Flex,
+  Collapse,
 } from "antd";
 import Swal from "sweetalert2";
 import CustomerService from "../service/CustomerService";
@@ -34,9 +34,89 @@ function Employee() {
   const [openModalManage, setOpenModalManage] = useState(false);
   const searchInput = useRef(null);
   const [formManage] = Form.useForm();
+  const [activeSearch, setActiveSearch] = useState([]);
   useEffect(() => {
     getCustomer();
   }, []);
+  const CollapseItemSearch = () => {
+    return (
+      <>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="รหัสลูกค้า" name="packingset_name">
+              <Input placeholder="ใส่รหัสลูกค้า" />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="ชื่อ-นามสกุลลูกค้า" name="created_by">
+              <Input placeholder="ใส่ชื่อ-นามสกุลลูกค้า" />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="เบอร์โทร" name="created_date">
+              <Input placeholder="ใส่เบอร์โทร" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            {/* Ignore */}
+          </Col>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            <Flex justify="flex-end" gap={8}>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                icon={<SearchOutlined />}
+                onClick={() => handleSearch()}
+              >
+                ค้นหา
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                danger
+                icon={<ClearOutlined />}
+                onClick={() => handleClear()}
+              >
+                ล้าง
+              </Button>
+            </Flex>
+          </Col>
+        </Row>
+      </>
+    );
+  };
+  const FormSearch = (
+    <Collapse
+      size="small"
+      onChange={(e) => {
+        setActiveSearch(e);
+      }}
+      activeKey={activeSearch}
+      items={[
+        {
+          key: "1",
+          label: (
+            <>
+              <SearchOutlined />
+              <span> ค้นหา</span>
+            </>
+          ),
+          children: CollapseItemSearch(),
+          showArrow: false,
+        },
+      ]}
+      // bordered={false}
+    />
+  );
+  const handleClear = () => {
+    form.resetFields();
+    handleSearch();
+  };
+  const [form] = Form.useForm();
   const { TextArea } = Input;
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -455,6 +535,10 @@ function Employee() {
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>ลูกค้าบุคคล</h1>
+        <Form form={form} layout="vertical" autoComplete="off">
+          {FormSearch}
+        </Form>
+        <br></br>
         <Button
           type="primary"
           onClick={() => {

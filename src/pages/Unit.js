@@ -1,4 +1,4 @@
-import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone, ClearOutlined } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -14,6 +14,8 @@ import {
   Select,
   Badge,
   Checkbox,
+  Flex,
+  Collapse,
 } from "antd";
 import Swal from "sweetalert2";
 import UnitService from "../service/Unit.service";
@@ -28,6 +30,8 @@ function Unit() {
   const [UnitDetail, setUnitDetail] = useState(unit);
   const [formAdd] = Form.useForm();
   const searchInput = useRef(null);
+  const [form] = Form.useForm();
+  const [activeSearch, setActiveSearch] = useState([]);
   const [actionManage, setActionManage] = useState({
     action: "add",
     title: "เพิ่มประเภทสินค้า",
@@ -37,13 +41,79 @@ function Unit() {
   useEffect(() => {
     GetUnit();
   }, []);
-
+  const handleClear = () => {
+    form.resetFields();
+    handleSearch();
+  };
+  const CollapseItemSearch = () => {
+    return (
+      <>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="ชื่อหน่วยสินค้า" name="created_by">
+              <Input placeholder="ใส่ชื่อหน่วยสินค้า" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            {/* Ignore */}
+          </Col>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            <Flex justify="flex-end" gap={8}>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                icon={<SearchOutlined />}
+                onClick={() => handleSearch()}
+              >
+                ค้นหา
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                danger
+                icon={<ClearOutlined />}
+                onClick={() => handleClear()}
+              >
+                ล้าง
+              </Button>
+            </Flex>
+          </Col>
+        </Row>
+      </>
+    );
+  };
+  const FormSearch = (
+    <Collapse
+      size="small"
+      onChange={(e) => {
+        setActiveSearch(e);
+      }}
+      activeKey={activeSearch}
+      items={[
+        {
+          key: "1",
+          label: (
+            <>
+              <SearchOutlined />
+              <span> ค้นหา</span>
+            </>
+          ),
+          children: CollapseItemSearch(),
+          showArrow: false,
+        },
+      ]}
+      // bordered={false}
+    />
+  );
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
@@ -414,6 +484,10 @@ function Unit() {
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>หน่วยสินค้า</h1>
+        <Form form={form} layout="vertical" autoComplete="off">
+          {FormSearch}
+        </Form>
+        <br></br>
         <Button
           type="primary"
           onClick={() => {

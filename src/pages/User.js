@@ -1,4 +1,4 @@
-import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone, ClearOutlined } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -13,6 +13,8 @@ import {
   Form,
   Select,
   Checkbox,
+  Collapse,
+  Flex
 } from "antd";
 import Swal from "sweetalert2";
 import UserService from "../service/UserService";
@@ -31,10 +33,80 @@ function User() {
   const [searchedColumn, setSearchedColumn] = useState("");
   const [openModalManage, setOpenModalManage] = useState(false);
   const searchInput = useRef(null);
+  const [form] = Form.useForm();
+  const [activeSearch, setActiveSearch] = useState([]);
   const [formManage] = Form.useForm();
   useEffect(() => {
     GetUser();
   }, []);
+  const handleClear = () => {
+    form.resetFields();
+    handleSearch();
+  };
+  const CollapseItemSearch = () => {
+    return (
+      <>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="ชื่อ-นามสกุลผู้ใช้ระบบ" name="created_by">
+              <Input placeholder="ใส่ ชื่อ-นามสกุล ผู้ใช้ระบบ" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            {/* Ignore */}
+          </Col>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            <Flex justify="flex-end" gap={8}>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                icon={<SearchOutlined />}
+                onClick={() => handleSearch()}
+              >
+                ค้นหา
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                danger
+                icon={<ClearOutlined />}
+                onClick={() => handleClear()}
+              >
+                ล้าง
+              </Button>
+            </Flex>
+          </Col>
+        </Row>
+      </>
+    );
+  };
+  const FormSearch = (
+    <Collapse
+      size="small"
+      onChange={(e) => {
+        setActiveSearch(e);
+      }}
+      activeKey={activeSearch}
+      items={[
+        {
+          key: "1",
+          label: (
+            <>
+              <SearchOutlined />
+              <span> ค้นหา</span>
+            </>
+          ),
+          children: CollapseItemSearch(),
+          showArrow: false,
+        },
+      ]}
+      // bordered={false}
+    />
+  );
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -501,6 +573,10 @@ function User() {
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>ผู้ใช้ระบบ</h1>
+        <Form form={form} layout="vertical" autoComplete="off">
+          {FormSearch}
+        </Form>
+        <br></br>
         <Button
           type="primary"
           onClick={() => {

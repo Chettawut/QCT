@@ -1,4 +1,4 @@
-import { SearchOutlined, ToolTwoTone } from "@ant-design/icons";
+import { SearchOutlined, ToolTwoTone, ClearOutlined } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import {
@@ -14,6 +14,8 @@ import {
   Select,
   Badge,
   Checkbox,
+  Collapse,
+  Flex,
 } from "antd";
 import Swal from "sweetalert2";
 import ItemtypeService from "../service/ItemType.service";
@@ -28,6 +30,8 @@ function Itemtype() {
   const [ItemtypeDetail, setItemtypeDetail] = useState(itemtype);
   const [formAdd] = Form.useForm();
   const searchInput = useRef(null);
+  const [form] = Form.useForm();
+  const [activeSearch, setActiveSearch] = useState([]);
   const [actionManage, setActionManage] = useState({
     action: "add",
     title: "เพิ่มประเภทสินค้า",
@@ -37,7 +41,74 @@ function Itemtype() {
   useEffect(() => {
     GetItemtype();
   }, []);
-
+  const handleClear = () => {
+    form.resetFields();
+    handleSearch();
+  };
+  const CollapseItemSearch = () => {
+    return (
+      <>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+            <Form.Item label="ชื่อประเภทสินค้า" name="created_by">
+              <Input placeholder="ใส่ชื่อประเภทสินค้า" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={[8, 8]}>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            {/* Ignore */}
+          </Col>
+          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+            <Flex justify="flex-end" gap={8}>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                icon={<SearchOutlined />}
+                onClick={() => handleSearch()}
+              >
+                ค้นหา
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                className="bn-action"
+                danger
+                icon={<ClearOutlined />}
+                onClick={() => handleClear()}
+              >
+                ล้าง
+              </Button>
+            </Flex>
+          </Col>
+        </Row>
+      </>
+    );
+  };
+  const FormSearch = (
+    <Collapse
+      size="small"
+      onChange={(e) => {
+        setActiveSearch(e);
+      }}
+      activeKey={activeSearch}
+      items={[
+        {
+          key: "1",
+          label: (
+            <>
+              <SearchOutlined />
+              <span> ค้นหา</span>
+            </>
+          ),
+          children: CollapseItemSearch(),
+          showArrow: false,
+        },
+      ]}
+      // bordered={false}
+    />
+  );
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -207,11 +278,11 @@ function Itemtype() {
       fixed: "right",
       render: (text) => (
         <Button
-        size="small"
-        icon={
-          <ToolTwoTone twoToneColor="#E74C3C" style={{ fontSize: ".9rem" }} />
-        }
-        danger
+          size="small"
+          icon={
+            <ToolTwoTone twoToneColor="#E74C3C" style={{ fontSize: ".9rem" }} />
+          }
+          danger
           onClick={(e) => showEditModal(text.typecode)}
         >
           แก้ไข
@@ -347,7 +418,7 @@ function Itemtype() {
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={8}>
                 <Form.Item
-                label="ใส่ชื่อประเภทสินค้า"
+                  label="ใส่ชื่อประเภทสินค้า"
                   name="typename"
                   rules={[
                     {
@@ -412,6 +483,10 @@ function Itemtype() {
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>ประเภทสินค้า</h1>
+        <Form form={form} layout="vertical" autoComplete="off">
+          {FormSearch}
+        </Form>
+        <br></br>
         <Button
           type="primary"
           onClick={() => {
@@ -429,8 +504,8 @@ function Itemtype() {
         <Row gutter={[24, 0]} style={{ marginTop: "1rem" }}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
-            <Checkbox.Group
-              style={{padding: 15}}
+              <Checkbox.Group
+                style={{ padding: 15 }}
                 value={checkedList}
                 options={options}
                 onChange={(value) => {
@@ -438,9 +513,9 @@ function Itemtype() {
                 }}
               />
               <Table
-               rowSelection={{
-                type: "radio",
-              }}
+                rowSelection={{
+                  type: "radio",
+                }}
                 size="small"
                 columns={newColumns}
                 dataSource={AllItemtype}

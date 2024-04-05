@@ -18,7 +18,6 @@ import {
   Checkbox,
   Collapse,
   Flex,
-  DatePicker,
 } from "antd";
 import Swal from "sweetalert2";
 import CarService from "../service/Car.service";
@@ -41,7 +40,6 @@ function Car() {
   const { TextArea } = Input;
   const [form] = Form.useForm();
   const [activeSearch, setActiveSearch] = useState([]);
-  const RangePicker = DatePicker.RangePicker;
   useEffect(() => {
     GetCar();
     GetModel();
@@ -74,7 +72,7 @@ function Car() {
           </Col>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
             <Form.Item label="ชื่อ-นามสกุลเจ้าของ" name="created_by">
-              <Input placeholder="ใส่ชื่อ หรือ นามสกุล เจ้าของ" />
+              <Input placeholder="ใส่ชื่อ-นามสกุลเจ้าของ" />
             </Form.Item>
           </Col>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
