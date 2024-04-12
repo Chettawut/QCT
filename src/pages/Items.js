@@ -18,6 +18,7 @@ import {
   Badge,
   Select,
   Flex,
+  Radio,
 } from "antd";
 import Swal from "sweetalert2";
 // COMPONENT
@@ -383,16 +384,12 @@ const Items = () => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col
-              style={{ paddingTop: 32 }}
-              xs={24}
-              sm={24}
-              md={24}
-              lg={24}
-              xl={6}
-            >
-              <Form.Item name="count_stock">
-                <Checkbox size="large">ตัดสต๊อก</Checkbox>
+            <Col xs={24} md={24} lg={6}>
+              <Form.Item label="ตัดสต๊อก" name="count_stock">
+                <Radio.Group buttonStyle="solid">
+                  <Radio.Button value="1">Enable</Radio.Button>
+                  <Radio.Button value="0">Disable</Radio.Button>
+                </Radio.Group>
               </Form.Item>
             </Col>
             <Col
@@ -557,9 +554,12 @@ const Items = () => {
             </Col>
           </Row>
           <Row gutter={[24, 0]}>
-            <Col xs={24} sm={24} md={24} lg={24} xl={16}>
-              <Form.Item name="check-1" valuePropName="checked">
-                <Checkbox>แยกตามล๊อตการผลิต</Checkbox>
+            <Col xs={24} md={24} lg={6}>
+              <Form.Item label="แยกตามล๊อตการผลิต" name="stock_by_product">
+                <Radio.Group buttonStyle="solid">
+                  <Radio.Button value="1">Enable</Radio.Button>
+                  <Radio.Button value="0">Disable</Radio.Button>
+                </Radio.Group>
               </Form.Item>
             </Col>
           </Row>
@@ -592,7 +592,7 @@ const Items = () => {
           <Table
             size="small"
             columns={columnsdetail}
-            dataSource={AllItems}
+            // dataSource={AllItems}
             rowKey="stcode"
           />
         </Form>
