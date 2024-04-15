@@ -7,7 +7,8 @@ ini_set('display_errors', 1);
 
 include '../conn.php';
 
-$sql = "SELECT carno,active_status as statusunit FROM car";
+$sql = "SELECT carno, cusno, province, brand, car_type, car_model, car_cc, front_tire, back_tire, color, avg_daydistance, modelcode, 
+car_speed, car_chassisno, car_loading, car_engineno, remark, business_car, active_status FROM car";
 $sql .= " where carno = '".$_POST['idcode']."'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();

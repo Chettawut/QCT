@@ -40,6 +40,7 @@ function Car() {
   const { TextArea } = Input;
   const [form] = Form.useForm();
   const [activeSearch, setActiveSearch] = useState([]);
+
   useEffect(() => {
     GetCar();
     GetModel();
@@ -349,6 +350,12 @@ function Car() {
         if (status === 200) {
           setCardataDetail(data);
           formManage.setFieldsValue(data);
+
+          if (formManage.getFieldValue('business_car') === "1") {
+            formManage.setFieldsValue({
+              businessno: formManage.getFieldValue('cusno'),
+            });            
+          } 
           setActionManage({
             action: "edit",
             title: "แก้ไขผู้ใช้งาน",
@@ -414,10 +421,22 @@ function Car() {
       .catch((err) => {});
   };
 
+  const onModalManageOpen = () => {
+    formManage.setFieldsValue({
+      business_car: '1',
+    });
+    setActionManage({
+      action: "add",
+      title: "เพิ่มข้อมูลรถ",
+      confirmText: "เพิ่ม",
+    });
+    setOpenModalManage(true);
+  };
+
   const onModalManageClose = async () => {
     // await setCardataDetail({});
     formManage.resetFields();
-    setOpenModalManage(false);
+    setOpenModalManage(false);    
   };
   ////////////////////////////////
   const filterOption = (input, option) =>
@@ -453,7 +472,6 @@ function Car() {
                 <Form.Item name="business_car" label="ลักษณะรถ">
                   <Select
                     size="large"
-                    defaultValue="รถบริษัท"
                     showSearch
                     filterOption={filterOption}
                     options={[
@@ -500,7 +518,7 @@ function Car() {
                     : { display: "none" }
                 }
               >
-                <Form.Item label="สถานการใช้งาน" name="statusunit">
+                <Form.Item label="สถานการใช้งาน" name="active_status">
                   <Select
                     size="large"
                     options={[
@@ -1012,12 +1030,7 @@ function Car() {
         <Button
           type="primary"
           onClick={() => {
-            setActionManage({
-              action: "add",
-              title: "เพิ่มข้อมูลรถ",
-              confirmText: "เพิ่ม",
-            });
-            setOpenModalManage(true);
+                        onModalManageOpen()
           }}
         >
           เพิ่มข้อมูลรถ
@@ -1035,11 +1048,12 @@ function Car() {
               />
               <Table
                 rowSelection={{
-                  type: "radio",
+                  type: "radio"
                 }}
                 size="small"
                 columns={newColumns}
                 dataSource={AllCar}
+                rowKey="carno"
               />
             </Card>
           </Col>

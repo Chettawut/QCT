@@ -1,9 +1,6 @@
 <?php
 error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors', 1);
-// header("Access-Control-Allow-Origin: *");
-// header("Access-Control-Allow-Headers: *");
-// header("Access-Control-Allow-Methods: *");
 date_default_timezone_set("Asia/Bangkok");
 
 include '../conn.php';
@@ -18,7 +15,7 @@ if ($chkdata) {
 
     $strSQL = "INSERT INTO items (`stcode`, `stname`, `unit`, `material_code` ";
     $strSQL .= ", `count_stock`, `typecode`,stname_vat, brand, `stname_per`,`stfront`,`stseries` ";
-    $strSQL .= ",stborder,stload,stspeed,sttw, stweight, stwidth, price, `stlong`,`sthigh` ";
+    $strSQL .= ",stborder,stload,stspeed,sttw, stweight, stwidth, price, `stlong`,`sthigh` ,stcar_brand ";
     $strSQL .= ",stchange_round,stchange_time,stcar_model,remark,price_A,price_B,price_online ";
     $strSQL .= ", `active_status`,`created_date`) ";
     $strSQL .= "VALUES (";
@@ -26,7 +23,7 @@ if ($chkdata) {
     $strSQL .= ",'" . $_POST["count_stock"] . "','" . $_POST["typecode"] . "','" . $_POST["stname_vat"] . "' ";
     $strSQL .= ",'" . $_POST["brand"] . "','" . $_POST["stname_per"] . "','" . $_POST["stfront"] . "','" . $_POST["stseries"] . "' ";
     $strSQL .= ",'" . $_POST["stborder"] . "','" . $_POST["stload"] . "','" . $_POST["stspeed"] . "','" . $_POST["sttw"] . "','" . $_POST["stweight"] . "' ";
-    $strSQL .= ",'" . $_POST["stwidth"] . "','" . $_POST["price"] . "','" . $_POST["stlong"] . "','" . $_POST["sthigh"] . "' ";
+    $strSQL .= ",'" . $_POST["stwidth"] . "','" . $_POST["price"] . "','" . $_POST["stlong"] . "','" . $_POST["sthigh"] . "','" . $_POST["stcar_brand"] . "' ";
     $strSQL .= ",'" . $_POST["stchange_round"] . "','" . $_POST["stchange_time"] . "','" . $_POST["stcar_model"] . "','" . $_POST["remark"] . "' ";
     $strSQL .= ",'" . $_POST["price_A"] . "','" . $_POST["price_B"] . "','" . $_POST["price_online"] . "' ";
     $strSQL .= ",'Y','" . date("Y-m-d H:i:s")."')";

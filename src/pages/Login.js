@@ -1,8 +1,8 @@
 import { React, useEffect, useState } from "react";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
-import { Layout, Button, Card, Form, Input } from "antd";
+import { Layout, Button, Card, Form, Input,Modal } from "antd";
 import logo4 from "../assets/images/logo_nsf.png";
-import Swal from "sweetalert2";
+
 import SystemService from "../service/SystemService";
 import { Authenticate } from "../service/Authenticate.service";
 
@@ -18,19 +18,20 @@ const Login = () => {
   useEffect( () => {
     const isLogin = () => { 
       const isAuthen = authService.isExpireToken(); 
-      if(!isAuthen) setLogined( true );
-      else direcetSystem();
+      if(!!isAuthen) direcetSystem();
+      else setLogined(true);
     }
-    
+
     isLogin();
+
   }, []);
 
   const onFinish = (values) => {
     Connectapp(values);
   };
   const direcetSystem = () => { 
-    const curr = authService.getCurrent(); 
-    navigate(!!curr ? curr : "/dashboard", { replace: true });
+    // const curr = authService.getCurrent(); 
+    navigate("/dashboard", { replace: true });
   }
 
   const Connectapp = (values) => {
@@ -44,17 +45,20 @@ const Login = () => {
 
             direcetSystem();
           } else {
-              Swal.fire({
-                title: "<strong>" + data.message + "</strong>",
-                html: "ผิดพลาด",
-                icon: "error",
-              });            
+            Modal.error({
+              title: <strong>{data.message}</strong>,
+              content: 'Login request failed...',
+            });
+              // Swal.fire({
+              //   title: "<strong>" + data.message + "</strong>",
+              //   html: "ผิดพลาด",
+              //   icon: "error",
+              // });            
           }
         } else {
-          Swal.fire({
-            title: "<strong>Login ผิดพลาด!</strong>",
-            html: data.message,
-            icon: "error",
+          Modal.error({
+            title: <strong>Login ผิดพลาด!</strong>,
+            content: 'Login request failed...',
           });
         }
       })

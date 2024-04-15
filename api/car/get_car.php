@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 
 include '../conn.php';
 
-$sql = "SELECT carno,active_status as statusunit FROM car";
+$sql = "SELECT carno,province,cusno,brand,car_model,color,active_status FROM car";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

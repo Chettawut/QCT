@@ -174,20 +174,20 @@ const Items = () => {
   const columnsdetail = [
     {
       title: "ปีผลิต",
-      dataIndex: "stcode",
-      key: "stcode",
+      dataIndex: "proyear",
+      key: "proyear",
       width: "20%",
     },
     {
-      title: "หนึ่งในสี่ส่วน",
-      dataIndex: "stname",
-      key: "stname",
+      title: "ไตรมาส",
+      dataIndex: "quarter",
+      key: "quarter",
       width: "40%",
     },
     {
       title: "สถานที่เก็บ",
-      dataIndex: "typename",
-      key: "typename",
+      dataIndex: "location",
+      key: "location",
       width: "40%",
     },
   ].filter((item) => !item.hidden);
@@ -386,7 +386,7 @@ const Items = () => {
             </Col>
             <Col xs={24} md={24} lg={6}>
               <Form.Item label="ตัดสต๊อก" name="count_stock">
-                <Radio.Group buttonStyle="solid">
+                <Radio.Group buttonStyle="solid" defaultValue="1">
                   <Radio.Button value="1">Enable</Radio.Button>
                   <Radio.Button value="0">Disable</Radio.Button>
                 </Radio.Group>
@@ -556,7 +556,7 @@ const Items = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} md={24} lg={6}>
               <Form.Item label="แยกตามล๊อตการผลิต" name="stock_by_product">
-                <Radio.Group buttonStyle="solid">
+                <Radio.Group buttonStyle="solid" defaultValue="1">
                   <Radio.Button value="1">Enable</Radio.Button>
                   <Radio.Button value="0">Disable</Radio.Button>
                 </Radio.Group>
