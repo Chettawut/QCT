@@ -98,7 +98,6 @@ try {
         $stmt->bindParam(":remark", $remark, PDO::PARAM_STR);
         $stmt->bindParam(":active_status", $active_status, PDO::PARAM_STR);        
         $stmt->bindParam(":action_user", $action_user, PDO::PARAM_INT);  
-        $stmt->bindParam(":product_id", $product_id, PDO::PARAM_INT); 
 
         if(!$stmt->execute()) {
             $error = $conn->errorInfo();
