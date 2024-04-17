@@ -16,7 +16,6 @@ import {
   Checkbox,
   Collapse,
   Flex,
-  
 } from "antd";
 import Swal from "sweetalert2";
 import BusinessService from "../service/BusinessService";
@@ -389,6 +388,8 @@ function Employee() {
     setOpenModalManage(false);
   };
   ////////////////////////////////
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const ModalManage = () => {
     return (
       <Modal
@@ -444,7 +445,25 @@ function Employee() {
                     },
                   ]}
                 >
-                  <Input placeholder="คำนำหน้าชื่อ" />
+                  <Select
+                    size="large"
+                    showSearch
+                    filterOption={filterOption}
+                    options={[
+                      {
+                        value: "0",
+                        label: "บจก.",
+                      },
+                      {
+                        value: "1",
+                        label: "บมจ.",
+                      },
+                      {
+                        value: "2",
+                        label: "หจก.",
+                      },
+                    ]}
+                  ></Select>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>

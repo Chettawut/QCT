@@ -399,6 +399,8 @@ function Employee() {
     setOpenModalManage(false);
   };
   ////////////////////////////////
+  const filterOption = (input, option) =>
+  (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const ModalManage = () => {
     return (
       <Modal
@@ -445,7 +447,25 @@ function Employee() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item label="คำนำหน้าชื่อ" name="title_name">
-                  <Input placeholder="คำนำหน้าชื่อ" />
+                  <Select
+                    size="large"
+                    showSearch
+                    filterOption={filterOption}
+                    options={[
+                      {
+                        value: "0",
+                        label: "นาย",
+                      },
+                      {
+                        value: "1",
+                        label: "นาง",
+                      },
+                      {
+                        value: "2",
+                        label: "นางสาว",
+                      },
+                    ]}
+                  ></Select>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
