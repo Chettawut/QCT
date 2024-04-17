@@ -10,3 +10,15 @@ export const ROLES = {
   ADMIN: "admin",
   USER: "user",
 };
+
+export const LAYOUT = {
+  ALOND: "alond",
+  CHILD: "child",
+};
+
+const project_key = "6dfcf9ed-d930-11ee-1a2b-0242ac150002"; //
+
+export const STORE_KEY = {
+  authen : `${project_key}-authen`,
+  current : `${project_key}-current`
+}

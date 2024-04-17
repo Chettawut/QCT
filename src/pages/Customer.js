@@ -16,12 +16,15 @@ import {
   Checkbox,
   Flex,
   Collapse,
+  message,
 } from "antd";
 import Swal from "sweetalert2";
-import CustomerService from "../service/CustomerService";
+import CustomerService from "../service/Customer.service";
 import { customermodel } from "../model/customer.model";
-function Employee() {
-  const [AllUser, setAllUser] = useState("");
+
+const customerService = CustomerService();
+function Customer() {
+  const [AllCustomer, setAllCustomer] = useState("");
   const [actionManage, setActionManage] = useState({
     action: "add",
     title: "เพิ่มพนักงาน",
@@ -29,31 +32,34 @@ function Employee() {
   });
   const [EmpDetail, setEmpDetail] = useState(customermodel);
   const [formAdd] = Form.useForm();
+  const [form] = Form.useForm();
+  const [formManage] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [openModalManage, setOpenModalManage] = useState(false);
   const searchInput = useRef(null);
-  const [formManage] = Form.useForm();
+  
   const [activeSearch, setActiveSearch] = useState([]);
   useEffect(() => {
-    getCustomer();
+    getCustomer({});
   }, []);
   const CollapseItemSearch = () => {
     return (
       <>
+      <Form form={form} layout="vertical" autoComplete="off">
         <Row gutter={[8, 8]}>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="รหัสลูกค้า" name="packingset_name" onChange={handleSearch}>
+            <Form.Item label="รหัสลูกค้า" name="cuscode" onChange={()=>handleSearch()}>
               <Input placeholder="ใส่รหัสลูกค้า"  />
             </Form.Item>
           </Col>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="ชื่อ-นามสกุลลูกค้า" name="created_by" onChange={handleSearch}>
+            <Form.Item label="ชื่อ-นามสกุลลูกค้า" name="cusname" onChange={()=>handleSearch()}>
               <Input placeholder="ใส่ชื่อ-นามสกุลลูกค้า"/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="เบอร์โทร" name="created_date" onChange={handleSearch}>
+            <Form.Item label="เบอร์โทร" name="tel" onChange={()=>handleSearch()}>
               <Input placeholder="ใส่เบอร์โทร" />
             </Form.Item>
           </Col>
@@ -86,6 +92,7 @@ function Employee() {
             </Flex>
           </Col>
         </Row>
+        </Form>
       </>
     );
   };
@@ -112,17 +119,24 @@ function Employee() {
       // bordered={false}
     />
   );
+  const handleSearch = () => {
+    form.validateFields().then((v) => {
+      const data = { ...v };
+      getCustomer(data);
+    });
+  };
+
   const handleClear = () => {
     form.resetFields();
     handleSearch();
   };
-  const [form] = Form.useForm();
+
   const { TextArea } = Input;
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+  const handleSearchColumn = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
-  };
+  };  
 
   const handleReset = (clearFilters) => {
     clearFilters();
@@ -149,7 +163,7 @@ function Employee() {
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          onPressEnter={() => handleSearchColumn(selectedKeys, confirm, dataIndex)}
           style={{
             marginBottom: 8,
             display: "block",
@@ -158,7 +172,7 @@ function Employee() {
         <Space>
           <Button
             type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            onClick={() => handleSearchColumn(selectedKeys, confirm, dataIndex)}
             icon={<SearchOutlined />}
             size="small"
             style={{
@@ -290,20 +304,23 @@ function Employee() {
     },
   ].filter((item) => !item.hidden);
 
-  const getCustomer = () => {
-    CustomerService.getCustomer()
+  const getCustomer = (data) => {
+    customerService
+      .search(data)
       .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          setAllUser(data);
-        }
-      })
-      .catch((err) => {});
-  };
+        const { data } = res.data;
+        // console.log(data)
 
+        setAllCustomer(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        message.error("Request error!");
+      });
+  };
   
   const showAddModal = () => {
-    CustomerService.getCuscode()
+    customerService.getcode()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -322,10 +339,9 @@ function Employee() {
   };
 
   const showEditModal = (data) => {
-    CustomerService.getSupCustomer(data)
+    customerService.get(data)
       .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
+        const { data } = res.data;
           setEmpDetail(data);
           formManage.setFieldsValue(data);
           setActionManage({
@@ -334,17 +350,14 @@ function Employee() {
             confirmText: "แก้ใข",
           });
           setOpenModalManage(true);
-        }
       })
       .catch((err) => {});
   };
 
   const submitAdd = (dataform) => {
-    CustomerService.addCustomer(dataform)
+    customerService.create(dataform)
       .then(async (res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          if (data.status) {
+        const { data } = res.data;
             await Swal.fire({
               title: "<strong>สำเร็จ</strong>",
               html: data.message,
@@ -354,25 +367,14 @@ function Employee() {
             getCustomer();
             setOpenModalManage(false);
             formAdd.resetFields();
-          } else {
-            // alert(data.message)
-            Swal.fire({
-              title: "<strong>ผิดพลาด!</strong>",
-              html: data.message,
-              icon: "error",
-            });
-          }
-        }
       })
       .catch((err) => {});
   };
 
   const submitEdit = (dataform) => {
-    CustomerService.editCustomer({ ...EmpDetail, ...dataform })
+    customerService.update({ ...EmpDetail, ...dataform })
       .then(async (res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          if (data.status) {
+        const { data } = res.data;
             await Swal.fire({
               title: "<strong>สำเร็จ</strong>",
               html: data.message,
@@ -380,15 +382,8 @@ function Employee() {
             });
             getCustomer();
             setOpenModalManage(false);
-          } else {
-            // alert(data.message)
-            Swal.fire({
-              title: "<strong>ผิดพลาด!</strong>",
-              html: data.message,
-              icon: "error",
-            });
-          }
-        }
+          
+        
       })
       .catch((err) => {});
   };
@@ -575,9 +570,7 @@ function Employee() {
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>ลูกค้าบุคคล</h1>
-        <Form form={form} layout="vertical" autoComplete="off">
           {FormSearch}
-        </Form>
         <br></br>
         <Button
           type="primary"
@@ -605,7 +598,8 @@ function Employee() {
                 }}
                 size="small"
                 columns={newColumns}
-                dataSource={AllUser}
+                dataSource={AllCustomer}
+                rowKey="cuscode"
               />
             </Card>
           </Col>
@@ -617,4 +611,4 @@ function Employee() {
   );
 }
 
-export default Employee;
+export default Customer;

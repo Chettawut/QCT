@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../../utils/util";
 // import { message } from 'antd';
-import { useLoadingContext } from "../../store/context/loading-context";
+// import { useLoadingContext } from "../../store/context/loading-context";
 // import { useNavigate } from 'react-router-dom';
 // import { useLocation } from "react-router-dom";
 const instance = axios.create({ baseURL: BACKEND_URL });
 
 // const tokens = sessionStorage.getItem("authen");
 const AxiosInterceptor = ({ children }) => {
-    const { startLoading, stopLoading } = useLoadingContext(); 
+    // const { startLoading, stopLoading } = useLoadingContext(); 
     // const navigate = useNavigate();
     // const { pathname } = useLocation();
 
@@ -23,7 +23,7 @@ const AxiosInterceptor = ({ children }) => {
                 // const t = token;
                 const t = sessionStorage.getItem("authen");
                 // console.log(t, "asdas");
-                if( !config?.ignoreLoading ) startLoading();
+                // if( !config?.ignoreLoading ) startLoading();
                 // const token = auThen.getToken();
                 if (t) {
                     config.headers.Authorization = `Bearer ${t}`;
@@ -32,19 +32,19 @@ const AxiosInterceptor = ({ children }) => {
                 return config;
             },
             (error) => {
-                stopLoading();  
+                // stopLoading();  
                 return Promise.reject(error); 
             }
         );  
 
         const interceptorRes = instance.interceptors.response.use(
             (response) => {
-                stopLoading();
+                // stopLoading();
                 // console.log("resInterceptor");
                 return response;
             },
             (error) => {
-                stopLoading(); 
+                // stopLoading(); 
                 // console.log("errInterceptor");
                 const originalRequest = error.config;
                 

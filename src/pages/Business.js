@@ -16,12 +16,15 @@ import {
   Checkbox,
   Collapse,
   Flex,
+  message,
 } from "antd";
 import Swal from "sweetalert2";
-import BusinessService from "../service/BusinessService";
+import BusinessService from "../service/Business.service";
 import { business } from "../model/business.model";
-function Employee() {
-  const [AllUser, setAllUser] = useState("");
+
+const businessService = BusinessService();
+function Business() {
+  const [AllBusiness, setAllBusiness] = useState("");
   const [actionManage, setActionManage] = useState({
     action: "add",
     title: "เพิ่มพนักงาน",
@@ -280,15 +283,20 @@ function Employee() {
     },
   ].filter((item) => !item.hidden);
 
-  const getBusiness = () => {
-    BusinessService.getBusiness()
+
+  const getBusiness = (data) => {
+    businessService
+      .search(data)
       .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          setAllUser(data);
-        }
+        const { data } = res.data;
+        // console.log(data)
+
+        setAllBusiness(data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+        message.error("Request error!");
+      });
   };
 
   const showAddModal = () => {
@@ -632,7 +640,8 @@ function Employee() {
                 }}
                 size="small"
                 columns={newColumns}
-                dataSource={AllUser}
+                dataSource={AllBusiness}
+                rowKey="buscode"
               />
             </Card>
           </Col>
@@ -644,4 +653,4 @@ function Employee() {
   );
 }
 
-export default Employee;
+export default Business;
