@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors', 1);
 // header("Access-Control-Allow-Origin: *");
 // header("Access-Control-Allow-Headers: *");
@@ -10,9 +10,8 @@ include '../conn.php';
         
 $action_datetime = date("Y-m-d H:i:s");
 
-$strSQL = "UPDATE `customer` SET `title_name`='".$_POST["firstname"]."',`firstname`='".$_POST["firstname"]."'
-,`lastname`='".$_POST["firstname"]."',`citizen_id`='".$_POST["firstname"]."',`member_code`='".$_POST["firstname"]."',`member_date`='".$_POST["firstname"]."'
-,`dateofbirth`='".$_POST["firstname"]."',`address`='".$_POST["firstname"]."',`zipcode`='".$_POST["firstname"]."',`tel`='".$_POST["firstname"]."',`email`='".$_POST["firstname"]."'
+$strSQL = "UPDATE `customer` SET `title_name`='".$_POST["title_name"]."',`firstname`='".$_POST["firstname"]."'
+,`lastname`='".$_POST["lastname"]."',`citizen_id`='".$_POST["citizen_id"]."',`address`='".$_POST["address"]."',`zipcode`='".$_POST["zipcode"]."',`tel`='".$_POST["tel"]."',`email`='".$_POST["email"]."',`remark`='".$_POST["remark"]."'
 ,updated_date='".$action_datetime."' ";
 $strSQL .= "WHERE cuscode= '" . $_POST["cuscode"] . "' ";
 $stmt = $conn->prepare($strSQL);

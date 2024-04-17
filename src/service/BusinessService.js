@@ -7,7 +7,8 @@ const API_URL = {
   GET_BUSINESS: `${BACKEND_URL}/business/get_business.php`,
   GETSUP_BUSINESS: `${BACKEND_URL}/business/getsup_business.php`,
   Edit_BUSINESS: `${BACKEND_URL}/business/edit_business.php`,
-  GET_BUSINESSNO: `${BACKEND_URL}/business/get_business.php`,
+  GET_BUSINESSNO: `${BACKEND_URL}/business/get_businesscode.php`,
+  GET_CUSCODE: `${BACKEND_URL}/customer/get_cuscode.php`,
 };
 
 let contenttype = {"content-type": "application/x-www-form-urlencoded"};
@@ -20,7 +21,7 @@ const BusinessService = {
       headers: contenttype,
       data: reqData,
     });
-  },
+  },  
 
   getBusinessno: () => {
     return axios({

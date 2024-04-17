@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 
 include '../conn.php';
 
-$sql = "SELECT typename,typecode,active_status as statusunit FROM itemtype";
+$sql = "SELECT typename,typecode,active_status FROM itemtype";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -43,17 +43,17 @@ function Employee() {
       <>
         <Row gutter={[8, 8]}>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="รหัสลูกค้า" name="packingset_name">
-              <Input placeholder="ใส่รหัสลูกค้า" />
+            <Form.Item label="รหัสลูกค้า" name="packingset_name" onChange={handleSearch}>
+              <Input placeholder="ใส่รหัสลูกค้า"  />
             </Form.Item>
           </Col>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="ชื่อ-นามสกุลลูกค้า" name="created_by">
-              <Input placeholder="ใส่ชื่อ-นามสกุลลูกค้า" />
+            <Form.Item label="ชื่อ-นามสกุลลูกค้า" name="created_by" onChange={handleSearch}>
+              <Input placeholder="ใส่ชื่อ-นามสกุลลูกค้า"/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="เบอร์โทร" name="created_date">
+            <Form.Item label="เบอร์โทร" name="created_date" onChange={handleSearch}>
               <Input placeholder="ใส่เบอร์โทร" />
             </Form.Item>
           </Col>
@@ -301,6 +301,26 @@ function Employee() {
       .catch((err) => {});
   };
 
+  
+  const showAddModal = () => {
+    CustomerService.getCuscode()
+      .then((res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          formManage.setFieldsValue({
+            cuscode: data,
+          });
+          setActionManage({
+            action: "add",
+            title: "เพิ่มลูกค้า",
+            confirmText: "เพิ่ม",
+          });
+          setOpenModalManage(true);
+        }
+      })
+      .catch((err) => {});
+  };
+
   const showEditModal = (data) => {
     CustomerService.getSupCustomer(data)
       .then((res) => {
@@ -483,7 +503,7 @@ function Employee() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                <Form.Item label="หมายเหตุ" name="หมายเหตุ">
+                <Form.Item label="หมายเหตุ" name="remark">
                   <TextArea rows={3} placeholder="หมายเหตุ" />
                 </Form.Item>
               </Col>
@@ -542,12 +562,7 @@ function Employee() {
         <Button
           type="primary"
           onClick={() => {
-            setActionManage({
-              action: "add",
-              title: "เพิ่มลูกค้า",
-              confirmText: "เพิ่ม",
-            });
-            setOpenModalManage(true);
+            showAddModal()            
           }}
         >
           เพิ่มลูกค้า

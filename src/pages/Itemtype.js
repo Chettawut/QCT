@@ -255,11 +255,11 @@ function Itemtype() {
     },
     {
       title: "สถานะการใช้งาน",
-      dataIndex: "statusunit",
-      key: "statusunit",
+      dataIndex: "active_status",
+      key: "active_status",
       width: "25%",
-      ...getColumnSearchProps("statusunit"),
-      sorter: (a, b) => a.statusunit.length - b.statusunit.length,
+      ...getColumnSearchProps("active_status"),
+      sorter: (a, b) => a.active_status.length - b.active_status.length,
       sortDirections: ["descend", "ascend"],
       render: (data) => (
         <div>
@@ -442,7 +442,7 @@ function Itemtype() {
                     : { display: "none" }
                 }
               >
-                <Form.Item name="statusunit" label="สถานะการใช้งาน">
+                <Form.Item name="active_status" label="สถานะการใช้งาน">
                   <Select
                     size="large"
                     options={[

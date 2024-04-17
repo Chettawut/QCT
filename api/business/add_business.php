@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors', 1);
 // header("Access-Control-Allow-Origin: *");
 // header("Access-Control-Allow-Headers: *");
@@ -18,8 +18,21 @@ $sql .= ")";
 $stmt = $conn->prepare($sql);
 
 if ($stmt->execute()) {
-    $response = ['status' => 1, 'message' => 'เพิ่ม ลูกค้าบริษัท สำเร็จ'];
-} else {
-    $response = ['status' => 0, 'message' => 'Error! ติดต่อโปรแกรมเมอร์'];
+    $strSQL = "UPDATE buscode SET ";
+    $strSQL .= " number= number+1 ";
+    $strSQL .= " order by id desc LIMIT 1 ";
+
+    $stmt3 = $conn->prepare($strSQL);
+
+    if ($stmt3->execute()) {
+        http_response_code(200);
+        $response = ['status' => 1, 'message' => 'เพิ่ม ลูกค้าบริษัท สำเร็จ'];
+    }
+    else {
+        $response = ['status' => 0, 'message' => 'Error! ติดต่อโปรแกรมเมอร์'];
+    }
+} 
+else {
+$response = ['status' => 0, 'message' => 'Error! ติดต่อโปรแกรมเมอร์'];
 }
 echo json_encode($response);

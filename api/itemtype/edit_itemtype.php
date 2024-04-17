@@ -11,7 +11,7 @@
     $action_datetime = date("Y-m-d H:i:s");
 
     $sql = "UPDATE itemtype SET ";
-    $sql .= " typename='".$_POST["typename"]."',active_status='".$_POST["statusunit"]."' ";
+    $sql .= " typename='".$_POST["typename"]."',active_status='".$_POST["active_status"]."' ";
     $sql .= ",update_date='".$action_datetime."' ";
     $sql .= "WHERE typecode= '".$_POST["typecode"]."' ";
     $stmt = $conn->prepare($sql);

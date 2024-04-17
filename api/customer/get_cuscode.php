@@ -7,10 +7,16 @@ ini_set('display_errors', 1);
 
 include '../conn.php';
 
-$sql = "SELECT empcode,CONCAT(firstname, ' ', lastname) as firstname,nickname,position,tel,1 as status FROM `employee` ";
+$sql = "SELECT number as cuscode FROM `cuscode` ";
+// $sql .= " where prodty_id = '".$_GET['id']."'";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$res = $stmt->fetch(PDO::FETCH_ASSOC);
+extract($res, EXTR_OVERWRITE, "_");
+
+$code = sprintf("%04s", ($cuscode + 1));
 
 http_response_code(200);
-echo json_encode($data);
+echo json_encode($code);
+
+

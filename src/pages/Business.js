@@ -292,6 +292,25 @@ function Employee() {
       .catch((err) => {});
   };
 
+  const showAddModal = () => {
+    BusinessService.getBusinessno()
+      .then((res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          formManage.setFieldsValue({
+            businessno: data,
+          });
+          setActionManage({
+            action: "add",
+            title: "เพิ่มลูกค้าบริษัท",
+            confirmText: "เพิ่ม",
+          });
+          setOpenModalManage(true);
+        }
+      })
+      .catch((err) => {});
+  };
+
   const showEditModal = (data) => {
     BusinessService.getSupBusiness(data)
       .then((res) => {
@@ -571,12 +590,7 @@ function Employee() {
         <Button
           type="primary"
           onClick={() => {
-            setActionManage({
-              action: "add",
-              title: "เพิ่มลูกค้าบริษัท",
-              confirmText: "เพิ่ม",
-            });
-            setOpenModalManage(true);
+            showAddModal()
           }}
         >
           เพิ่มลูกค้าบริษัท
