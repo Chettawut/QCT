@@ -299,25 +299,6 @@ function Business() {
       });
   };
 
-  const showAddModal = () => {
-    BusinessService.getBusinessno()
-      .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          formManage.setFieldsValue({
-            businessno: data,
-          });
-          setActionManage({
-            action: "add",
-            title: "เพิ่มลูกค้าบริษัท",
-            confirmText: "เพิ่ม",
-          });
-          setOpenModalManage(true);
-        }
-      })
-      .catch((err) => {});
-  };
-
   const showEditModal = (data) => {
     BusinessService.getSupBusiness(data)
       .then((res) => {
@@ -389,7 +370,17 @@ function Business() {
       })
       .catch((err) => {});
   };
-
+  const onModalManageOpen = () => {
+    formManage.setFieldsValue({
+      business_branch: '1',
+    });
+    setActionManage({
+      action: "add",
+      title: "เพิ่มข้อมูลลูกค้า",
+      confirmText: "เพิ่ม",
+    });
+    setOpenModalManage(true);
+  };
   const onModalManageClose = async () => {
     // await setCardataDetail({});
     formManage.resetFields();
@@ -442,6 +433,7 @@ function Business() {
                   />
                 </Form.Item>
               </Col>
+             
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item
                   label="คำนำหน้าชื่อ"
@@ -474,7 +466,7 @@ function Business() {
                   ></Select>
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item
                   label="ชื่อบริษัท"
                   name="business_name"
@@ -486,6 +478,46 @@ function Business() {
                   ]}
                 >
                   <Input placeholder="ชื่อบริษัท" />
+                </Form.Item>
+              </Col>
+              </Row>
+              <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="business_branch" label="ระบุสาขา">
+                  <Select
+                    size="large"
+                    showSearch
+                    filterOption={filterOption}
+                    options={[
+                      {
+                        value: "0",
+                        label: "สำนักงานใหญ่",
+                      },
+                      {
+                        value: "1",
+                        label: "สาขา",
+                      },
+                    ]}
+                  ></Select>
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  shouldUpdate={(prevValues, currentValues) =>
+                    prevValues.business_branch !== currentValues.business_branch
+                  }
+                >
+                  {({ getFieldValue }) =>
+                    getFieldValue("business_branch") === "0" ? (
+                      <Form.Item name="businessbranch" label="รายละเอียดสาขา">
+                        <Input placeholder="สำนักงานใหญ่" disabled />
+                      </Form.Item>
+                    ) : (
+                      <Form.Item name="businessbranch1" label="รายละเอียดสาขา">
+                        <Input placeholder="รายละเอียดสาขา" />
+                      </Form.Item>
+                    )
+                  }
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -617,7 +649,7 @@ function Business() {
         <Button
           type="primary"
           onClick={() => {
-            showAddModal()
+            onModalManageOpen()
           }}
         >
           เพิ่มลูกค้าบริษัท
