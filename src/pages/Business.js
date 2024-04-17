@@ -40,6 +40,7 @@ function Employee() {
     getBusiness();
   }, []);
   const { TextArea } = Input;
+  const { Option } = Select;
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -364,7 +365,7 @@ function Employee() {
   };
   const onModalManageOpen = () => {
     formManage.setFieldsValue({
-      business_branch: '1',
+      business_branch: "",
     });
     setActionManage({
       action: "add",
@@ -379,6 +380,22 @@ function Employee() {
     setOpenModalManage(false);
   };
   ////////////////////////////////
+  const onGenderChange = (value) => {
+    switch (value) {
+      case "0":
+        formManage.setFieldsValue({
+          note: "สำนักงานใหญ่",
+        });
+        break;
+      case "1":
+        formManage.setFieldsValue({
+          note: "ใส่รายละเอียดสาขา",
+        });
+        break;
+      default:
+    }
+  };
+
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const ModalManage = () => {
@@ -425,7 +442,6 @@ function Employee() {
                   />
                 </Form.Item>
               </Col>
-             
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item
                   label="คำนำหน้าชื่อ"
@@ -472,44 +488,19 @@ function Employee() {
                   <Input placeholder="ชื่อบริษัท" />
                 </Form.Item>
               </Col>
-              </Row>
-              <Row gutter={[24, 0]}>
+            </Row>
+            <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="business_branch" label="ระบุสาขา">
-                  <Select
-                    size="large"
-                    showSearch
-                    filterOption={filterOption}
-                    options={[
-                      {
-                        value: "0",
-                        label: "สำนักงานใหญ่",
-                      },
-                      {
-                        value: "1",
-                        label: "สาขา",
-                      },
-                    ]}
-                  ></Select>
+                <Form.Item label="ระบุสาขา">
+                  <Select size="large" allowClear onChange={onGenderChange}>
+                    <Option value="0">สำนักงานใหญ่</Option>
+                    <Option value="1">สาขา</Option>
+                  </Select>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item
-                  shouldUpdate={(prevValues, currentValues) =>
-                    prevValues.business_branch !== currentValues.business_branch
-                  }
-                >
-                  {({ getFieldValue }) =>
-                    getFieldValue("business_branch") === "0" ? (
-                      <Form.Item name="businessbranch" label="รายละเอียดสาขา">
-                        <Input placeholder="สำนักงานใหญ่" disabled />
-                      </Form.Item>
-                    ) : (
-                      <Form.Item name="businessbranch1" label="รายละเอียดสาขา">
-                        <Input placeholder="รายละเอียดสาขา" />
-                      </Form.Item>
-                    )
-                  }
+                <Form.Item name="note" label="รายละเอียดสาขา">
+                  <Input />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -641,7 +632,7 @@ function Employee() {
         <Button
           type="primary"
           onClick={() => {
-            onModalManageOpen()
+            onModalManageOpen();
           }}
         >
           เพิ่มลูกค้าบริษัท
