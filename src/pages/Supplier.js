@@ -21,6 +21,7 @@ import {
 import Swal from "sweetalert2";
 import SupplierService from "../service/Supplier.service";
 import TextArea from "antd/es/input/TextArea";
+import { PROVINCE_OPTIONS } from "../utils/util";
 
 const supplierService = SupplierService();
 function Supplier() {
@@ -337,16 +338,14 @@ function Supplier() {
     supplierService
       .get(data)
       .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          formManage.setFieldsValue(data);
-          setActionManage({
-            action: "edit",
-            title: "แก้ไขข้อมูลผู้ขาย",
-            confirmText: "แก้ใข",
-          });
-          setOpenModalManage(true);
-        }
+        const { data } = res.data;
+        formManage.setFieldsValue(data);
+        setActionManage({
+          action: "edit",
+          title: "แก้ไขข้อมูลผู้ขาย",
+          confirmText: "แก้ใข",
+        });
+        setOpenModalManage(true);
       })
       .catch((err) => {});
   };
@@ -357,15 +356,8 @@ function Supplier() {
         : supplierService.create;
 
     action({ ...v })
-      .then((_) => {
+      .then( async (_) => {
         GetSup({});
-      })
-      .catch((err) => {
-        console.warn(err);
-        const data = err?.response?.data;
-        message.error(data?.message || "error request");
-      })
-      .finally(async () => {
         let datamessage;
         actionManage?.action !== "create"
           ? (datamessage = "แก้ไข Supplier สำเร็จ")
@@ -376,6 +368,13 @@ function Supplier() {
           icon: "success",
         });
         formManage.resetFields();
+      })
+      .catch((err) => {
+        console.warn(err);
+        const data = err?.response?.data;
+        message.error(data?.message || "error request");
+      })
+      .finally(async () => {        
         setOpenModalManage(false);
       });
   };
@@ -384,6 +383,8 @@ function Supplier() {
     formManage.resetFields();
     setOpenModalManage(false);
   };
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const defaultCheckedList = columns.map((item) => item.key);
   const [checkedList, setCheckedList] = useState(defaultCheckedList);
   const options = columns.map(({ key, title }) => ({
@@ -473,6 +474,18 @@ function Supplier() {
                   <Input placeholder="โทรสาร" />
                 </Form.Item>
               </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="province" label="จังหวัด" rules={[
+                  {
+                    required: true,
+                    message: "กรุณาระบุจังหวัด!",
+                  },
+                ]}>                
+                <Select style={{ height: 40 }} showSearch
+                    filterOption={filterOption} options={PROVINCE_OPTIONS} />
+                </Form.Item>
+              </Col>
+              
               <Col
                 xs={24}
                 sm={24}
@@ -485,7 +498,7 @@ function Supplier() {
                     : { display: "none" }
                 }
               >
-                <Form.Item label="สถานการใช้งาน" name="statussup">
+                <Form.Item label="สถานการใช้งาน" name="active_status">
                   <Select
                     size="large"
                     options={[

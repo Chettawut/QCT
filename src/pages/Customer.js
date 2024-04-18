@@ -20,6 +20,7 @@ import {
 } from "antd";
 import Swal from "sweetalert2";
 import CustomerService from "../service/Customer.service";
+import { PROVINCE_OPTIONS } from "../utils/util";
 
 const customerService = CustomerService();
 function Customer() {
@@ -44,52 +45,64 @@ function Customer() {
   const CollapseItemSearch = () => {
     return (
       <>
-      <Form form={form} layout="vertical" autoComplete="off">
-        <Row gutter={[8, 8]}>
-          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="รหัสลูกค้า" name="cuscode" onChange={()=>handleSearch()}>
-              <Input placeholder="ใส่รหัสลูกค้า"  />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="ชื่อ-นามสกุลลูกค้า" name="cusname" onChange={()=>handleSearch()}>
-              <Input placeholder="ใส่ชื่อ-นามสกุลลูกค้า"/>
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="เบอร์โทร" name="tel" onChange={()=>handleSearch()}>
-              <Input placeholder="ใส่เบอร์โทร" />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[8, 8]}>
-          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
-            {/* Ignore */}
-          </Col>
-          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
-            <Flex justify="flex-end" gap={8}>
-              <Button
-                type="primary"
-                size="small"
-                className="bn-action"
-                icon={<SearchOutlined />}
-                onClick={() => handleSearch()}
+        <Form form={form} layout="vertical" autoComplete="off">
+          <Row gutter={[8, 8]}>
+            <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+              <Form.Item
+                label="รหัสลูกค้า"
+                name="cuscode"
+                onChange={() => handleSearch()}
               >
-                ค้นหา
-              </Button>
-              <Button
-                type="primary"
-                size="small"
-                className="bn-action"
-                danger
-                icon={<ClearOutlined />}
-                onClick={() => handleClear()}
+                <Input placeholder="ใส่รหัสลูกค้า" />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+              <Form.Item
+                label="ชื่อ-นามสกุลลูกค้า"
+                name="cusname"
+                onChange={() => handleSearch()}
               >
-                ล้าง
-              </Button>
-            </Flex>
-          </Col>
-        </Row>
+                <Input placeholder="ใส่ชื่อ-นามสกุลลูกค้า" />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+              <Form.Item
+                label="เบอร์โทร"
+                name="tel"
+                onChange={() => handleSearch()}
+              >
+                <Input placeholder="ใส่เบอร์โทร" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[8, 8]}>
+            <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+              {/* Ignore */}
+            </Col>
+            <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+              <Flex justify="flex-end" gap={8}>
+                <Button
+                  type="primary"
+                  size="small"
+                  className="bn-action"
+                  icon={<SearchOutlined />}
+                  onClick={() => handleSearch()}
+                >
+                  ค้นหา
+                </Button>
+                <Button
+                  type="primary"
+                  size="small"
+                  className="bn-action"
+                  danger
+                  icon={<ClearOutlined />}
+                  onClick={() => handleClear()}
+                >
+                  ล้าง
+                </Button>
+              </Flex>
+            </Col>
+          </Row>
         </Form>
       </>
     );
@@ -133,7 +146,7 @@ function Customer() {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
-  };  
+  };
 
   const handleReset = (clearFilters) => {
     clearFilters();
@@ -160,7 +173,9 @@ function Customer() {
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
-          onPressEnter={() => handleSearchColumn(selectedKeys, confirm, dataIndex)}
+          onPressEnter={() =>
+            handleSearchColumn(selectedKeys, confirm, dataIndex)
+          }
           style={{
             marginBottom: 8,
             display: "block",
@@ -315,9 +330,10 @@ function Customer() {
         message.error("Request error!");
       });
   };
-  
+
   const showAddModal = () => {
-    customerService.getcode()
+    customerService
+      .getcode()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
@@ -336,16 +352,17 @@ function Customer() {
   };
 
   const showEditModal = (data) => {
-    customerService.get(data)
+    customerService
+      .get(data)
       .then((res) => {
         const { data } = res.data;
-          formManage.setFieldsValue(data);
-          setActionManage({
-            action: "edit",
-            title: "แก้ไขข้อมูลลูกค้า",
-            confirmText: "แก้ใข",
-          });
-          setOpenModalManage(true);
+        formManage.setFieldsValue(data);
+        setActionManage({
+          action: "edit",
+          title: "แก้ไขข้อมูลลูกค้า",
+          confirmText: "แก้ใข",
+        });
+        setOpenModalManage(true);
       })
       .catch((err) => {});
   };
@@ -357,26 +374,26 @@ function Customer() {
         : customerService.create;
 
     action({ ...v })
-      .then( (_) => {
+      .then(async (_) => {
         getCustomer({});
+        let datamessage;
+        actionManage?.action !== "create"
+          ? (datamessage = "แก้ไข ลูกค้า สำเร็จ")
+          : (datamessage = "เพิ่ม ลูกค้า สำเร็จ");
+        await Swal.fire({
+          title: "<strong>สำเร็จ</strong>",
+          html: datamessage,
+          icon: "success",
+        });
+        formManage.resetFields();
       })
       .catch((err) => {
         console.warn(err);
         const data = err?.response?.data;
         message.error(data?.message || "error request");
       })
-      .finally( async () => {
-        let datamessage
-        actionManage?.action !== "create"        
-          ? datamessage="แก้ไข ลูกค้า สำเร็จ"
-          : datamessage="เพิ่ม ลูกค้า สำเร็จ";
-          await Swal.fire({
-            title: "<strong>สำเร็จ</strong>",
-            html: datamessage,
-            icon: "success",
-          });
-          formManage.resetFields();
-          setOpenModalManage(false);
+      .finally(() => {
+        setOpenModalManage(false);
       });
   };
 
@@ -387,7 +404,7 @@ function Customer() {
   };
   ////////////////////////////////
   const filterOption = (input, option) =>
-  (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const ModalManage = () => {
     return (
       <Modal
@@ -401,7 +418,7 @@ function Customer() {
           formManage
             .validateFields()
             .then((values) => {
-                manageSubmit(values);
+              manageSubmit(values);
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -422,10 +439,7 @@ function Customer() {
                     },
                   ]}
                 >
-                  <Input
-                    disabled
-                    placeholder="รหัสลูกค้าบุคคล"
-                  />
+                  <Input disabled placeholder="รหัสลูกค้าบุคคล" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -499,6 +513,21 @@ function Customer() {
                   <Input placeholder="รหัสไปรษณีย์" />
                 </Form.Item>
               </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  name="province"
+                  label="จังหวัด"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาระบุจังหวัด!",
+                    },
+                  ]}
+                >
+                  <Select style={{ height: 40 }} showSearch
+                    filterOption={filterOption} options={PROVINCE_OPTIONS} />
+                </Form.Item>
+              </Col>
 
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item label="ที่อยู่" name="address">
@@ -558,12 +587,12 @@ function Customer() {
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>ลูกค้าบุคคล</h1>
-          {FormSearch}
+        {FormSearch}
         <br></br>
         <Button
           type="primary"
           onClick={() => {
-            showAddModal()            
+            showAddModal();
           }}
         >
           เพิ่มลูกค้า

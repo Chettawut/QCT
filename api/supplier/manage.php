@@ -18,21 +18,24 @@ try {
 
         // var_dump($_POST);
         
-        $sql = "INSERT INTO supplier (`supcode`, `supname`,`address`, `zipcode`, `tel`, `email`,`remark`, `active_status`, created_by, created_date) 
-        values (:supcode,:supname,:address,:zipcode,:tel,:email,:remark,'Y',:action_user,:action_user)";
+        $sql = "INSERT INTO supplier (`supcode`, `supname`,`taxnumber`,`address`,`province`, `zipcode`, `tel`, `fax`, `email`,`remark`, `active_status`, created_by, created_date) 
+        values (:supcode,:supname,:taxnumber,:address,:province,:zipcode,:tel,:fax,:email,:remark,'Y',:action_user,:action_date)";
 
         $stmt = $conn->prepare($sql);
-        if(!$stmt) throw new PDOException("Insert data error => {$conn->errorInfo()}"); 
+        if(!$stmt) throw new PDOException("Insert data error =>  $sql"); 
         
         $stmt->bindParam(":supcode", $supcode, PDO::PARAM_STR);
         $stmt->bindParam(":supname", $supname, PDO::PARAM_STR);
+        $stmt->bindParam(":taxnumber", $taxnumber, PDO::PARAM_STR);        
         $stmt->bindParam(":address", $address, PDO::PARAM_STR);        
-        $stmt->bindParam(":zipcode", $zipcode, PDO::PARAM_STR);
+        $stmt->bindParam(":province", $province, PDO::PARAM_STR);        
+        $stmt->bindParam(":zipcode", $zipcode, PDO::PARAM_STR);        
         $stmt->bindParam(":tel", $tel, PDO::PARAM_STR);
+        $stmt->bindParam(":fax", $fax, PDO::PARAM_STR);
         $stmt->bindParam(":email", $email, PDO::PARAM_STR);        
         $stmt->bindParam(":remark", $remark, PDO::PARAM_STR);        
         $stmt->bindParam(":action_user", $action_user, PDO::PARAM_INT); 
-        $stmt->bindParam(":action_user", $action_user, PDO::PARAM_INT); 
+        $stmt->bindParam(":action_date", $action_date, PDO::PARAM_INT); 
 
         if(!$stmt->execute()) {
             $error = $conn->errorInfo();
@@ -41,7 +44,7 @@ try {
         }
 
         $conn->commit();
-        $strSQL = "UPDATE cuscode SET ";
+        $strSQL = "UPDATE supcode SET ";
         $strSQL .= " number= number+1 ";
         $strSQL .= " order by id desc LIMIT 1 ";
 
@@ -65,33 +68,35 @@ try {
         // var_dump($_POST);
 
         $sql = "
-        update customer
+        update supplier
         set
-        cuscode = :cuscode,
-        title_name = :title_name,
-        firstname = :firstname,
-        lastname = :lastname,
-        citizen_id = :citizen_id,
+        supcode = :supcode,
+        supname = :supname,   
+        taxnumber = :taxnumber,   
+        address = :address,
+        province = :province,
         zipcode = :zipcode,
         tel = :tel,
+        fax = :fax,
         email = :email,
         remark = :remark,
         active_status = :active_status,
         updated_date = CURRENT_TIMESTAMP(),
         updated_by = :action_user
-        where cuscode = :cuscode";
+        where supcode = :supcode";
         
         $stmt = $conn->prepare($sql);
         if(!$stmt) throw new PDOException("Insert data error => {$conn->errorInfo()}"); 
 
         
-        $stmt->bindParam(":cuscode", $cuscode, PDO::PARAM_STR);
-        $stmt->bindParam(":title_name", $title_name, PDO::PARAM_STR);
-        $stmt->bindParam(":firstname", $firstname, PDO::PARAM_STR);
-        $stmt->bindParam(":lastname", $lastname, PDO::PARAM_STR);
-        $stmt->bindParam(":citizen_id", $citizen_id, PDO::PARAM_STR);
+        $stmt->bindParam(":supcode", $supcode, PDO::PARAM_STR);
+        $stmt->bindParam(":supname", $supname, PDO::PARAM_STR);
+        $stmt->bindParam(":taxnumber", $taxnumber, PDO::PARAM_STR);        
+        $stmt->bindParam(":address", $address, PDO::PARAM_STR);
+        $stmt->bindParam(":province", $province, PDO::PARAM_STR);
         $stmt->bindParam(":zipcode", $zipcode, PDO::PARAM_STR);
         $stmt->bindParam(":tel", $tel, PDO::PARAM_STR);
+        $stmt->bindParam(":fax", $fax, PDO::PARAM_STR);        
         $stmt->bindParam(":email", $email, PDO::PARAM_STR);
         $stmt->bindParam(":remark", $remark, PDO::PARAM_STR);
         $stmt->bindParam(":active_status", $active_status, PDO::PARAM_STR);        
@@ -128,13 +133,13 @@ try {
         http_response_code(200);
         echo json_encode(array("status"=> 1));
     } else  if($_SERVER["REQUEST_METHOD"] == "GET"){
-        $cuscode = $_GET["code"]; 
-        $sql = "SELECT `cuscode`, `title_name`, `firstname`, `lastname`, `citizen_id`, `address`, `zipcode`, `tel`, `email`, `remark`, `active_status` ";
-        $sql .= " FROM `customer` ";
-        $sql .= " where cuscode = :id";
+        $supcode = $_GET["code"]; 
+        $sql = "SELECT supcode,supname,address,province,zipcode,tel,fax,taxnumber,email,remark,active_status  ";
+        $sql .= " FROM `supplier` ";
+        $sql .= " where supcode = :id";
         
         $stmt = $conn->prepare($sql); 
-        if (!$stmt->execute([ 'id' => $cuscode ])){
+        if (!$stmt->execute([ 'id' => $supcode ])){
             $error = $conn->errorInfo(); 
             http_response_code(404);
             throw new PDOException("Geting data error => $error");

@@ -21,6 +21,7 @@ import {
 } from "antd";
 import Swal from "sweetalert2";
 import BusinessService from "../service/Business.service";
+import { PROVINCE_OPTIONS } from "../utils/util";
 
 const businessService = BusinessService();
 function Business() {
@@ -75,7 +76,7 @@ function Business() {
             <Col xs={24} sm={8} md={8} lg={8} xl={8}>
               <Form.Item
                 label="ชื่อบริษัท"
-                name="businessname"
+                name="business_name"
                 onChange={() => handleSearch()}
               >
                 <Input placeholder="ใส่ชื่อบริษัท" />
@@ -346,18 +347,11 @@ function Business() {
         : businessService.create;
 
     action({ ...v })
-      .then((_) => {
+      .then( async (_) => {
         getBusiness({});
-      })
-      .catch((err) => {
-        console.warn(err);
-        const data = err?.response?.data;
-        message.error(data?.message || "error request");
-      })
-      .finally( async (res) => {      
         let datamessage
         actionManage?.action !== "create"        
-          ? datamessage="แก้ไขลูกค้าบริษัท สำเร็จจ"
+          ? datamessage="แก้ไขลูกค้าบริษัท สำเร็จ"
           : datamessage="เพิ่มลูกค้าบริษัท สำเร็จ";
           await Swal.fire({
             title: "<strong>สำเร็จ</strong>",
@@ -365,6 +359,14 @@ function Business() {
             icon: "success",
           });
           formManage.resetFields();
+      })
+      .catch((err) => {
+        console.warn(err);
+        const data = err?.response?.data;
+        message.error(data?.message || "error request");
+      })
+      .finally(  (res) => {      
+       
           setOpenModalManage(false);
 
       });
@@ -564,6 +566,13 @@ function Business() {
                   <TextArea rows={2} placeholder="ที่อยู่" />
                 </Form.Item>
               </Col>
+              
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                <Form.Item label="จังหวัด" name="province">
+                <Select style={{ height: 40 }} showSearch
+                    filterOption={filterOption}  options={PROVINCE_OPTIONS}/>
+                </Form.Item>
+              </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={8}>
                 <Form.Item label="รหัสไปรษณีย์" name="zipcode">
                   <Input placeholder="รหัสไปรษณีย์" />
@@ -572,6 +581,12 @@ function Business() {
               <Col xs={24} sm={24} md={12} lg={12} xl={16}>
                 <Form.Item label="ที่อยู่จัดส่งสินค้า" name="shipping_address">
                   <TextArea rows={2} placeholder="ที่อยู่จัดส่งสินค้า" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+                <Form.Item label="จังหวัดจัดส่งสินค้า" name="shipping_province">
+                <Select style={{ height: 40 }} showSearch
+                    filterOption={filterOption} options={PROVINCE_OPTIONS} />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={8}>

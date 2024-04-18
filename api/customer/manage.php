@@ -17,9 +17,9 @@ try {
         extract($_POST, EXTR_OVERWRITE, "_");
 
         // var_dump($_POST);
-        $sql = "INSERT INTO customer (`cuscode`, `title_name`, `firstname`, `lastname`, `citizen_id`, `address`, `zipcode`, `tel`, `email`,`remark`, `active_status`, created_by, created_date) 
-        values (:cuscode,:title_name,:firstname,:lastname,:citizen_id,:address,:zipcode,:tel,:email,:remark,'Y',:action_user,:action_user)";
-
+        $sql = "INSERT INTO customer (`cuscode`, `title_name`, `firstname`, `lastname`, `citizen_id`, `address`, `province`, `zipcode`, `tel`, `email`,`remark`, `active_status`, created_by, created_date) 
+        values (:cuscode,:title_name,:firstname,:lastname,:citizen_id,:address,:province,:zipcode,:tel,:email,:remark,'Y',:action_user,:action_date)";
+        
         $stmt = $conn->prepare($sql);
         if(!$stmt) throw new PDOException("Insert data error => {$conn->errorInfo()}"); 
         
@@ -28,13 +28,14 @@ try {
         $stmt->bindParam(":firstname", $firstname, PDO::PARAM_STR);        
         $stmt->bindParam(":lastname", $lastname, PDO::PARAM_STR);
         $stmt->bindParam(":citizen_id", $citizen_id, PDO::PARAM_STR);
-        $stmt->bindParam(":address", $address, PDO::PARAM_STR);        
+        $stmt->bindParam(":address", $address, PDO::PARAM_STR); 
+        $stmt->bindParam(":province", $province, PDO::PARAM_STR);        
         $stmt->bindParam(":zipcode", $zipcode, PDO::PARAM_STR);
         $stmt->bindParam(":tel", $tel, PDO::PARAM_STR);
         $stmt->bindParam(":email", $email, PDO::PARAM_STR);        
         $stmt->bindParam(":remark", $remark, PDO::PARAM_STR);        
         $stmt->bindParam(":action_user", $action_user, PDO::PARAM_INT); 
-        $stmt->bindParam(":action_user", $action_user, PDO::PARAM_INT); 
+        $stmt->bindParam(":action_date", $action_date, PDO::PARAM_INT); 
 
         if(!$stmt->execute()) {
             $error = $conn->errorInfo();
@@ -74,6 +75,8 @@ try {
         firstname = :firstname,
         lastname = :lastname,
         citizen_id = :citizen_id,
+        address = :address,
+        province = :province,
         zipcode = :zipcode,
         tel = :tel,
         email = :email,
@@ -92,6 +95,8 @@ try {
         $stmt->bindParam(":firstname", $firstname, PDO::PARAM_STR);
         $stmt->bindParam(":lastname", $lastname, PDO::PARAM_STR);
         $stmt->bindParam(":citizen_id", $citizen_id, PDO::PARAM_STR);
+        $stmt->bindParam(":address", $address, PDO::PARAM_STR);
+        $stmt->bindParam(":province", $province, PDO::PARAM_STR);
         $stmt->bindParam(":zipcode", $zipcode, PDO::PARAM_STR);
         $stmt->bindParam(":tel", $tel, PDO::PARAM_STR);
         $stmt->bindParam(":email", $email, PDO::PARAM_STR);
@@ -131,7 +136,7 @@ try {
         echo json_encode(array("status"=> 1));
     } else  if($_SERVER["REQUEST_METHOD"] == "GET"){
         $cuscode = $_GET["code"]; 
-        $sql = "SELECT `cuscode`, `title_name`, `firstname`, `lastname`, `citizen_id`, `address`, `zipcode`, `tel`, `email`, `remark`, `active_status` ";
+        $sql = "SELECT `cuscode`, `title_name`, `firstname`, `lastname`, `citizen_id`, `address`,`province`, `zipcode`, `tel`, `email`, `remark`, `active_status` ";
         $sql .= " FROM `customer` ";
         $sql .= " where cuscode = :id";
         

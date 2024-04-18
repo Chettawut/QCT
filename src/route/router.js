@@ -25,7 +25,7 @@ import Billinginformation from "../pages/Billing_information";
 import User from "../pages/User";
 import Customer from "../pages/Customer";
 import PrivateRoute from "../components/auth/PrivateRoutes";
-import Cardata from "../pages/Cardata";
+import Model from "../pages/Model";
 import { ROLES } from "../constant/constant";
 
 const Router = () => {
@@ -52,7 +52,7 @@ const Router = () => {
           <Route path="/itemtype" element={<Itemtype />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/customer" element={<Customer />} />
-          <Route path="/cardata" element={<Cardata />} />
+          <Route path="/model" element={<Model />} />
           {/* <Route path="/purchase-order/" exact element={<PO />}>
             <Route index element={<POIndex />} />
             <Route path="manage/:action" element={<POForm />} />

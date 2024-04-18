@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     $tel = !empty($tel) ? "and tel like '%$tel%'" : "";
     
     try {   
-        $sql = "SELECT supcode,supname,province,tel,active_status as statussup FROM `supplier`
+        $sql = "SELECT supcode,supname,tel,active_status FROM `supplier`
            where 1 = 1
            $supcode
            $supname        

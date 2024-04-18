@@ -45,7 +45,7 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/Billing" rel="noopener noreferrer">
+                <a href="/billing" rel="noopener noreferrer">
                   การวางบิล
                 </a>
               ),
@@ -53,7 +53,7 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/Billinginformation" rel="noopener noreferrer">
+                <a href="/billinginformation" rel="noopener noreferrer">
                   ข้อมูลการเก็บเงิน
                 </a>
               ),
@@ -109,7 +109,7 @@ const Header = () => {
           children: [
             {
               label: (
-                <a href="/Items" rel="noopener noreferrer">
+                <a href="/items" rel="noopener noreferrer">
                   สินค้า
                 </a>
               ),
@@ -129,7 +129,7 @@ const Header = () => {
           children: [
             {
               label: (
-                <a href="/Car" rel="noopener noreferrer">
+                <a href="/car" rel="noopener noreferrer">
                   รถ
                 </a>
               ),
@@ -145,7 +145,7 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/Business" rel="noopener noreferrer">
+                <a href="/business" rel="noopener noreferrer">
                   ลูกค้าบริษัท
                 </a>
               ),
@@ -153,7 +153,7 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/Supplier" rel="noopener noreferrer">
+                <a href="/supplier" rel="noopener noreferrer">
                   ผู้ขาย
                 </a>
               ),
@@ -161,7 +161,7 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/Employee" rel="noopener noreferrer">
+                <a href="/employee" rel="noopener noreferrer">
                   พนักงาน
                 </a>
               ),
@@ -169,7 +169,7 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/cardata" rel="noopener noreferrer">
+                <a href="/model" rel="noopener noreferrer">
                   รุ่นรถ
                 </a>
               ),
@@ -177,7 +177,7 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/Unit" rel="noopener noreferrer">
+                <a href="/unit" rel="noopener noreferrer">
                   หน่วยสินค้า
                 </a>
               ),

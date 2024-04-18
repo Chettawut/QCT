@@ -10,8 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
     extract($_POST, EXTR_OVERWRITE, "_");  
     
-    $businessno = !empty($businessno) ? "and cuscode like '%$businessno%'" : "";
-    $business_name = !empty($business_name) ? "and business_name like '%$cusname%' " : "";
+    $businessno = !empty($businessno) ? "and businessno like '%$businessno%'" : "";
+    $business_name = !empty($business_name) ? "and business_name like '%$business_name%' " : "";
     $tel = !empty($tel) ? "and tel like '%$tel%'" : "";
     
     try {   

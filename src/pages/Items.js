@@ -43,9 +43,7 @@ const Items = () => {
 
   const [itemsDetail, setItemsDetail] = useState(items);
   const [optionType, setOptionType] = useState([]);
-  const [optionValueType, setOptionValueType] = useState();
   const [optionUnit, setOptionUnit] = useState([]);
-  const [optionValueUnit, setOptionValueUnit] = useState();
   const [form] = Form.useForm();
   const [activeSearch, setActiveSearch] = useState([]);
 
@@ -92,7 +90,8 @@ const Items = () => {
       })
       .catch((err) => {});
   };
-
+  const filterOption = (input, option) =>
+  (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const handleSearch = () => {
     form
       .validateFields()
@@ -356,9 +355,9 @@ const Items = () => {
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item name="typecode" label="ประเภทสินค้า">
                 <Select
-                  size={"large"}
-                  value={optionValueType}
-                  onChange={(value) => setOptionValueType(value)}
+                  size="large"
+                  showSearch
+                  filterOption={filterOption}
                   options={optionType.map((item) => ({
                     value: item.typecode,
                     label: item.typename,
@@ -369,9 +368,9 @@ const Items = () => {
             <Col xs={24} sm={24} md={24} lg={24} xl={6}>
               <Form.Item name="unit" label="หน่วยสั่งซื้อ">
                 <Select
-                  size={"large"}
-                  value={optionValueUnit}
-                  onChange={(value) => setOptionValueUnit(value)}
+                  size="large"
+                  showSearch
+                  filterOption={filterOption}
                   options={optionUnit.map((item) => ({
                     value: item.unitname,
                     label: item.unitname,
@@ -623,7 +622,7 @@ const Items = () => {
       // bordered={false}
     />
   );
-
+  
   const ModalManage = () => {
     return (
       <Modal
@@ -656,6 +655,7 @@ const Items = () => {
       </Modal>
     );
   };
+
   const defaultCheckedList = columns.map((item) => item.key);
   const [checkedList, setCheckedList] = useState(defaultCheckedList);
   const options = columns.map(({ key, title }) => ({
