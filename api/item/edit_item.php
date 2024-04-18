@@ -19,8 +19,8 @@ UPDATE items
 SET 
 stname = :stname, typecode = :typecode, unit = :unit, material_code = :material_code,
 count_stock = :count_stock, stname_vat = :stname_vat, brand = :brand, stname_per = :stname_per, stfront = :stfront, stseries = :stseries,
-stborder = :stborder, stload = :stload, stspeed = :stspeed, sttw = :sttw, stweight = :stweight, stwidth = :stwidth,stlong = :stlong,
-sthigh = :sthigh,stchange_round = :stchange_round,stchange_time = :stchange_time,stcar_brand = :stcar_brand,stcar_model = :stcar_model,
+stborder = :stborder, stload = :stload, stspeed = :stspeed, sttw = :sttw, stweight = :stweight, stwidth = :stwidth,stlong = :stlong,min = :min,
+sthigh = :sthigh,stchange_round = :stchange_round,stchange_time = :stchange_time,stcar_brand = :stcar_brand,stcar_model = :stcar_model,stock_by_product = :stock_by_product,
 remark = :remark,price = :price,price_A = :price_A,price_B = :price_B,active_status = :active_status,updated_by = :updated_by,updated_date = :updated_date
 WHERE stcode = :stcode"; 
 
@@ -44,11 +44,13 @@ $stmt->bindParam(":sttw", $sttw);
 $stmt->bindParam(":stweight", $stweight);
 $stmt->bindParam(":stwidth", $stwidth);
 $stmt->bindParam(":stlong", $stlong);
+$stmt->bindParam(":min", $min);
 $stmt->bindParam(":sthigh", $sthigh);
 $stmt->bindParam(":stchange_round", $stchange_round);
 $stmt->bindParam(":stchange_time", $stchange_time);
 $stmt->bindParam(":stcar_brand", $stcar_brand);
 $stmt->bindParam(":stcar_model", $stcar_model);
+$stmt->bindParam(":stock_by_product", $stock_by_product);
 $stmt->bindParam(":remark", $remark);
 $stmt->bindParam(":price", $price);
 $stmt->bindParam(":price_A", $price_A);

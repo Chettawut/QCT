@@ -16,19 +16,18 @@ import {
   Checkbox,
   Collapse,
   Flex,
+  message,
 } from "antd";
-import Swal from "sweetalert2";
-import BusinessService from "../service/BusinessService";
-import { business } from "../model/business.model";
-function Employee() {
-  const [AllUser, setAllUser] = useState("");
+import BusinessService from "../service/Business.service";
+
+const businessService = BusinessService();
+function Business() {
+  const [AllBusiness, setAllBusiness] = useState("");
   const [actionManage, setActionManage] = useState({
-    action: "add",
+    action: "create",
     title: "เพิ่มพนักงาน",
     confirmText: "ยืนยัน",
   });
-  const [EmpDetail, setEmpDetail] = useState(business);
-  const [formAdd] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [openModalManage, setOpenModalManage] = useState(false);
@@ -36,6 +35,8 @@ function Employee() {
   const [formManage] = Form.useForm();
   const [form] = Form.useForm();
   const [activeSearch, setActiveSearch] = useState([]);
+  const { TextArea } = Input;
+
   useEffect(() => {
     getBusiness();
   }, []);
@@ -46,6 +47,12 @@ function Employee() {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
+  const handleSearch = () => {
+    form.validateFields().then((v) => {
+      const data = { ...v };
+      getBusiness(data);
+    });
+  };
   const handleClear = () => {
     form.resetFields();
     handleSearch();
@@ -53,19 +60,20 @@ function Employee() {
   const CollapseItemSearch = () => {
     return (
       <>
+      <Form form={form} layout="vertical" autoComplete="off">
         <Row gutter={[8, 8]}>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="รหัสบริษัท" name="packingset_name">
+            <Form.Item label="รหัสบริษัท" name="businessno" onChange={()=>handleSearch()}>
               <Input placeholder="ใส่รหัสบริษัท" />
             </Form.Item>
           </Col>
           <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="ชื่อบริษัท" name="created_by">
+            <Form.Item label="ชื่อบริษัท" name="businessno" onChange={()=>handleSearch()}>
               <Input placeholder="ใส่ชื่อบริษัท" />
             </Form.Item>
           </Col>
-          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="เบอร์โทร" name="created_date">
+          <Col xs={24} sm={8} md={8} lg={8} xl={8} onChange={()=>handleSearch()}>
+            <Form.Item label="เบอร์โทร" name="tel">
               <Input placeholder="ใส่เบอร์โทร" />
             </Form.Item>
           </Col>
@@ -98,6 +106,7 @@ function Employee() {
             </Flex>
           </Col>
         </Row>
+        </Form>
       </>
     );
   };
@@ -149,7 +158,7 @@ function Employee() {
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          onPressEnter={() => handleSearchColumn(selectedKeys, confirm, dataIndex)}
           style={{
             marginBottom: 8,
             display: "block",
@@ -158,7 +167,7 @@ function Employee() {
         <Space>
           <Button
             type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            onClick={() => handleSearchColumn(selectedKeys, confirm, dataIndex)}
             icon={<SearchOutlined />}
             size="small"
             style={{
@@ -281,23 +290,26 @@ function Employee() {
     },
   ].filter((item) => !item.hidden);
 
-  const getBusiness = () => {
-    BusinessService.getBusiness()
+
+  const getBusiness = (data) => {
+    businessService
+      .search(data)
       .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          setAllUser(data);
-        }
+        const { data } = res;
+        // console.log(data)
+
+        setAllBusiness(data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+        message.error("Request error!");
+      });
   };
 
   const showEditModal = (data) => {
-    BusinessService.getSupBusiness(data)
+    businessService.get(data)
       .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          setEmpDetail(data);
+        const { data } = res.data;
           formManage.setFieldsValue(data);
           setActionManage({
             action: "edit",
@@ -305,67 +317,56 @@ function Employee() {
             confirmText: "แก้ใข",
           });
           setOpenModalManage(true);
-        }
       })
       .catch((err) => {});
   };
 
-  const submitAdd = (dataform) => {
-    BusinessService.addBusiness(dataform)
-      .then(async (res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          if (data.status) {
-            await Swal.fire({
-              title: "<strong>สำเร็จ</strong>",
-              html: data.message,
-              icon: "success",
-            });
+  const manageSubmit = (v) => {
+    const action =
+      actionManage?.action !== "create"
+        ? businessService.update
+        : businessService.create;
 
-            getBusiness();
-            setOpenModalManage(false);
-            formAdd.resetFields();
-          } else {
-            // alert(data.message)
-            Swal.fire({
-              title: "<strong>ผิดพลาด!</strong>",
-              html: data.message,
-              icon: "error",
-            });
-          }
-        }
+    action({ ...v })
+      .then((_) => {
+        getBusiness({});
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.warn(err);
+        const data = err?.response?.data;
+        message.error(data?.message || "error request");
+      })
+      .finally((res) => {        
+        actionManage?.action !== "create"
+        ? message.success(`แก้ไขลูกค้าบริษัท สำเร็จ`)
+        : message.success(`เพิ่มลูกค้าบริษัท สำเร็จ`);
+
+          setOpenModalManage(false);
+      });
   };
 
-  const submitEdit = (dataform) => {
-    BusinessService.editBusiness({ ...EmpDetail, ...dataform })
-      .then(async (res) => {
+  const showAddModal = () => {
+    businessService.getcode()
+      .then((res) => {
         let { status, data } = res;
         if (status === 200) {
-          if (data.status) {
-            await Swal.fire({
-              title: "<strong>สำเร็จ</strong>",
-              html: data.message,
-              icon: "success",
-            });
-            getBusiness();
-            setOpenModalManage(false);
-          } else {
-            // alert(data.message)
-            Swal.fire({
-              title: "<strong>ผิดพลาด!</strong>",
-              html: data.message,
-              icon: "error",
-            });
-          }
+          formManage.setFieldsValue({
+            businessno: data,
+            business_branch: '1',
+          });
+          setActionManage({
+            action: "create",
+            title: "เพิ่มลูกค้าธุรกิจ",
+            confirmText: "เพิ่ม",
+          });
+          setOpenModalManage(true);
         }
       })
       .catch((err) => {});
   };
   const onModalManageOpen = () => {
     formManage.setFieldsValue({
-      business_branch: "",
+      business_branch: '1',
     });
     setActionManage({
       action: "add",
@@ -411,11 +412,9 @@ function Employee() {
           formManage
             .validateFields()
             .then((values) => {
-              if (actionManage.action === "add") {
-                submitAdd(values);
-              } else if (actionManage.action === "edit") {
-                submitEdit(values);
-              }
+              
+                manageSubmit(values);
+              
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -625,14 +624,12 @@ function Employee() {
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>รายการลูกค้าบริษัท</h1>
-        <Form form={form} layout="vertical" autoComplete="off">
           {FormSearch}
-        </Form>
         <br></br>
         <Button
           type="primary"
           onClick={() => {
-            onModalManageOpen();
+            onModalManageOpen()
           }}
         >
           เพิ่มลูกค้าบริษัท
@@ -655,7 +652,8 @@ function Employee() {
                 }}
                 size="small"
                 columns={newColumns}
-                dataSource={AllUser}
+                dataSource={AllBusiness}
+                rowKey="businessno"
               />
             </Card>
           </Col>
@@ -667,4 +665,4 @@ function Employee() {
   );
 }
 
-export default Employee;
+export default Business;
