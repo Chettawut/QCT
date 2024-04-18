@@ -41,9 +41,8 @@ function Business() {
   useEffect(() => {
     getBusiness();
   }, []);
-  const { TextArea } = Input;
   const { Option } = Select;
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+  const handleSearchColumn = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
@@ -353,7 +352,7 @@ function Business() {
       });
   };
 
-  const showAddModal = () => {
+  const onModalManageOpen = () => {
     businessService.getcode()
       .then((res) => {
         let { status, data } = res;
@@ -371,17 +370,6 @@ function Business() {
         }
       })
       .catch((err) => {});
-  };
-  const onModalManageOpen = () => {
-    formManage.setFieldsValue({
-      business_branch: '1',
-    });
-    setActionManage({
-      action: "add",
-      title: "เพิ่มข้อมูลลูกค้า",
-      confirmText: "เพิ่ม",
-    });
-    setOpenModalManage(true);
   };
   const onModalManageClose = async () => {
     // await setCardataDetail({});
