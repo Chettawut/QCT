@@ -15,12 +15,6 @@ class DbConnect {
 		} catch (\Exception $e) {
 			echo "Database Error: " . $e->getMessage();
 		}
-		// return mysqli_connect($this->server, $this->user, $this->pass, $this->dbname);
-		// // mysqli_set_charset($conn,"utf8");
-		// if ( mysqli_connect_errno() ) {
-		// 	// If there is an error with the connection, stop the script and display the error.
-		// 	exit('Failed to connect to MySQL: ' . mysqli_connect_error());
-		// }
 	}
 	
 }

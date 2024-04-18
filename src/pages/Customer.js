@@ -18,27 +18,24 @@ import {
   Collapse,
   message,
 } from "antd";
-import Swal from "sweetalert2";
 import CustomerService from "../service/Customer.service";
-import { customermodel } from "../model/customer.model";
 
 const customerService = CustomerService();
 function Customer() {
   const [AllCustomer, setAllCustomer] = useState("");
   const [actionManage, setActionManage] = useState({
-    action: "add",
+    action: "create",
     title: "เพิ่มพนักงาน",
     confirmText: "ยืนยัน",
   });
-  const [EmpDetail, setEmpDetail] = useState(customermodel);
-  const [formAdd] = Form.useForm();
   const [form] = Form.useForm();
   const [formManage] = Form.useForm();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [openModalManage, setOpenModalManage] = useState(false);
   const searchInput = useRef(null);
-  
+  const { TextArea } = Input;
+
   const [activeSearch, setActiveSearch] = useState([]);
   useEffect(() => {
     getCustomer({});
@@ -131,7 +128,6 @@ function Customer() {
     handleSearch();
   };
 
-  const { TextArea } = Input;
   const handleSearchColumn = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -328,7 +324,7 @@ function Customer() {
             cuscode: data,
           });
           setActionManage({
-            action: "add",
+            action: "create",
             title: "เพิ่มลูกค้า",
             confirmText: "เพิ่ม",
           });
@@ -342,7 +338,6 @@ function Customer() {
     customerService.get(data)
       .then((res) => {
         const { data } = res.data;
-          setEmpDetail(data);
           formManage.setFieldsValue(data);
           setActionManage({
             action: "edit",
@@ -354,38 +349,28 @@ function Customer() {
       .catch((err) => {});
   };
 
-  const submitAdd = (dataform) => {
-    customerService.create(dataform)
-      .then(async (res) => {
-        const { data } = res.data;
-            await Swal.fire({
-              title: "<strong>สำเร็จ</strong>",
-              html: data.message,
-              icon: "success",
-            });
+  const manageSubmit = (v) => {
+    const action =
+      actionManage?.action !== "create"
+        ? customerService.update
+        : customerService.create;
 
-            getCustomer();
-            setOpenModalManage(false);
-            formAdd.resetFields();
+    action({ ...v })
+      .then((_) => {
+        getCustomer({});
       })
-      .catch((err) => {});
-  };
+      .catch((err) => {
+        console.warn(err);
+        const data = err?.response?.data;
+        message.error(data?.message || "error request");
+      })
+      .finally(() => {
+        actionManage?.action !== "create"
+          ? message.success(`แก้ไข Product Spec สำเร็จ`)
+          : message.success(`เพิ่ม Product Spec สำเร็จ`);
 
-  const submitEdit = (dataform) => {
-    customerService.update({ ...EmpDetail, ...dataform })
-      .then(async (res) => {
-        const { data } = res.data;
-            await Swal.fire({
-              title: "<strong>สำเร็จ</strong>",
-              html: data.message,
-              icon: "success",
-            });
-            getCustomer();
-            setOpenModalManage(false);
-          
-        
-      })
-      .catch((err) => {});
+          setOpenModalManage(false);
+      });
   };
 
   const onModalManageClose = async () => {
@@ -409,11 +394,7 @@ function Customer() {
           formManage
             .validateFields()
             .then((values) => {
-              if (actionManage.action === "add") {
-                submitAdd(values);
-              } else if (actionManage.action === "edit") {
-                submitEdit(values);
-              }
+                manageSubmit(values);
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

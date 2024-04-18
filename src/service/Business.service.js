@@ -65,7 +65,7 @@ import { STORE_KEY } from "../constant/constant";
 
 const API_URL = {
   API_GETMASTER: `/business/get_business.php`, 
-
+  API_GETCODE: `/business/get_buscode.php`, 
   API_MANAGE: `/business/manage.php`,
 };
 
@@ -84,7 +84,7 @@ const BusinessService = () => {
   const update = (parm = {}) => api.put(`${API_URL.API_MANAGE}`, parm, { headers: getHeader() });
   const deleted = (code) => api.delete(`${API_URL.API_MANAGE}?code=${code}`, { headers: getHeader() });
   const get = (code) => api.get(`${API_URL.API_MANAGE}?code=${code}`, { headers: getHeader() });
-
+  const getcode = () => api.get(`${API_URL.API_GETCODE}`, { headers: getHeader() });
 
   const search = (parm = {}) => api.post(`${API_URL.API_GETMASTER}`, parm, { headers: getHeader() });
 
@@ -93,7 +93,7 @@ const BusinessService = () => {
     update,
     deleted,
     get,
-
+    getcode,
     search,
   };
 };

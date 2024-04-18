@@ -386,7 +386,7 @@ const Items = () => {
             </Col>
             <Col xs={24} md={24} lg={6}>
               <Form.Item label="ตัดสต๊อก" name="count_stock">
-                <Radio.Group buttonStyle="solid" defaultValue="1">
+                <Radio.Group buttonStyle="solid" >
                   <Radio.Button value="1">Enable</Radio.Button>
                   <Radio.Button value="0">Disable</Radio.Button>
                 </Radio.Group>
@@ -556,7 +556,7 @@ const Items = () => {
           <Row gutter={[24, 0]}>
             <Col xs={24} md={24} lg={6}>
               <Form.Item label="แยกตามล๊อตการผลิต" name="stock_by_product">
-                <Radio.Group buttonStyle="solid" defaultValue="1">
+                <Radio.Group buttonStyle="solid" >
                   <Radio.Button value="1">Enable</Radio.Button>
                   <Radio.Button value="0">Disable</Radio.Button>
                 </Radio.Group>
@@ -688,6 +688,10 @@ const Items = () => {
         <Button
           type="primary"
           onClick={() => {
+            formManage.setFieldsValue({
+              count_stock: '1',
+              stock_by_product: '1',
+            });
             setActionManage({
               action: "add",
               title: "เพิ่มสินค้า",
