@@ -18,6 +18,7 @@ import {
   Collapse,
   message,
 } from "antd";
+import Swal from "sweetalert2";
 import CustomerService from "../service/Customer.service";
 
 const customerService = CustomerService();
@@ -356,7 +357,7 @@ function Customer() {
         : customerService.create;
 
     action({ ...v })
-      .then((_) => {
+      .then( (_) => {
         getCustomer({});
       })
       .catch((err) => {
@@ -364,11 +365,17 @@ function Customer() {
         const data = err?.response?.data;
         message.error(data?.message || "error request");
       })
-      .finally(() => {
-        actionManage?.action !== "create"
-          ? message.success(`แก้ไข Product Spec สำเร็จ`)
-          : message.success(`เพิ่ม Product Spec สำเร็จ`);
-
+      .finally( async () => {
+        let datamessage
+        actionManage?.action !== "create"        
+          ? datamessage="แก้ไข ลูกค้า สำเร็จ"
+          : datamessage="เพิ่ม ลูกค้า สำเร็จ";
+          await Swal.fire({
+            title: "<strong>สำเร็จ</strong>",
+            html: datamessage,
+            icon: "success",
+          });
+          formManage.resetFields();
           setOpenModalManage(false);
       });
   };

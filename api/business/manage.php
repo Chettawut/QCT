@@ -130,13 +130,13 @@ try {
         http_response_code(200);
         echo json_encode(array("status"=> 1));
     } else  if($_SERVER["REQUEST_METHOD"] == "GET"){
-        $cuscode = $_GET["code"]; 
-        $sql = "SELECT `cuscode`, `title_name`, `firstname`, `lastname`, `citizen_id`, `address`, `zipcode`, `tel`, `email`, `remark`, `active_status` ";
-        $sql .= " FROM `customer` ";
-        $sql .= " where cuscode = :id";
+        $businessno = $_GET["code"]; 
+        $sql = "SELECT `businessno`, `title_name`, `business_name`, `taxno`, `email`, `address`, `zipcode`, `shipping_address`, `shipping_zipcode`, `contact_person`, `contact_department`, `tel_phone`, `tel_mobile`, `fax`, `active_status` ";
+        $sql .= " FROM `business` ";
+        $sql .= " where businessno = :id";
         
         $stmt = $conn->prepare($sql); 
-        if (!$stmt->execute([ 'id' => $cuscode ])){
+        if (!$stmt->execute([ 'id' => $businessno ])){
             $error = $conn->errorInfo(); 
             http_response_code(404);
             throw new PDOException("Geting data error => $error");
