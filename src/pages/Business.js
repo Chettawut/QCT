@@ -17,6 +17,7 @@ import {
   Collapse,
   Flex,
   message,
+  Divider,
 } from "antd";
 import BusinessService from "../service/Business.service";
 
@@ -25,7 +26,7 @@ function Business() {
   const [AllBusiness, setAllBusiness] = useState("");
   const [actionManage, setActionManage] = useState({
     action: "create",
-    title: "เพิ่มพนักงาน",
+    title: "เพิ่มข้อมูลลูกค้าบริษัท",
     confirmText: "ยืนยัน",
   });
   const [searchText, setSearchText] = useState("");
@@ -40,9 +41,9 @@ function Business() {
   useEffect(() => {
     getBusiness();
   }, []);
-  const { TextArea } = Input;
+
   const { Option } = Select;
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+  const handleSearchColumn = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
@@ -60,52 +61,67 @@ function Business() {
   const CollapseItemSearch = () => {
     return (
       <>
-      <Form form={form} layout="vertical" autoComplete="off">
-        <Row gutter={[8, 8]}>
-          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="รหัสบริษัท" name="businessno" onChange={()=>handleSearch()}>
-              <Input placeholder="ใส่รหัสบริษัท" />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="ชื่อบริษัท" name="businessno" onChange={()=>handleSearch()}>
-              <Input placeholder="ใส่ชื่อบริษัท" />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={8} md={8} lg={8} xl={8} onChange={()=>handleSearch()}>
-            <Form.Item label="เบอร์โทร" name="tel">
-              <Input placeholder="ใส่เบอร์โทร" />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[8, 8]}>
-          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
-            {/* Ignore */}
-          </Col>
-          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
-            <Flex justify="flex-end" gap={8}>
-              <Button
-                type="primary"
-                size="small"
-                className="bn-action"
-                icon={<SearchOutlined />}
-                onClick={() => handleSearch()}
+        <Form form={form} layout="vertical" autoComplete="off">
+          <Row gutter={[8, 8]}>
+            <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+              <Form.Item
+                label="รหัสบริษัท"
+                name="businessno"
+                onChange={() => handleSearch()}
               >
-                ค้นหา
-              </Button>
-              <Button
-                type="primary"
-                size="small"
-                className="bn-action"
-                danger
-                icon={<ClearOutlined />}
-                onClick={() => handleClear()}
+                <Input placeholder="ใส่รหัสบริษัท" />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+              <Form.Item
+                label="ชื่อบริษัท"
+                name="businessno"
+                onChange={() => handleSearch()}
               >
-                ล้าง
-              </Button>
-            </Flex>
-          </Col>
-        </Row>
+                <Input placeholder="ใส่ชื่อบริษัท" />
+              </Form.Item>
+            </Col>
+            <Col
+              xs={24}
+              sm={8}
+              md={8}
+              lg={8}
+              xl={8}
+              onChange={() => handleSearch()}
+            >
+              <Form.Item label="เบอร์โทร" name="tel">
+                <Input placeholder="ใส่เบอร์โทร" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[8, 8]}>
+            <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+              {/* Ignore */}
+            </Col>
+            <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+              <Flex justify="flex-end" gap={8}>
+                <Button
+                  type="primary"
+                  size="small"
+                  className="bn-action"
+                  icon={<SearchOutlined />}
+                  onClick={() => handleSearch()}
+                >
+                  ค้นหา
+                </Button>
+                <Button
+                  type="primary"
+                  size="small"
+                  className="bn-action"
+                  danger
+                  icon={<ClearOutlined />}
+                  onClick={() => handleClear()}
+                >
+                  ล้าง
+                </Button>
+              </Flex>
+            </Col>
+          </Row>
         </Form>
       </>
     );
@@ -158,7 +174,9 @@ function Business() {
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
-          onPressEnter={() => handleSearchColumn(selectedKeys, confirm, dataIndex)}
+          onPressEnter={() =>
+            handleSearchColumn(selectedKeys, confirm, dataIndex)
+          }
           style={{
             marginBottom: 8,
             display: "block",
@@ -290,7 +308,6 @@ function Business() {
     },
   ].filter((item) => !item.hidden);
 
-
   const getBusiness = (data) => {
     businessService
       .search(data)
@@ -307,16 +324,17 @@ function Business() {
   };
 
   const showEditModal = (data) => {
-    businessService.get(data)
+    businessService
+      .get(data)
       .then((res) => {
         const { data } = res.data;
-          formManage.setFieldsValue(data);
-          setActionManage({
-            action: "edit",
-            title: "แก้ไขข้อมูลลูกค้าบริษัท",
-            confirmText: "แก้ใข",
-          });
-          setOpenModalManage(true);
+        formManage.setFieldsValue(data);
+        setActionManage({
+          action: "edit",
+          title: "แก้ไขข้อมูลลูกค้าบริษัท",
+          confirmText: "แก้ใข",
+        });
+        setOpenModalManage(true);
       })
       .catch((err) => {});
   };
@@ -336,41 +354,22 @@ function Business() {
         const data = err?.response?.data;
         message.error(data?.message || "error request");
       })
-      .finally((res) => {        
+      .finally((res) => {
         actionManage?.action !== "create"
-        ? message.success(`แก้ไขลูกค้าบริษัท สำเร็จ`)
-        : message.success(`เพิ่มลูกค้าบริษัท สำเร็จ`);
+          ? message.success(`แก้ไขลูกค้าบริษัท สำเร็จ`)
+          : message.success(`เพิ่มลูกค้าบริษัท สำเร็จ`);
 
-          setOpenModalManage(false);
+        setOpenModalManage(false);
       });
   };
 
-  const showAddModal = () => {
-    businessService.getcode()
-      .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          formManage.setFieldsValue({
-            businessno: data,
-            business_branch: '1',
-          });
-          setActionManage({
-            action: "create",
-            title: "เพิ่มลูกค้าธุรกิจ",
-            confirmText: "เพิ่ม",
-          });
-          setOpenModalManage(true);
-        }
-      })
-      .catch((err) => {});
-  };
   const onModalManageOpen = () => {
     formManage.setFieldsValue({
-      business_branch: '1',
+      branch: "0",
     });
     setActionManage({
       action: "add",
-      title: "เพิ่มข้อมูลลูกค้า",
+      title: "เพิ่มข้อมูลลูกค้าบริษัท",
       confirmText: "เพิ่ม",
     });
     setOpenModalManage(true);
@@ -393,6 +392,11 @@ function Business() {
           note: "ใส่รายละเอียดสาขา",
         });
         break;
+      case "other":
+        form.setFieldsValue({
+          
+        });
+        break;
       default:
     }
   };
@@ -412,9 +416,7 @@ function Business() {
           formManage
             .validateFields()
             .then((values) => {
-              
-                manageSubmit(values);
-              
+              manageSubmit(values);
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -490,19 +492,6 @@ function Business() {
             </Row>
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="ระบุสาขา">
-                  <Select size="large" allowClear onChange={onGenderChange}>
-                    <Option value="0">สำนักงานใหญ่</Option>
-                    <Option value="1">สาขา</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="note" label="รายละเอียดสาขา">
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item
                   label="เลขประจำตัวผู้เสียภาษี"
                   name="taxno"
@@ -517,10 +506,32 @@ function Business() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="อีเมล" name="email">
-                  <Input placeholder="อีเมล" />
+                <Form.Item label="ระบุสาขา" name="branch">
+                  <Select size="large" allowClear onChange={onGenderChange}>
+                    <Option value="0">สำนักงานใหญ่</Option>
+                    <Option value="1">สาขา</Option>
+                  </Select>
                 </Form.Item>
               </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  noStyle
+                  shouldUpdate={(prevValues, currentValues) =>
+                    prevValues.branch !== currentValues.branch
+                  }
+                >
+                  {({ getFieldValue }) =>
+                    getFieldValue("branch") === "1" ? (
+                      <Form.Item name="branch_details" label="รายละเอียดสาขา">
+                        <Input />
+                      </Form.Item>
+                    ) : null
+                  }
+                </Form.Item>
+              </Col>
+            </Row>
+            <Divider />
+            <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item label="ผู้ติดต่อ" name="contact_person">
                   <Input placeholder="ผู้ติดต่อ" />
@@ -542,36 +553,13 @@ function Business() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="โทรสาร" name="fax">
-                  <Input placeholder="โทรสาร" />
+                <Form.Item label="อีเมล" name="email">
+                  <Input placeholder="อีเมล" />
                 </Form.Item>
               </Col>
-              <Col
-                xs={24}
-                sm={24}
-                md={12}
-                lg={12}
-                xl={6}
-                style={
-                  actionManage.action === "edit"
-                    ? { display: "inline" }
-                    : { display: "none" }
-                }
-              >
-                <Form.Item label="สถานการใช้งาน" name="active_status">
-                  <Select
-                    size="large"
-                    options={[
-                      {
-                        value: "Y",
-                        label: <Badge status="success" text="เปิดการใช้งาน" />,
-                      },
-                      {
-                        value: "N",
-                        label: <Badge status="error" text="ปิดการใช้งาน" />,
-                      },
-                    ]}
-                  />
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item label="โทรสาร" name="fax">
+                  <Input placeholder="โทรสาร" />
                 </Form.Item>
               </Col>
             </Row>
@@ -599,9 +587,37 @@ function Business() {
                   <Input placeholder="รหัสไปรษณีย์ที่อยู่จัดส่งสินค้า" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={24}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={16}>
                 <Form.Item label="หมายเหตุ" name="หมายเหตุ">
                   <TextArea rows={2} placeholder="หมายเหตุ" />
+                </Form.Item>
+              </Col>
+              <Col
+                xs={24}
+                sm={24}
+                md={12}
+                lg={12}
+                xl={8}
+                style={
+                  actionManage.action === "edit"
+                    ? { display: "inline" }
+                    : { display: "none" }
+                }
+              >
+                <Form.Item label="สถานการใช้งาน" name="active_status">
+                  <Select
+                    size="large"
+                    options={[
+                      {
+                        value: "Y",
+                        label: <Badge status="success" text="เปิดการใช้งาน" />,
+                      },
+                      {
+                        value: "N",
+                        label: <Badge status="error" text="ปิดการใช้งาน" />,
+                      },
+                    ]}
+                  />
                 </Form.Item>
               </Col>
             </Row>
@@ -624,12 +640,12 @@ function Business() {
     <>
       <div className="layout-content" style={{ padding: 20 }}>
         <h1>รายการลูกค้าบริษัท</h1>
-          {FormSearch}
+        {FormSearch}
         <br></br>
         <Button
           type="primary"
           onClick={() => {
-            onModalManageOpen()
+            onModalManageOpen();
           }}
         >
           เพิ่มลูกค้าบริษัท
