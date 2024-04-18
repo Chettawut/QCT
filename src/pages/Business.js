@@ -42,7 +42,6 @@ function Business() {
   useEffect(() => {
     getBusiness();
   }, []);
-  const { TextArea } = Input;
   const { Option } = Select;
   const handleSearchColumn = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -355,12 +354,19 @@ function Business() {
         const data = err?.response?.data;
         message.error(data?.message || "error request");
       })
-      .finally((res) => {        
-        actionManage?.action !== "create"
-        ? message.success(`แก้ไขลูกค้าบริษัท สำเร็จ`)
-        : message.success(`เพิ่มลูกค้าบริษัท สำเร็จ`);
-
+      .finally( async (res) => {      
+        let datamessage
+        actionManage?.action !== "create"        
+          ? datamessage="แก้ไขลูกค้าบริษัท สำเร็จจ"
+          : datamessage="เพิ่มลูกค้าบริษัท สำเร็จ";
+          await Swal.fire({
+            title: "<strong>สำเร็จ</strong>",
+            html: datamessage,
+            icon: "success",
+          });
+          formManage.resetFields();
           setOpenModalManage(false);
+
       });
   };
 
