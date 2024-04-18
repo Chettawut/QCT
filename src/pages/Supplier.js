@@ -20,13 +20,14 @@ import {
 } from "antd";
 import Swal from "sweetalert2";
 import SupplierService from "../service/Supplier.service";
+import TextArea from "antd/es/input/TextArea";
 
 const supplierService = SupplierService();
 function Supplier() {
   const [AllSupplier, setAllSupplier] = useState("");
   const [actionManage, setActionManage] = useState({
     action: "create",
-    title: "เพิ่มพนักงาน",
+    title: "เพิ่มผู้ขาย",
     confirmText: "ยืนยัน",
   });
   const [searchText, setSearchText] = useState("");
@@ -45,7 +46,6 @@ function Supplier() {
       GetSup(data);
     });
   };
-
   const handleSearchColumn = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -58,52 +58,64 @@ function Supplier() {
   const CollapseItemSearch = () => {
     return (
       <>
-      <Form form={form} layout="vertical" autoComplete="off">
-        <Row gutter={[8, 8]}>
-          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="รหัสผู้ขาย" name="supcode" onChange={()=>handleSearch()}>
-              <Input placeholder="ใส่รหัสผู้ขาย" />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="ชื่อผู้ขาย" name="supname" onChange={()=>handleSearch()}>
-              <Input placeholder="ใส่ชื่อผู้ขาย" />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={8} md={8} lg={8} xl={8}>
-            <Form.Item label="เบอร์โทร" name="tel" onChange={()=>handleSearch()}>
-              <Input placeholder="ใส่เบอร์โทร" />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[8, 8]}>
-          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
-            {/* Ignore */}
-          </Col>
-          <Col xs={24} sm={8} md={12} lg={12} xl={12}>
-            <Flex justify="flex-end" gap={8}>
-              <Button
-                type="primary"
-                size="small"
-                className="bn-action"
-                icon={<SearchOutlined />}
-                onClick={() => handleSearch()}
+        <Form form={form} layout="vertical" autoComplete="off">
+          <Row gutter={[8, 8]}>
+            <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+              <Form.Item
+                label="รหัสผู้ขาย"
+                name="supcode"
+                onChange={() => handleSearch()}
               >
-                ค้นหา
-              </Button>
-              <Button
-                type="primary"
-                size="small"
-                className="bn-action"
-                danger
-                icon={<ClearOutlined />}
-                onClick={() => handleClear()}
+                <Input placeholder="ใส่รหัสผู้ขาย" />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+              <Form.Item
+                label="ชื่อผู้ขาย"
+                name="supname"
+                onChange={() => handleSearch()}
               >
-                ล้าง
-              </Button>
-            </Flex>
-          </Col>
-        </Row>
+                <Input placeholder="ใส่ชื่อผู้ขาย" />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={8} md={8} lg={8} xl={8}>
+              <Form.Item
+                label="เบอร์โทร"
+                name="tel"
+                onChange={() => handleSearch()}
+              >
+                <Input placeholder="ใส่เบอร์โทร" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[8, 8]}>
+            <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+              {/* Ignore */}
+            </Col>
+            <Col xs={24} sm={8} md={12} lg={12} xl={12}>
+              <Flex justify="flex-end" gap={8}>
+                <Button
+                  type="primary"
+                  size="small"
+                  className="bn-action"
+                  icon={<SearchOutlined />}
+                  onClick={() => handleSearch()}
+                >
+                  ค้นหา
+                </Button>
+                <Button
+                  type="primary"
+                  size="small"
+                  className="bn-action"
+                  danger
+                  icon={<ClearOutlined />}
+                  onClick={() => handleClear()}
+                >
+                  ล้าง
+                </Button>
+              </Flex>
+            </Col>
+          </Row>
         </Form>
       </>
     );
@@ -241,7 +253,6 @@ function Supplier() {
         text
       ),
   });
-
   const columns = [
     {
       title: "รหัสผู้ขาย",
@@ -289,7 +300,6 @@ function Supplier() {
       ),
     },
   ].filter((item) => !item.hidden);
-
   const GetSup = (data) => {
     supplierService
       .search(data)
@@ -304,26 +314,25 @@ function Supplier() {
         message.error("Request error!");
       });
   };
-
   const showAddModal = () => {
-    supplierService.getcode()
-    .then((res) => {
-      let { status, data } = res;
-      if (status === 200) {
-        formManage.setFieldsValue({
-          supcode: data,
-        });
-        setActionManage({
-          action: "create",
-          title: "เพิ่มลูกค้า",
-          confirmText: "เพิ่ม",
-        });
-        setOpenModalManage(true);
-      }
-    })
-    .catch((err) => {});
+    supplierService
+      .getcode()
+      .then((res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          formManage.setFieldsValue({
+            supcode: data,
+          });
+          setActionManage({
+            action: "create",
+            title: "เพิ่มผู้ขาย",
+            confirmText: "เพิ่ม",
+          });
+          setOpenModalManage(true);
+        }
+      })
+      .catch((err) => {});
   };
-
   const showEditModal = (data) => {
     supplierService
       .get(data)
@@ -341,7 +350,6 @@ function Supplier() {
       })
       .catch((err) => {});
   };
-
   const manageSubmit = (v) => {
     const action =
       actionManage?.action !== "create"
@@ -371,12 +379,21 @@ function Supplier() {
         setOpenModalManage(false);
       });
   };
-
   const onModalManageClose = async () => {
     // await setCardataDetail({});
     formManage.resetFields();
     setOpenModalManage(false);
   };
+  const defaultCheckedList = columns.map((item) => item.key);
+  const [checkedList, setCheckedList] = useState(defaultCheckedList);
+  const options = columns.map(({ key, title }) => ({
+    label: title,
+    value: key,
+  }));
+  const newColumns = columns.map((item) => ({
+    ...item,
+    hidden: !checkedList.includes(item.key),
+  }));
   ////////////////////////////////
   const ModalManage = () => {
     return (
@@ -434,33 +451,10 @@ function Supplier() {
                   <Input placeholder="เลขที่ภาษี" />
                 </Form.Item>
               </Col>
+            </Row>
+            <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="เลขที่อยู่" name="idno">
-                  <Input placeholder="เลขที่อยู่" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="ถนน" name="road">
-                  <Input placeholder="ถนน" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="subdistrict" label="ตำบล">
-                  <Input placeholder="ตำบล" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="district" label="อำเภอ">
-                  <Input placeholder="อำเภอ" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="province" label="จังหวัด">
-                  <Input placeholder="จังหวัด" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="zipcode" label="รหัสไปไปรษณีย์">
+                <Form.Item name="zipcode" label="รหัสไปรษณีย์">
                   <Input placeholder="รหัสไปรษณีย์" />
                 </Form.Item>
               </Col>{" "}
@@ -470,13 +464,13 @@ function Supplier() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="fax" label="โทรสาร">
-                  <Input placeholder="โทรสาร" />
+                <Form.Item name="email" label="อีเมล">
+                  <Input placeholder="อีเมล" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="email" label="อีเมล">
-                  <Input placeholder="อีเมล" />
+                <Form.Item name="fax" label="โทรสาร">
+                  <Input placeholder="โทรสาร" />
                 </Form.Item>
               </Col>
               <Col
@@ -508,21 +502,24 @@ function Supplier() {
                 </Form.Item>
               </Col>
             </Row>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Form.Item label="ที่อยู่" name="address">
+                  <TextArea rows={3} placeholder="ที่อยู่" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Form.Item label="หมายเหตุ" name="remark">
+                  <TextArea rows={3} placeholder="ที่อยู่" />
+                </Form.Item>
+              </Col>
+            </Row>
           </Card>
         </Form>
       </Modal>
     );
   };
-  const defaultCheckedList = columns.map((item) => item.key);
-  const [checkedList, setCheckedList] = useState(defaultCheckedList);
-  const options = columns.map(({ key, title }) => ({
-    label: title,
-    value: key,
-  }));
-  const newColumns = columns.map((item) => ({
-    ...item,
-    hidden: !checkedList.includes(item.key),
-  }));
+
   return (
     <>
       <div className="layout-content" style={{ padding: 20 }}>
