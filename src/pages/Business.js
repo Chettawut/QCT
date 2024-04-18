@@ -75,7 +75,7 @@ function Business() {
             <Col xs={24} sm={8} md={8} lg={8} xl={8}>
               <Form.Item
                 label="ชื่อบริษัท"
-                name="businessno"
+                name="businessname"
                 onChange={() => handleSearch()}
               >
                 <Input placeholder="ใส่ชื่อบริษัท" />
@@ -370,25 +370,6 @@ function Business() {
       });
   };
 
-  const showAddModal = () => {
-    businessService.getcode()
-      .then((res) => {
-        let { status, data } = res;
-        if (status === 200) {
-          formManage.setFieldsValue({
-            businessno: data,
-            business_branch: '1',
-          });
-          setActionManage({
-            action: "create",
-            title: "เพิ่มลูกค้าธุรกิจ",
-            confirmText: "เพิ่ม",
-          });
-          setOpenModalManage(true);
-        }
-      })
-      .catch((err) => {});
-  };
   const onModalManageOpen = () => {
     formManage.setFieldsValue({
       business_branch: '1',
