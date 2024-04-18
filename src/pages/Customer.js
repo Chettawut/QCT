@@ -423,7 +423,7 @@ function Customer() {
                   ]}
                 >
                   <Input
-                    disabled={actionManage.action === "edit" ? true : false}
+                    disabled
                     placeholder="รหัสลูกค้าบุคคล"
                   />
                 </Form.Item>

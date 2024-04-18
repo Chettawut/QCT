@@ -17,20 +17,30 @@ try {
         extract($_POST, EXTR_OVERWRITE, "_");
 
         // var_dump($_POST);
-        $sql = "INSERT INTO customer (`cuscode`, `title_name`, `firstname`, `lastname`, `citizen_id`, `address`, `zipcode`, `tel`, `email`,`remark`, `active_status`, created_by, created_date) 
-        values (:cuscode,:title_name,:firstname,:lastname,:citizen_id,:address,:zipcode,:tel,:email,:remark,'Y',:action_user,:action_user)";
+
+        $sql = "INSERT INTO business (`businessno`, `title_name`, `business_name`, `business_branch`, `branch_details`,`taxno`, `address`, `zipcode`
+        , `shipping_address`, `shipping_zipcode`, `contact_person`, `contact_department`, `tel`,`tel_mobile`, `fax`, `email`,`remark`, `active_status`, created_by, created_date) 
+        values (:businessno,:title_name,:business_name,:business_branch,:branch_details,:taxno,:address,:zipcode,:shipping_address,:shipping_zipcode
+        ,:contact_person,:contact_department,:tel,:tel_mobile,:fax,:email,:remark,'Y',:action_user,:action_user)";
 
         $stmt = $conn->prepare($sql);
         if(!$stmt) throw new PDOException("Insert data error => {$conn->errorInfo()}"); 
         
-        $stmt->bindParam(":cuscode", $cuscode, PDO::PARAM_STR);
+        $stmt->bindParam(":businessno", $businessno, PDO::PARAM_STR);
         $stmt->bindParam(":title_name", $title_name, PDO::PARAM_STR);
-        $stmt->bindParam(":firstname", $firstname, PDO::PARAM_STR);        
-        $stmt->bindParam(":lastname", $lastname, PDO::PARAM_STR);
-        $stmt->bindParam(":citizen_id", $citizen_id, PDO::PARAM_STR);
+        $stmt->bindParam(":business_name", $business_name, PDO::PARAM_STR);        
+        $stmt->bindParam(":business_branch", $business_branch, PDO::PARAM_STR);
+        $stmt->bindParam(":branch_details", $branch_details, PDO::PARAM_STR);
+        $stmt->bindParam(":taxno", $taxno, PDO::PARAM_STR);
         $stmt->bindParam(":address", $address, PDO::PARAM_STR);        
         $stmt->bindParam(":zipcode", $zipcode, PDO::PARAM_STR);
+        $stmt->bindParam(":shipping_address", $shipping_address, PDO::PARAM_STR);        
+        $stmt->bindParam(":shipping_zipcode", $shipping_zipcode, PDO::PARAM_STR);
+        $stmt->bindParam(":contact_person", $contact_person, PDO::PARAM_STR);        
+        $stmt->bindParam(":contact_department", $contact_department, PDO::PARAM_STR);
         $stmt->bindParam(":tel", $tel, PDO::PARAM_STR);
+        $stmt->bindParam(":tel_mobile", $tel_mobile, PDO::PARAM_STR);        
+        $stmt->bindParam(":fax", $fax, PDO::PARAM_STR);
         $stmt->bindParam(":email", $email, PDO::PARAM_STR);        
         $stmt->bindParam(":remark", $remark, PDO::PARAM_STR);        
         $stmt->bindParam(":action_user", $action_user, PDO::PARAM_INT); 
@@ -131,7 +141,7 @@ try {
         echo json_encode(array("status"=> 1));
     } else  if($_SERVER["REQUEST_METHOD"] == "GET"){
         $businessno = $_GET["code"]; 
-        $sql = "SELECT `businessno`, `title_name`, `business_name`, `taxno`, `email`, `address`, `zipcode`, `shipping_address`, `shipping_zipcode`, `contact_person`, `contact_department`, `tel_phone`, `tel_mobile`, `fax`, `active_status` ";
+        $sql = "SELECT `businessno`, `title_name`, `business_name`, `business_branch`, `branch_details`,`taxno`, `address`, `zipcode`, `shipping_address`, `shipping_zipcode`, `contact_person`, `contact_department`, `tel`,`tel_mobile`, `fax`, `email`,`remark`, `active_status` ";
         $sql .= " FROM `business` ";
         $sql .= " where businessno = :id";
         

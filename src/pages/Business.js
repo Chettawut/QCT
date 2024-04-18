@@ -281,11 +281,11 @@ function Business() {
     },
     {
       title: "เบอร์โทร",
-      dataIndex: "tel_phone",
-      key: "tel_phone",
+      dataIndex: "tel",
+      key: "tel",
       width: "20%",
-      ...getColumnSearchProps("tel_phone"),
-      sorter: (a, b) => a.tel_phone.length - b.tel_phone.length,
+      ...getColumnSearchProps("tel"),
+      sorter: (a, b) => a.tel.length - b.tel.length,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -312,7 +312,7 @@ function Business() {
     businessService
       .search(data)
       .then((res) => {
-        const { data } = res;
+        const { data } = res.data;
         // console.log(data)
 
         setAllBusiness(data);
@@ -369,44 +369,32 @@ function Business() {
 
       });
   };
-
-  const onModalManageOpen = () => {
-    formManage.setFieldsValue({
-      business_branch: '1',
-    });
-    setActionManage({
-      action: "add",
-      title: "เพิ่มข้อมูลลูกค้า",
-      confirmText: "เพิ่ม",
-    });
-    setOpenModalManage(true);
+  
+  const showAddModal = () => {
+    businessService.getcode()
+      .then((res) => {
+        let { status, data } = res;
+        if (status === 200) {
+          formManage.setFieldsValue({
+            businessno: data,
+            business_branch: 'สำนักงานใหญ่',
+          });
+          setActionManage({
+            action: "create",
+            title: "เพิ่มข้อมูลลูกค้า",
+            confirmText: "เพิ่ม",
+          });
+          setOpenModalManage(true);
+        }
+      })
+      .catch((err) => {});
   };
-  const onModalManageClose = async () => {
+  const onModalManageClose = () => {
     // await setCardataDetail({});
     formManage.resetFields();
     setOpenModalManage(false);
   };
   ////////////////////////////////
-  const onGenderChange = (value) => {
-    switch (value) {
-      case "0":
-        formManage.setFieldsValue({
-          note: "สำนักงานใหญ่",
-        });
-        break;
-      case "1":
-        formManage.setFieldsValue({
-          note: "ใส่รายละเอียดสาขา",
-        });
-        break;
-      case "other":
-        form.setFieldsValue({
-          
-        });
-        break;
-      default:
-    }
-  };
 
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
@@ -445,7 +433,7 @@ function Business() {
                   ]}
                 >
                   <Input
-                    disabled={actionManage.action === "edit" ? true : false}
+                    disabled
                     placeholder="รหัสลูกค้าบริษัท"
                   />
                 </Form.Item>
@@ -513,10 +501,10 @@ function Business() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="ระบุสาขา" name="branch">
-                  <Select size="large" allowClear onChange={onGenderChange}>
-                    <Option value="0">สำนักงานใหญ่</Option>
-                    <Option value="1">สาขา</Option>
+                <Form.Item label="ระบุสาขา" name="business_branch">
+                  <Select size="large" allowClear >
+                    <Option value="สำนักงานใหญ่">สำนักงานใหญ่</Option>
+                    <Option value="สาขา">สาขา</Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -524,11 +512,11 @@ function Business() {
                 <Form.Item
                   noStyle
                   shouldUpdate={(prevValues, currentValues) =>
-                    prevValues.branch !== currentValues.branch
+                    prevValues.business_branch !== currentValues.business_branch
                   }
                 >
                   {({ getFieldValue }) =>
-                    getFieldValue("branch") === "1" ? (
+                    getFieldValue("business_branch") === "สาขา" ? (
                       <Form.Item name="branch_details" label="รายละเอียดสาขา">
                         <Input />
                       </Form.Item>
@@ -550,7 +538,7 @@ function Business() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="โทรศัพท์" name="tel_phone">
+                <Form.Item label="โทรศัพท์" name="tel">
                   <Input placeholder="โทรศัพท์" />
                 </Form.Item>
               </Col>
@@ -595,7 +583,7 @@ function Business() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={16}>
-                <Form.Item label="หมายเหตุ" name="หมายเหตุ">
+                <Form.Item label="หมายเหตุ" name="remark">
                   <TextArea rows={2} placeholder="หมายเหตุ" />
                 </Form.Item>
               </Col>
@@ -652,7 +640,7 @@ function Business() {
         <Button
           type="primary"
           onClick={() => {
-            onModalManageOpen();
+            showAddModal();
           }}
         >
           เพิ่มลูกค้าบริษัท
