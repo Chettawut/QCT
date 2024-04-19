@@ -561,35 +561,35 @@ function Business() {
               </Col>
             </Row>
             <Row gutter={[24, 0]}>
-              <Col xs={24} sm={24} md={12} lg={12} xl={16}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item label="ที่อยู่" name="address">
                   <TextArea rows={2} placeholder="ที่อยู่" />
                 </Form.Item>
               </Col>
               
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item label="จังหวัด" name="province">
                 <Select style={{ height: 40 }} showSearch
                     filterOption={filterOption}  options={PROVINCE_OPTIONS}/>
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item label="รหัสไปรษณีย์" name="zipcode">
                   <Input placeholder="รหัสไปรษณีย์" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={16}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item label="ที่อยู่จัดส่งสินค้า" name="shipping_address">
                   <TextArea rows={2} placeholder="ที่อยู่จัดส่งสินค้า" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item label="จังหวัดจัดส่งสินค้า" name="shipping_province">
                 <Select style={{ height: 40 }} showSearch
                     filterOption={filterOption} options={PROVINCE_OPTIONS} />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={8}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item
                   label="รหัสไปรษณีย์ที่อยู่จัดส่งสินค้า"
                   name="shipping_zipcode"
@@ -597,7 +597,7 @@ function Business() {
                   <Input placeholder="รหัสไปรษณีย์ที่อยู่จัดส่งสินค้า" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={16}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item label="หมายเหตุ" name="remark">
                   <TextArea rows={2} placeholder="หมายเหตุ" />
                 </Form.Item>

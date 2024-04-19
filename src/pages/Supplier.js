@@ -356,7 +356,7 @@ function Supplier() {
         : supplierService.create;
 
     action({ ...v })
-      .then( async (_) => {
+      .then(async (_) => {
         GetSup({});
         let datamessage;
         actionManage?.action !== "create"
@@ -374,7 +374,7 @@ function Supplier() {
         const data = err?.response?.data;
         message.error(data?.message || "error request");
       })
-      .finally(async () => {        
+      .finally(async () => {
         setOpenModalManage(false);
       });
   };
@@ -474,18 +474,32 @@ function Supplier() {
                   <Input placeholder="โทรสาร" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="province" label="จังหวัด" rules={[
-                  {
-                    required: true,
-                    message: "กรุณาระบุจังหวัด!",
-                  },
-                ]}>                
-                <Select style={{ height: 40 }} showSearch
-                    filterOption={filterOption} options={PROVINCE_OPTIONS} />
+            </Row>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Form.Item label="ที่อยู่" name="address">
+                  <TextArea rows={3} placeholder="ที่อยู่" />
                 </Form.Item>
               </Col>
-              
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  name="province"
+                  label="จังหวัด"
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณาระบุจังหวัด!",
+                    },
+                  ]}
+                >
+                  <Select
+                    style={{ height: 40 }}
+                    showSearch
+                    filterOption={filterOption}
+                    options={PROVINCE_OPTIONS}
+                  />
+                </Form.Item>
+              </Col>
               <Col
                 xs={24}
                 sm={24}
@@ -516,11 +530,6 @@ function Supplier() {
               </Col>
             </Row>
             <Row gutter={[24, 0]}>
-              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                <Form.Item label="ที่อยู่" name="address">
-                  <TextArea rows={3} placeholder="ที่อยู่" />
-                </Form.Item>
-              </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item label="หมายเหตุ" name="remark">
                   <TextArea rows={3} placeholder="ที่อยู่" />
