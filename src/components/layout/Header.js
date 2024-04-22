@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "antd";
-import {  Row, Col,ConfigProvider, Menu, Typography, Space } from "antd";
+import { Row, Col, ConfigProvider, Menu, Typography, Space } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Authenticate } from "../../service/Authenticate.service";
 import {
@@ -274,6 +274,8 @@ const Header = () => {
               items={items}
             />
           </Col>
+        </Row>
+        <Row gutter={[24, 0]}>
           <Col span={24} md={18} className="header-control">
             <Space className="gap-2">
               <UserOutlined />

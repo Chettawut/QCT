@@ -508,14 +508,16 @@ function Customer() {
                   <Input placeholder="อีเมล" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="รหัสไปรษณีย์" name="zipcode">
-                  <Input placeholder="รหัสไปรษณีย์" />
-                </Form.Item>
-              </Col> 
+            </Row>
+            <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item label="ที่อยู่" name="address">
                   <TextArea rows={3} placeholder="ที่อยู่" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item label="รหัสไปรษณีย์" name="zipcode">
+                  <Input placeholder="รหัสไปรษณีย์" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -529,13 +531,16 @@ function Customer() {
                     },
                   ]}
                 >
-                  <Select style={{ height: 40 }} showSearch
-                    filterOption={filterOption} options={PROVINCE_OPTIONS} />
+                  <Select
+                    style={{ height: 40 }}
+                    showSearch
+                    filterOption={filterOption}
+                    options={PROVINCE_OPTIONS}
+                  />
                 </Form.Item>
               </Col>
-
-              </Row>
-              <Row gutter={[24, 0]}>
+            </Row>
+            <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item label="หมายเหตุ" name="remark">
                   <TextArea rows={3} placeholder="หมายเหตุ" />
