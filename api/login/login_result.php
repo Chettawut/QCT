@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-header('Content-Type: application/json');
+// header('Content-Type: application/json');
 // header('Access-Control-Allow-Origin: *');
 // header('Access-Control-Allow-Headers: *'); 
 date_default_timezone_set('Asia/Bangkok');
@@ -47,7 +47,7 @@ if ($stmt->execute()) {
 				$issuedAt = new DateTimeImmutable(); 
 				
 				$expire = $issuedAt->modify('+1 day');      // Add 60 seconds
-				$serverName = "nsf";
+				$serverName = "qct";
 				$username = $_POST['username'];
 				$userid = $code;
 				$data = [
@@ -57,6 +57,9 @@ if ($stmt->execute()) {
 					'exp'  => $expire->getTimestamp(), 			 // Expire
 					'username' => $username,                     // User name
 					'userid' => $userid,                         // User Id
+					'firstname' => $firstname,                   // First Name
+					'lastname' => $lastname,                     // Last Name
+					'type' => $type,                         	 // User Type
 					'expd' => $expire //test
 				];
 

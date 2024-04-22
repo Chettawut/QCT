@@ -27,7 +27,7 @@ try{
     $token = JWT::decode($jwt, $secretKey, ['HS512']);
     // var_dump($token);  exit;
     $now = new DateTimeImmutable();
-    $serverName = "nsf";
+    $serverName = "qct";
 
     if ($token->iss !== $serverName ||
         $token->nbf > $now->getTimestamp() ||

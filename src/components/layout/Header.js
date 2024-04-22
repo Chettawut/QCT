@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "antd";
-import { ConfigProvider, Menu } from "antd";
+import {  Row, Col,ConfigProvider, Menu, Typography, Space } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Authenticate } from "../../service/Authenticate.service";
 import {
@@ -10,10 +10,20 @@ import {
   ShopOutlined,
   TagOutlined,
   AuditOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 const authService = Authenticate();
 const Header = () => {
+  const [userInfo, setUserInfo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const users = authService.getUserInfo();
+    setUserInfo(users);
+
+    return () => {};
+  }, []);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -254,13 +264,33 @@ const Header = () => {
           },
         }}
       >
-        <Menu
-          style={{ padding: 7, paddingLeft: 10 }}
-          onClick={onClick}
-          selectedKeys={[current]}
-          mode="horizontal"
-          items={items}
-        />
+        <Row gutter={[24, 0]}>
+          <Col span={24} className="header-control">
+            <Menu
+              style={{ padding: 7, paddingLeft: 10 }}
+              onClick={onClick}
+              selectedKeys={[current]}
+              mode="horizontal"
+              items={items}
+            />
+          </Col>
+          <Col span={24} md={18} className="header-control">
+            <Space className="gap-2">
+              <UserOutlined />
+              <span
+                style={{
+                  letterSpacing: 0.7,
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                }}
+              >
+                <Typography.Text style={{ color: "#5e5f61" }}>
+                  {userInfo?.firstname} {userInfo?.lastname}
+                </Typography.Text>
+              </span>
+            </Space>
+          </Col>
+        </Row>
         <Modal
           title="แจ้งเตือน"
           open={isModalOpen}

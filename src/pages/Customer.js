@@ -27,7 +27,7 @@ function Customer() {
   const [AllCustomer, setAllCustomer] = useState("");
   const [actionManage, setActionManage] = useState({
     action: "create",
-    title: "เพิ่มพนักงาน",
+    title: "เพิ่มลูกค้า",
     confirmText: "ยืนยัน",
   });
   const [form] = Form.useForm();
