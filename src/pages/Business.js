@@ -347,43 +347,42 @@ function Business() {
         : businessService.create;
 
     action({ ...v })
-      .then( async (_) => {
+      .then(async (_) => {
         getBusiness({});
-        let datamessage
-        actionManage?.action !== "create"        
-          ? datamessage="แก้ไขลูกค้าบริษัท สำเร็จ"
-          : datamessage="เพิ่มลูกค้าบริษัท สำเร็จ";
-          await Swal.fire({
-            title: "<strong>สำเร็จ</strong>",
-            html: datamessage,
-            icon: "success",
-          });
-          formManage.resetFields();
+        let datamessage;
+        actionManage?.action !== "create"
+          ? (datamessage = "แก้ไขลูกค้าบริษัท สำเร็จ")
+          : (datamessage = "เพิ่มลูกค้าบริษัท สำเร็จ");
+        await Swal.fire({
+          title: "<strong>สำเร็จ</strong>",
+          html: datamessage,
+          icon: "success",
+        });
+        formManage.resetFields();
       })
       .catch((err) => {
         console.warn(err);
         const data = err?.response?.data;
         message.error(data?.message || "error request");
       })
-      .finally(  (res) => {      
-       
-          setOpenModalManage(false);
-
+      .finally((res) => {
+        setOpenModalManage(false);
       });
   };
-  
+
   const showAddModal = () => {
-    businessService.getcode()
+    businessService
+      .getcode()
       .then((res) => {
         let { status, data } = res;
         if (status === 200) {
           formManage.setFieldsValue({
             businessno: data,
-            business_branch: 'สำนักงานใหญ่',
+            business_branch: "สำนักงานใหญ่",
           });
           setActionManage({
             action: "create",
-            title: "เพิ่มข้อมูลลูกค้า",
+            title: "เพิ่มข้อมูลลูกค้าบริษัท",
             confirmText: "เพิ่ม",
           });
           setOpenModalManage(true);
@@ -434,10 +433,7 @@ function Business() {
                     },
                   ]}
                 >
-                  <Input
-                    disabled
-                    placeholder="รหัสลูกค้าบริษัท"
-                  />
+                  <Input disabled placeholder="รหัสลูกค้าบริษัท" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -458,14 +454,18 @@ function Business() {
                     options={[
                       {
                         value: "0",
-                        label: "บจก.",
+                        label: "ร้าน",
                       },
                       {
                         value: "1",
-                        label: "บมจ.",
+                        label: "บจก.",
                       },
                       {
                         value: "2",
+                        label: "บมจ.",
+                      },
+                      {
+                        value: "3",
                         label: "หจก.",
                       },
                     ]}
@@ -486,8 +486,6 @@ function Business() {
                   <Input placeholder="ชื่อบริษัท" />
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item
                   label="เลขประจำตัวผู้เสียภาษี"
@@ -502,9 +500,51 @@ function Business() {
                   <Input placeholder="เลขประจำตัวผู้เสียภาษี" />
                 </Form.Item>
               </Col>
+            </Row>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item
+                  label="วงเงินเครดิต"
+                  name="credit"
+                  rules={[
+                    {
+                      message: "กรุณาใส่ วงเงินเครดิต ใหม่!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="วงเงินเครดิต" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item label="ประเภทเครดิต" name="credit_type">
+                  <Select
+                    size="large"
+                    showSearch
+                    filterOption={filterOption}
+                    options={[
+                      {
+                        value: "0",
+                        label: "เงินสด",
+                      },
+                      {
+                        value: "1",
+                        label: "เครดิต 7 วัน",
+                      },
+                      {
+                        value: "2",
+                        label: "เครดิต 30 วัน",
+                      },
+                      {
+                        value: "3",
+                        label: " เครดิต 30 วัน ไม่นับเดือนส่ง",
+                      },
+                    ]}
+                  ></Select>
+                </Form.Item>
+              </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item label="ระบุสาขา" name="business_branch">
-                  <Select size="large" allowClear >
+                  <Select size="large" allowClear>
                     <Option value="สำนักงานใหญ่">สำนักงานใหญ่</Option>
                     <Option value="สาขา">สาขา</Option>
                   </Select>
@@ -527,50 +567,103 @@ function Business() {
                 </Form.Item>
               </Col>
             </Row>
-            <Divider />
+            <Divider>ผู้ติดต่อ</Divider>
             <Row gutter={[24, 0]}>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="ผู้ติดต่อ" name="contact_person">
-                  <Input placeholder="ผู้ติดต่อ" />
-                </Form.Item>
+              <Col span={12}>
+                <Card title="ผู้ติดต่อ">
+                  <Row gutter={[24, 0]}>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item label="ผู้ติดต่อ" name="contact_person">
+                        <Input placeholder="ผู้ติดต่อ" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item label="ติดต่อแผนก" name="contact_department">
+                        <Input placeholder="ติดต่อแผนก" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item label="โทรศัพท์" name="tel">
+                        <Input placeholder="โทรศัพท์" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item label="มือถือ" name="tel_mobile">
+                        <Input placeholder="มือถือ" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item label="ไลน์" name="line">
+                        <Input placeholder="ไลน์" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item label="โทรสาร" name="fax">
+                        <Input placeholder="โทรสาร" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="ติดต่อแผนก" name="contact_department">
-                  <Input placeholder="ติดต่อแผนก" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="โทรศัพท์" name="tel">
-                  <Input placeholder="โทรศัพท์" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="มือถือ" name="tel_mobile">
-                  <Input placeholder="มือถือ" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="อีเมล" name="email">
-                  <Input placeholder="อีเมล" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item label="โทรสาร" name="fax">
-                  <Input placeholder="โทรสาร" />
-                </Form.Item>
+              <Col span={12}>
+                <Card title="บัญชี">
+                  <Row gutter={[24, 0]}>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item
+                        label="ผู้ติดต่อ"
+                        name="contact_person_account"
+                      >
+                        <Input placeholder="ผู้ติดต่อ" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item
+                        label="ติดต่อแผนก"
+                        name="contact_department_account"
+                      >
+                        <Input placeholder="ติดต่อแผนก" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item label="โทรศัพท์" name="tel_account">
+                        <Input placeholder="โทรศัพท์" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item label="มือถือ" name="tel_mobile_account">
+                        <Input placeholder="มือถือ" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item label="ไลน์" name="line_account">
+                        <Input placeholder="ไลน์" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Item label="โทรสาร" name="fax_account">
+                        <Input placeholder="โทรสาร" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>
               </Col>
             </Row>
+            <br></br>
+            <Divider>ที่อยู่</Divider>
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Form.Item label="ที่อยู่" name="address">
                   <TextArea rows={2} placeholder="ที่อยู่" />
                 </Form.Item>
               </Col>
-              
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item label="จังหวัด" name="province">
-                <Select style={{ height: 40 }} showSearch
-                    filterOption={filterOption}  options={PROVINCE_OPTIONS}/>
+                  <Select
+                    style={{ height: 40 }}
+                    showSearch
+                    filterOption={filterOption}
+                    options={PROVINCE_OPTIONS}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -585,8 +678,12 @@ function Business() {
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item label="จังหวัดจัดส่งสินค้า" name="shipping_province">
-                <Select style={{ height: 40 }} showSearch
-                    filterOption={filterOption} options={PROVINCE_OPTIONS} />
+                  <Select
+                    style={{ height: 40 }}
+                    showSearch
+                    filterOption={filterOption}
+                    options={PROVINCE_OPTIONS}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
@@ -607,7 +704,7 @@ function Business() {
                 sm={24}
                 md={12}
                 lg={12}
-                xl={8}
+                xl={6}
                 style={
                   actionManage.action === "edit"
                     ? { display: "inline" }

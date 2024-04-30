@@ -549,8 +549,18 @@ function Car() {
                   ]}
                 >
                   <Input
-                    disabled={actionManage.action === "edit" ? true : false}
                     placeholder="ทะเบียนรถ"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
+                <Form.Item name="province" label="จังหวัด">
+                  <Select
+                    size="large"
+                    placeholder="จังหวัด"
+                    showSearch
+                    filterOption={filterOption}
+                    options={PROVINCE_OPTIONS}
                   />
                 </Form.Item>
               </Col>
@@ -854,17 +864,7 @@ function Car() {
                   <Input placeholder="เลขเครื่อง" />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={12} lg={12} xl={6}>
-                <Form.Item name="province" label="จังหวัด">
-                  <Select
-                    size="large"
-                    placeholder="จังหวัด"
-                    showSearch
-                    filterOption={filterOption}
-                    options={PROVINCE_OPTIONS}
-                  />
-                </Form.Item>
-              </Col>
+              
               <Col xs={24} sm={24} md={12} lg={12} xl={6}>
                 <Form.Item name="car_type" label="ลักษณะรถ">
                   <Select

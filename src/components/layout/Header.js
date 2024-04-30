@@ -187,14 +187,6 @@ const Header = () => {
             },
             {
               label: (
-                <a href="/unit" rel="noopener noreferrer">
-                  หน่วยสินค้า
-                </a>
-              ),
-              key: "menu4_6",
-            },
-            {
-              label: (
                 <a href="/itemtype" rel="noopener noreferrer">
                   ประเภทสินค้า
                 </a>
